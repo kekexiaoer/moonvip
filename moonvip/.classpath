@@ -71,5 +71,8 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/jl1.0.1.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/joda-time-1.6.2.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/mp3spi1.9.5.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/IKAnalyzer3.2.0Stable.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-core-3.6.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/lucene-highlighter-3.6.2.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>
