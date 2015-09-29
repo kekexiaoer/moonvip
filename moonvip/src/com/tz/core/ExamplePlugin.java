@@ -1,6 +1,6 @@
 package com.tz.core;
 
-import java.util.Properties;
+import java.util.Properties;    
 
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.MappedStatement;
@@ -13,7 +13,7 @@ import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
 
 //@Intercepts({ @Signature(type = Executor.class, method = "update", args = {
-//		MappedStatement.class, Object.class }) })
+//MappedStatement.class, Object.class }) })
 @Intercepts({ @Signature(type = Executor.class, method = "query", args = { MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class }),
     @Signature(type = Executor.class, method = "update", args = { MappedStatement.class, Object.class })
     })
