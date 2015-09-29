@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tz.dao.banner.IBannerDao" >
+	<!-- 查询所有banner --> 
+	<select id="findBanners" parameterType="TmParams" resultType="Banner">
+		SELECT 
+			id,
+			title,
+			description,
+			url,
+			status,
+			type,
+			sort,
+			img,
+			ctype,
+			tag,
+			open,
+			content_id as contentId,
+			user_id as userId,
+			username,
+			header_pic as headerPic
+		FROM keke_banner 
+		<trim prefix="WHERE" prefixOverrides="AND | OR">  
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(id)">
+				AND id = ${id}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(status)">
+				AND status =${status}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(type)">
+				AND type = ${type}
+			</if>
+		</trim>
+		<choose>
+			<!--  MyBatis排序时使用order by 动态参数时需要注意，用$而不是# -->
+			<when test="@com.tz.util.TmStringUtils@isNotEmpty(orderSql)">
+                ORDER BY ${orderSql}
+			</when>
+		</choose>
+		LIMIT ${pageNo},${pageSize}
+	</select>
+	
+	<!-- 查询单条数据 -->
+	<select id="getBanner" parameterType="TmParams" resultType="Banner">
+		SELECT 
+			id,
+			title,
+			description,
+			url,
+			status,
+			type,
+			open,
+			ctype,
+			tag,
+			img,
+			sort,
+			content_id as contentId,
+			user_id as userId,
+			username,
+			header_pic as headerPic
+		FROM keke_banner where id = ${id}
+	</select>
+	
+	<!-- 更新banner -->
+	<update id="updateBanner" parameterType="Banner" flushCache="true">
+		UPDATE  keke_banner
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(id)">id =#{id},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(title)">title=#{title},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(description)">description=#{description},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(url)">url=#{url},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(open)">open=#{open},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(ctype)">ctype=#{ctype},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(tag)">tag=#{tag},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(img)">img=#{img},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(status)">status=#{status},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(type)">type=#{type},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(sort)">sort=#{sort},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(contentId)">content_id=#{contentId},</if> 
+ 			<if test="@com.tz.util.TmStringUtils@isNotEmpty(userId)">user_id=#{userId},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(updateTime)">update_time=#{updateTime},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(username)">username=#{username},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(headerPic)">header_pic=#{headerPic},</if> 
+		</trim>
+			WHERE id = #{id}
+	</update>
+	
+	<!-- 保存banner -->
+	<insert id="saveBanner" parameterType="Banner" useGeneratedKeys="true" keyProperty="id" flushCache="true" >
+	  INSERT INTO keke_banner(title,description,url,status,type,sort,content_id,user_id,username,header_pic,open,img,ctype,tag) VALUES (#{title},#{description},#{url},#{status},#{type},#{sort},#{contentId},#{userId},#{username},#{headerPic},#{open},#{img},#{ctype},#{tag})
+	</insert>
+</mapper>

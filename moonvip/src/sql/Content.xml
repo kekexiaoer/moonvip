@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tz.dao.content.IContentDao" >
+	<!-- 
+		SELECT * FROM keke_content WHERE id > 3 ORDER BY  id ASC LIMIT 0,1;
+		SELECT * FROM keke_content WHERE id < 3 ORDER BY  id DESC LIMIT 0,1;
+	 -->
+	<!-- 查询上一篇和下一篇 -->
+	<select id="getNextPrev" parameterType="TmParams" resultType="Content">
+		SELECT id ,
+			title,
+			sub_title as subTitle,
+			keywords,
+			create_time as createTime,
+			tag,
+			img,
+			hits,
+			loves,
+			collections,
+			static_link as staticLink
+		 FROM keke_content WHERE id ${fuhao} ${id} and type=${type} and is_delete =0 and status= 1 ORDER BY  id  ${orderSql} LIMIT 0,1
+	</select> 
+	
+	<select id="loadContents" parameterType="TmParams" resultType="Content">
+		SELECT 
+			c.id,
+			c.title,
+			c.description,
+			c.create_time as createTime,
+			c.user_id as userId,
+			c.tag,
+			c.img,
+			c.width,
+			c.height,
+			c.thumnail,
+			c.is_top as isTop,
+			c.is_delete as isDelete,
+			c.channel_id as channelId,
+			c.category_id as categoryId,
+			c.hits,
+			c.loves,
+			c.collections,
+			(SELECT count(1) FROM keke_comment where is_delete = 0 AND content_id =c.id) as comments, 
+			c.static_link as staticLink,
+			c.type,
+			ch.name as channelName,
+			mu.name as categoryName,
+			u.header_pic as headerPic,
+			u.username
+		FROM keke_content c 
+		LEFT JOIN keke_user u ON u.id = c.user_id
+		LEFT JOIN keke_channel ch ON ch.id = c.channel_id
+		LEFT JOIN keke_music_category mu ON mu.id = c.category_id
+		<trim prefix="WHERE" prefixOverrides="AND | OR">  
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(id)">
+				AND c.id = ${id}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isDelete)">
+				AND c.is_delete = ${isDelete}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(status)">
+				AND c.status =${status}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(push)">
+				AND c.push =${push}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(channelId)">
+				AND c.channel_id = ${channelId}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(filterChannelId)">
+				AND c.channel_id not in (${filterChannelId})
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(categoryId)">
+				AND c.category_id = ${categoryId}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isTop)">
+				AND c.is_top = ${isTop}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(type)">
+				AND c.type = ${type}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(userId)">
+				AND c.user_id= ${userId}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(keyword)">
+				AND (c.title like '%${keyword}%' or u.username like '%${keyword}%' ) 
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(filterId)">
+				AND c.id != ${filterId}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(week) and week=='week'">
+				AND YEARWEEK(date_format(c.create_time,'%Y-%m-%d')) = YEARWEEK(now())
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(week) and week=='month'">
+				AND date_format(c.create_time,'%Y-%m')=date_format(now(),'%Y-%m')  
+			</if>
+		</trim>
+		<choose>
+			<!--  MyBatis排序时使用order by 动态参数时需要注意，用$而不是# -->
+			<when test="@com.tz.util.TmStringUtils@isNotEmpty(orderSql)">
+                ORDER BY ${orderSql}
+			</when>
+		</choose>
+		LIMIT ${pageNo},${pageSize}
+	</select>
+	
+	
+	<!-- 查询所有内容 --> 
+	<select id="findContents" parameterType="TmParams" resultType="Content">
+		SELECT 
+			c.id,
+			c.title,
+			c.sub_title as subTitle,
+			c.content,
+			c.keywords,
+			c.html_code as htmlCode,
+			c.js_code as jsCode,
+			c.css_code as cssCode,
+			c.is_code as isCode,
+			c.description,
+			c.create_time as createTime,
+			c.user_id as userId,
+			c.tag,
+			c.img,
+			c.width,
+			c.height,
+			c.thumnail,
+			c.is_top as isTop,
+			c.is_delete as isDelete,
+			c.status,
+			c.push,
+			c.channel_id as channelId,
+			c.category_id as categoryId,
+			c.is_comment as isComment,
+			c.is_single as isSingle,
+			c.hits,
+			c.loves,
+			c.collections,
+			c.static_link as staticLink,
+			c.type,
+			ch.name as channelName,
+			mu.name as categoryName,
+			u.header_pic as headerPic,
+			u.username
+		FROM keke_content c 
+		LEFT JOIN keke_user u ON u.id = c.user_id
+		LEFT JOIN keke_channel ch ON ch.id = c.channel_id
+		LEFT JOIN keke_music_category mu ON mu.id = c.category_id
+		<trim prefix="WHERE" prefixOverrides="AND | OR">  
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(id)">
+				AND c.id = ${id}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isDelete)">
+				AND c.is_delete = ${isDelete}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(status)">
+				AND c.status =${status}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(push)">
+				AND c.push =${push}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(channelId)">
+				AND c.channel_id = ${channelId}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(filterChannelId)">
+				AND c.channel_id not in (${filterChannelId})
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(categoryId)">
+				AND c.category_id = ${categoryId}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isTop)">
+				AND c.is_top = ${isTop}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(type)">
+				AND c.type = ${type}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(userId)">
+				AND c.user_id= ${userId}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(keyword)">
+				AND (c.title like '%${keyword}%' or u.username like '%${keyword}%' ) 
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(filterId)">
+				AND c.id != ${filterId}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(week) and week=='week'">
+				AND YEARWEEK(date_format(c.create_time,'%Y-%m-%d')) = YEARWEEK(now())
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(week) and week=='month'">
+				AND date_format(c.create_time,'%Y-%m')=date_format(now(),'%Y-%m')  
+			</if>
+		</trim>
+		<choose>
+			<!--  MyBatis排序时使用order by 动态参数时需要注意，用$而不是# -->
+			<when test="@com.tz.util.TmStringUtils@isNotEmpty(orderSql)">
+                ORDER BY ${orderSql}
+			</when>
+		</choose>
+		LIMIT ${pageNo},${pageSize}
+	</select>
+	
+	<select id="countContents" parameterType="TmParams" resultType="int">
+		SELECT 
+			count(1)
+		FROM keke_content c LEFT JOIN keke_user u ON u.id = c.user_id
+		<trim prefix="WHERE" prefixOverrides="AND | OR">  
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(id)">
+				AND c.id = ${id}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isDelete)">
+				AND c.is_delete = ${isDelete}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(status)">
+				AND c.status =${status}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(push)">
+				AND c.push =${push}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(channelId)">
+				AND c.channel_id = ${channelId}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(filterChannelId)">
+				AND c.channel_id not in (${filterChannelId})
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isTop)">
+				AND c.is_top = ${isTop}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(type)">
+				AND c.type = ${type}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(userId)">
+				AND c.user_id= ${userId}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(keyword)">
+				AND (c.title like '%${keyword}%' or u.username like '%${keyword}%' ) 
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(filterId)">
+				AND c.id != ${filterId}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(week) and week=='week'">
+				AND YEARWEEK(date_format(c.create_time,'%Y-%m-%d')) = YEARWEEK(now())
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(week) and week=='month'">
+				AND date_format(c.create_time,'%Y-%m')=date_format(now(),'%Y-%m')  
+			</if>
+		</trim>
+	</select>
+	
+	<!-- 查询单条数据 -->
+	<select id="getContent" parameterType="TmParams" resultType="Content">
+		SELECT 
+			c.id,
+			c.title,
+			c.sub_title as subTitle,
+			c.content,
+			c.keywords,
+			c.description,
+			c.create_time as createTime,
+			c.user_id as userId,
+			c.tag,
+			c.img,
+			c.img,
+			c.width,
+			c.height,
+			c.thumnail,
+			c.html_code as htmlCode,
+			c.js_code as jsCode,
+			c.css_code as cssCode,
+			c.is_code as isCode,
+			c.is_top as isTop,
+			c.status,
+			c.push,
+			c.is_delete as isDelete,
+			c.channel_id as channelId,
+			c.category_id as categoryId,
+			c.is_comment as isComment,
+			c.is_single as isSingle,
+			c.hits,
+			c.loves,
+			(SELECT count(1) FROM keke_comment where is_delete = 0 AND content_id =${id}) as comments, 
+			c.collections,
+			c.static_link as staticLink,
+			c.type,
+			mu.name as categoryName,
+			u.header_pic as headerPic,
+			u.username,
+			ch.name as channelName
+		FROM keke_content c 
+			LEFT JOIN keke_user u ON u.id = c.user_id
+			LEFT JOIN keke_music_category mu ON mu.id = c.category_id
+			LEFT JOIN keke_channel ch ON ch.id = c.channel_id
+			where c.id = ${id}
+	</select>
+	
+	
+	<!-- 查询单条数据 -->
+	<select id="getHLCMessage" parameterType="TmParams" resultType="java.util.HashMap">
+		SELECT 
+			c.hits as hits,
+			c.loves as loves,
+			(SELECT count(1) FROM keke_comment where is_delete = 0 AND content_id =${id}) as comments, 
+			c.collections as collections
+		FROM keke_content c 
+			where c.id = ${id}
+	</select>
+	
+	<!-- 随机内容 -->
+	<select id="findRandContents" parameterType="TmParams" resultType="Content">
+		SELECT 
+			id ,
+			title,
+			sub_title as subTitle,
+			content,
+			keywords,
+			description,
+			create_time as createTime,
+			user_id as userId,
+			tag,
+			img,
+			width,
+			height,
+			thumnail,
+			is_top as isTop,
+			is_delete as isDelete,
+			status,
+			push,
+			channel_id as channelId,
+			category_id as categoryId,
+			is_comment as isComment,
+			is_single as isSingle,
+			hits,
+			loves,
+			collections,
+			static_link as staticLink,
+			type
+		FROM keke_content as r1
+		JOIN (SELECT ROUND(RAND() *  (SELECT MAX(id)  FROM keke_content)) AS rid) AS r2  WHERE r1.id >= r2.rid AND r1.is_delete=0 and r1.status = 1  ORDER BY r1.id ASC LIMIT ${pageSize}
+	</select>
+	
+	<!-- 更新内容 -->
+	<update id="updateContent" parameterType="Content" flushCache="true">
+		UPDATE  keke_content
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(title)">title =#{title},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(content)">content=#{content},</if>
+ 			<if test="@com.tz.util.TmStringUtils@isNotEmpty(updateTime)">update_time=#{updateTime},</if> 
+ 			<if test="@com.tz.util.TmStringUtils@isNotEmpty(userId)">user_id=#{userId},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(tag)">tag=#{tag},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isTop)">is_top=#{isTop},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isDelete)">is_delete=#{isDelete},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(status)">status=#{status},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(channelId)">channel_id=#{channelId},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(img)">img=#{img},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(width)">width=#{width},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(height)">height=#{height},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(thumnail)">thumnail=#{thumnail},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(push)">push=#{push},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isComment)">is_comment=#{isComment},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isSingle)">is_single=#{isSingle},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(categoryId)">category_id=#{categoryId},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(hits)">hits=#{hits},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(type)">type=#{type},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(loves)">loves=#{loves},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(collections)">collections=#{collections},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(staticLink)">static_link=#{staticLink},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(keywords)">keywords=#{keywords},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(description)">description=#{description},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(subTitle)">sub_title=#{subTitle},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(htmlCode)">html_code=#{htmlCode},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(jsCode)">js_code=#{jsCode},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(cssCode)">css_code=#{cssCode},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isCode)">is_code=#{isCode},</if>
+			
+		</trim>
+			WHERE id = #{id}
+	</update>
+	
+
+	<!-- 更新点击数和赞数和收藏数 -->
+    <select id="updateHLC" statementType="CALLABLE" parameterType="java.util.HashMap" resultType="Integer">
+       <![CDATA[
+           {call TZ_UPDATE_HCL(
+              #{userId,mode=IN,jdbcType=INTEGER},
+              #{contentId,mode=IN,jdbcType=INTEGER},
+              #{type,mode=IN,jdbcType=INTEGER}
+           )}    
+       ]]>
+	</select>
+    
+    <!--end 更新点击数和赞数和收藏数 -->
+    <select id="getHLC" parameterType="java.util.HashMap" resultType="java.util.HashMap" >
+    	SELECT type as type,is_delete as isDelete FROM keke_hcl_detail WHERE user_id =  #{userId,mode=IN,jdbcType=INTEGER} AND content_id = #{contentId,mode=IN,jdbcType=INTEGER}
+    </select>
+	
+	 <!-- 保存内容 -->
+	 <insert id="saveContent" parameterType="Content" useGeneratedKeys="true" keyProperty="id" flushCache="true" >
+	  INSERT INTO keke_content(title,content,user_id,tag,is_top,is_delete,status,channel_id,img,push,is_comment,is_single,hits,loves,collections,static_link,keywords,description,sub_title,type,category_id,html_code,css_code,js_code,is_code,width,height,thumnail) VALUES (#{title},#{content},#{userId},#{tag},#{isTop},#{isDelete},#{status},#{channelId},#{img},#{push},#{isComment},#{isSingle},#{hits},#{loves},#{collections},#{staticLink},#{keywords},#{description},#{subTitle},#{type},#{categoryId},#{htmlCode},#{cssCode},#{jsCode},#{isCode},#{width},#{height},#{thumnail})
+	 </insert>
+</mapper>

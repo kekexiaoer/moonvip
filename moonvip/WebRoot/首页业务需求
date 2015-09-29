@@ -1,0 +1,11 @@
+1:banner是存储于banner表中，用sort来置顶排序号，并且是根据is_delete来进行过滤的 --来自于内容
+2:精华文章,来自内容表(keke_content),根据istop=1和push=1两个条件，order by update_time desc 根据更新时间去排降序，因为精华是由楼主去指定的。展示6-8个 type=1
+3:热门文章,来自内容表(keke_content),根据istop=1，order by hits desc 根据点击数排降序，当点击过多的时候自动排前 6-8个
+4:本周音乐,来自内容表(keke_content) ,channelId = 7 根据创建时间排序desc  order by create_time desc 条件本周  去6-8个
+5:本周排行,来自内容表(keke_content) , 根据创建排序desc，order by create_time desc  条件本周  去6-8个
+
+以上的必要条件都是:is_delete = 0 and status = 0 未删除发布
+
+
+
+

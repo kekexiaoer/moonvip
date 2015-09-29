@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<@contentBean id=id/>
+<html>
+<head>
+<title>内容编辑-KeKe博客</title>
+<meta charset="UTF-8">
+<meta name="keywords" content="${content.keywords}">
+<meta name="description" content="${content.description}">
+<#include "/common/common.html"/>
+<script type="text/javascript" src="${basePath}/js/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="${basePath}/js/tz_admin.js"></script>
+<script type="text/javascript" src="${basePath}/js/upload/tz_upload.js"></script>
+<style id="cssRule">
+	.main .box_imptips{padding:0px 0 38px 0px}
+	#nav li:first-child{margin:0}
+</style>
+</head>
+<body data-opid="${id}" data-typeid="${content.channelId}" data-type="${content.type}"  style="background: url(${basePath}/images/course_bg.jpg) #f2f2f2 repeat-x;">
+<#include "/user/header.html"/>
+	<div class="main mb50">
+		<form id="editor_warp">
+		<input class="inp" type="hidden" name="id" id="contentId" value="${content.id}">
+		<div class="box_imptips">
+			<ul id="nav">
+				<li><a href="${basePath}">首页</a></li>
+				<li><a href="${basePath}/admin/list">内容管理</a></li>
+				<li><a href="${basePath}/admin/channellist">栏目管理</a></li>
+				<li><a href="${basePath}/admin/userlist">用户管理</a></li>
+				<li style="background:green"><a href="javascript:void(0);" onclick="tz_staticindex()">静态化首页</a></li>
+				<li style="background:green"><a href="${basePath}/admin/content/add">添加内容</a></li>
+			</ul>	
+		</div>
+
+		<div class="box_header">
+			<div class="img fl">
+				<div id="imgbox"><img id="img" data-iw="${content.width}" data-ih="${content.height}" data-thumnail="${content.thumnail}" class="tmui-tips" tip="请上传封面图片" data-img="${content.img}" src="${basePath}/${content.img}" width="320" height="180"/></div>
+				<span id="uploadBtn"></span>480 * 240 
+			</div>
+			<div class="info fl ">
+				<ul>
+					<li>
+						<p class="tinp">
+							<select class="inp selc" name="channelId" id="channelIdsec">
+								<option value="">--请选择栏目--</option>
+								<@channelList var="ch">
+								<#if ch.id!=1>
+									<option data-type="${ch.sort}" value="${ch.id}"<#if content.channelId==ch.id>selected="selected"</#if>>${ch.name}</option>
+								</#if>
+								</@channelList>
+							</select>
+						</p>
+					</li>
+					<#if content.type==2>
+						<li class="mt15">
+							<p class="tinp">
+								<select class="inp selc" name="categoryId">
+									<option value="">--请选择音乐类型--</option>
+									<@musicCategoryList isDelete=0 pageSize=30>
+										<option value="${category.id}"<#if content.categoryId==category.id>selected="selected"</#if>>${category.name}</option>
+									</@musicCategoryList>
+								</select>
+							</p>
+						</li>
+					</#if>
+					<li class="mt15"><input class="inp tmui-tips" id="title" type="text" name="title" value="${content.title}" placeholder="请输入标题"/></li>
+					<li class="mt15"><input class="inp tmui-tips" type="text" name="subTitle" value="${content.subTitle}" placeholder="请输入子标题"/></li>
+					<li class="mt15"><input class="inp tmui-tips" type="text" name="tag" value="${content.tag}" placeholder="请输入标签"/></li>
+				</ul>
+			</div>
+		</div>
+		
+		<h3 class="mt25">其他设置</h3>
+		<div class="box_header box_header_other mb50">
+			<div class="oinfo fl">
+				<#if session_user_key?? && session_user_key.role==1> 
+					<p class="tinp">
+						精华推荐： <label><input type="radio" name="push" value="1" <#if content.push==1>checked="checked"</#if> >是</label> <label><input
+							type="radio" name="push" value="0" <#if content.push==0>checked="checked"</#if>>否</label>
+					</p>
+					<p class="tinp">
+						是否置顶： <label><input type="radio" name="isTop" value="1"  <#if content.isTop==1>checked="checked"</#if>>是</label> <label><input
+							type="radio" name="isTop" value="0" <#if content.isTop==0>checked="checked"</#if>>否</label>
+					</p>
+				</#if>
+				<p class="tinp">
+					是否删除： <label><input type="radio" name="isDelete" value="1"  <#if content.isDelete==1>checked="checked"</#if>>是</label> <label><input
+						type="radio" name="isDelete" value="0"checked="checked" <#if content.isDelete==0>checked="checked"</#if>>否</label>
+				</p>
+				<p class="tinp">
+					是否评论： <label><input type="radio" name="isComment"
+						value="1"checked="checked" <#if content.isComment==1>checked="checked"</#if>>是</label> <label><input
+						type="radio" name="isComment" value="0" <#if content.isComment==0>checked="checked"</#if>>否</label>
+				</p>
+				<p class="tinp">
+					是否发布： <label><input type="radio" name="status" value="1" <#if content.status==1>checked="checked"</#if>">是</label> <label><input
+						type="radio" name="status" value="0" <#if content.status==0>checked="checked"</#if>>否</label>
+				</p>
+			</div>
+			<div class="info fl">
+				<ul>
+					<li><input class="inp tmui-tips" type="text" name="hits" value="${content.hits}" tip="请输入点击数"></li>
+					<li class="mt15">
+						<input class="inp tmui-tips" style="width: 217px;" type="text" name="collections"value="${content.collections}" placeholder="请输入收藏数">
+						<input class="inp tmui-tips" style="width: 217px;" type="text" name="loves" value="${content.loves}" placeholder="请输入喜欢数量(热门)">
+					</li>
+					<li class="mt15"><input class="inp tmui-tips" type="text" name="keywords" value="${content.keywords}" placeholder="请输入SEO关键字"></li>
+					<li class="mt15"><input class="inp tmui-tips" type="text" name="description" value="${content.description}" placeholder="请输入SEO描述"></li>
+				</ul>
+			</div>
+		</div>
+		<#if content.channelId!=3>
+			<h3 class="mt25">html设置</h3>
+			<div class="box_header_other" style="padding:15px 38px;">
+				<textarea name="htmlCode" style="width: 100%;height:280px">${content.htmlCode}</textarea>
+			</div>
+			<h3 class="mt25">css设置</h3>
+			<div class="box_header_other" style="padding:15px 38px;">
+				<textarea name="cssCode" style="width: 100%;height:280px">${content.cssCode}</textarea>
+			</div>
+			<h3 class="mt25">js设置</h3>
+			<div class="box_header_other" style="padding:15px 38px;">
+				<textarea name="jsCode" style="width: 100%;height:280px">${content.jsCode}</textarea>
+			</div>
+		</#if>
+		</form>
+		<#if content.type==2>
+			<h3 class="mt25">音乐设置</h3>
+			<span id="uploadBtn2"></span>
+			<input type="file" id="file" name="file" onchange="uploadFile(this)" style="display:none"/> 
+			<div id="tzmusicbox" class="box_header_other musicbox clearfix">
+				<@musicList cid=id>
+					<div class="mitems music_items clearfix" id="tz_music_items_${music.id}"  data-url="${music.linksrc}" data-opid="${music.id}">
+						<a href="javascript:void(0);" class="fl del" data-opid="${music.id}" onclick="tz_delete_music(this)"><i class="iconfont">&#xf00b3;</i></a>
+						<p class="btns">
+							<a href="javascript:void(0);" class='edit fr' data-opid="${music.id}"   data-url="${music.linksrc}" onclick="tz_edit_music(this)"><i class="iconfont">&#xf014f;</i></a>
+							<a href="javascript:void(0);" onclick="openBrowse(this,1)" data-url="${music.linksrc}" class="upbtns fr"><i class="iconfont">&#xf0113;</i></a>
+						</p>
+						<div class="imgup fl">
+							 <span class="up"><a href="javascript:void(0);" onclick="openBrowse(this,0)" class="upbtns"><i class="iconfont">&#xf0113;</i></a></span>
+							 <p><img src="${basePath}/${music.img}" data-src="${music.img}"  class="img" height="150" width="150"/> </p>
+							 <p>
+							 	是否发布${music.status}：<label><input type="radio" name="status${music.id}"  <#if music.status==1>checked="checked"</#if> value="1">是</label>
+								<label><input type="radio" name="status${music.id}"  <#if music.status==0>checked="checked"</#if> value="0">否</label>
+							</p>
+						</div>
+						<div class="info fl ">
+							<ul>
+								<li class="mt5">
+									歌名：<input class="inp tmui-tips" style="width:176px;" type="text" name='name'  value="${music.name}" placeholder="歌名"/>
+									歌手：<input class="inp tmui-tips" style="width:192px;" type="text" name='author' value="${music.author}" placeholder="演唱者"/>
+									排序：<input class="inp tmui-tips" style="width:176px;" type="text" name="sort" value="${music.sort!1}" placeholder="排序号"/>
+								</li>
+								<li class="mt5">
+									专辑：<input class="inp tmui-tips" style="width:176px;" type="text" name='atitle' value="${music.specialName}" placeholder="专辑"/>
+									时长：<input class="inp tmui-tips" style="width:192px;" type="text" name='timer'  value="${music.timer}" placeholder="时长"/>
+									点击：<input class="inp tmui-tips" style="width:176px;" type="text" name="hits" value="${music.hits!0}" placeholder="点击数"/>
+								</li>
+								<li class="mt5"><span style="vertical-align: top;">描述：</span><textarea class="tarea tzui-tips"  name='cdescription' placeholder="描述">${music.description}</textarea></li>
+								<li class="mt5"><span style="vertical-align: top;">歌词：</span><textarea class="tarea tzui-tips"  name='lrc' placeholder="歌词">${music.lrc}</textarea></li>
+							</ul>
+						</div>
+					</div>
+				</@musicList>
+			</div>
+		</#if>
+		<h3 class="mt25">编辑内容</h3>
+		<div class="box_header_other">
+			<textarea id="p_desc">${content.content}</textarea>
+		</div>
+	</div>
+	<div id="button_offset" class="box_nextn none">
+	     <div class="clear_float" id="ToolBar">
+	     	 <a href="javascript:void(0);" class="rbtn" onclick="window.location.href='${basePath}/admin/list'">返回内容页</a>
+	         <a href="javascript:void(0);" class="rbtn" onclick="window.open('${basePath}/<#if content.type==1>page<#else>music</#if>/${id}')">预览</a>
+	         <a href="javascript:void(0);" class="rbtn" onclick="window.location.href='${basePath}/admin/content/add'">切换添加</a>
+	         <a href="javascript:void(0);" class="gbtn" onclick="tz_staticHtml(${id})" id="cc-save-waitback">静态化该页</a>
+	         <a href="javascript:void(0);" class="gbtn" onclick="tz_editContent()" id="cc-save-waitback">保  存</a>
+	     </div>
+	 </div>
+<script type="text/javascript" src="${basePath}/js/tm/tz_edit.js"></script>
+<!-- 音乐相关js -->
+<#if content.type==2><script type="text/javascript" src="${basePath}/js/tm/tz_music.js"></script></#if>
+</body>
+</html>

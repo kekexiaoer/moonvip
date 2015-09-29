@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tz.dao.user.IUserDao" >
+
+	<select id="findUsers" parameterType="TmParams" resultType="User">
+		SELECT
+			id,
+			username,
+			account,
+			password,
+			telephone,
+			create_time as createTime,
+			header_pic as headerPic,
+			update_time as updateTime,
+			is_delete as isDelete,
+			age,
+			job,
+			male, 
+			active,
+			sign,
+			company,
+			background,
+			role
+		FROM
+			keke_user
+		<trim prefix="WHERE" prefixOverrides="AND | OR">  
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(id)">
+				AND id = #{id}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isDelete)">
+				AND is_delete = #{isDelete}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(keyword)">
+				AND (username like '%${keyword}%' or account like '%${keyword}%') 
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(job)">
+				AND job = #{job}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(min) and @com.tz.util.TmStringUtils@isNotEmpty(max)">
+				AND age between ${min} and ${max}
+			</if>
+		</trim>
+		<choose>
+			<!--  MyBatis排序时使用order by 动态参数时需要注意，用$而不是# -->
+			<when test="@com.tz.util.TmStringUtils@isNotEmpty(orderSql)">
+                ORDER BY ${orderSql}
+			</when>
+		</choose>
+		
+		LIMIT ${pageNo},${pageSize}
+	</select>
+	
+	<select id="countUsers" parameterType="TmParams" resultType="int">
+		SELECT 
+			count(1)
+		FROM
+			keke_user
+		<trim prefix="WHERE" prefixOverrides="AND | OR">  
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(id)">
+				AND id = #{id}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isDelete)">
+				AND is_delete = #{isDelete}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(keyword)">
+				AND (username like '%${keyword}%' or account like '%${keyword}%') 
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(job)">
+				AND job = #{job}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(min) and @com.tz.util.TmStringUtils@isNotEmpty(max)">
+				AND age between ${min} and ${max}
+			</if>
+		</trim>
+	</select>
+
+
+	<!-- 查询单条数据 -->
+	<select id="getUser" parameterType="TmParams" resultType="User">
+		SELECT
+			id,
+			username,
+			account,
+			password,
+			telephone,
+			create_time as createTime,
+			header_pic as headerPic,
+			update_time as updateTime,
+			is_delete as isDelete,
+			age,
+			job,
+			male, 
+			active,
+			sign,
+			company,
+			background,
+			role
+		FROM
+			keke_user
+		<trim prefix="WHERE" prefixOverrides="AND | OR">  
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(id)">
+				AND id = #{id}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isDelete)">
+				AND is_delete = #{isDelete}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(username)">
+				AND username =#{username}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(account)">
+				AND account = #{account}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(password)">
+				AND password = #{password}
+			</if>
+		</trim>
+	</select>
+	
+	<!-- 更新内容 -->
+	<update id="updateUser" parameterType="User" flushCache="true">
+		UPDATE  keke_user
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(username)">username =#{username},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(account)">account=#{account},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(telephone)">telephone=#{telephone},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(active)">active=#{active},</if>
+ 			<if test="@com.tz.util.TmStringUtils@isNotEmpty(updateTime)">update_time=#{updateTime},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isDelete)">is_delete=#{isDelete},</if> 
+ 			<if test="@com.tz.util.TmStringUtils@isNotEmpty(password)">password=#{password},</if>
+ 			<if test="@com.tz.util.TmStringUtils@isNotEmpty(background)">background=#{background},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(age)">age=#{age},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(job)">job=#{job},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(male)">male=#{male},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(sign)">sign=#{sign},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(company)">company=#{company},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(role)">role=#{role},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(headerPic)">header_pic=#{headerPic},</if>
+		</trim>
+			WHERE id = #{id}
+	</update>
+	<!-- 保存内容 -->
+	<insert id="saveUser" parameterType="User" useGeneratedKeys="true" keyProperty="id" flushCache="true" >
+	  INSERT INTO keke_user(username,account,password,header_pic,is_delete,age,job,male,role,active,background,sign,company,telephone) VALUES(#{username},#{account},#{password},#{headerPic},#{isDelete},#{age},#{job},#{male},#{role},#{active},#{background},#{sign},#{company},#{telephone})
+	</insert>
+</mapper>

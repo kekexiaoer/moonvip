@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<@contentBean id=id/>
+<html>
+<head>
+<title>${content.title}-KeKe</title>
+<meta charset="UTF-8">
+<meta name="keywords" content="${content.keywords}">
+<meta name="description" content="${content.description}">
+<#include "/common/common.html"/>
+<script type="text/javascript" src="${basePath}/js/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="${basePath}/js/tz_admin.js"></script>
+<script type="text/javascript" src="${basePath}/js/upload/tz_upload.js"></script>
+<style type="text/css" id="cssRule">
+.wz-nav .tinp {
+	padding-top: 5px;
+}
+.wz-nav .tinp .inp {
+	height: 35px;
+	border-radius: 4px;
+	padding-left: 9px;
+}
+.wz-nav fieldset {
+	border: 1px solid #e5e5e5;
+	padding: 40px;
+}
+</style>
+</head>
+<body data-opid="${id}" data-typeid="${content.channelId}">
+<div style="clear: both;background: #fff;margin: 0 auto;">
+	<div id="editbox"></div>
+	<div class="wz-nav pt30">
+		<form id="editor_warp">
+			<fieldset>
+				<a href="javascript:void(0);" onclick="tz_saveContent()" class="addbtn">添加内容</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:void(0);" onclick="tz_editContent()" class="editbtn">编辑内容</a>&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="javascript:void(0);" onclick="clearEditorBox()" class="editbtn">关闭编辑</a>
+				
+				<input class="inp" type="hidden" name="id" id="contentId" value="${content.id}">
+				<legend>基本信息</legend>
+				<p class="tinp">
+					<select class="inp" name="channelId">
+						<@channelList var="ch">
+						<option value="${ch.id}"<#if
+							content.channelId==ch.id>selected="selected"</#if>>${ch.name}</option>
+						</@channelList>
+					</select>
+				</p>
+				<p class="tinp">
+					<input class="inp tmui-tips" type="text" name="title" value="${content.title}" tip="请输入标题">
+				</p>
+				<p class="tinp">
+					<input class="inp tmui-tips" type="text" name="subTitle"
+						value="${content.subTitle}" tip="请输入子标题">
+				</p>
+				<p class="tinp">
+					<input class="inp tmui-tips" type="text" name="tag"
+						value="${content.tag}" tip="请输入标签">
+				</p>
+				<p class="tinp">
+					<input class="inp tmui-tips" type="text" name="img" id="img"
+						value="${content.img}" tip="请上传封面图片">480 * 240 <span id="uploadBtn"></span>
+				</p>
+				<p class="tinp">
+					<input class="inp tmui-tips" type="text" name="hits"
+						value="${content.hits}" tip="请输入点击数">
+				</p>
+				<p class="tinp">
+					<input class="inp tmui-tips" type="text" name="collections"
+						value="${content.collections}" tip="请输入收藏数">
+				</p>
+				<p class="tinp">
+					<input class="inp tmui-tips" type="text" name="loves"
+						value="${content.loves}" tip="请喜欢数量(热门)">
+				</p>
+				<p class="tinp">
+					<input class="inp tmui-tips" type="text" name="keywords"
+						value="${content.keywords}" tip="请输入SEO关键字">
+				</p>
+				<p class="tinp">
+					<input class="inp tmui-tips" type="text" name="description"
+						value="${content.description}" tip="请输入SEO描述">
+				</p>
+			</fieldset>
+			<fieldset>
+				<legend>控制状态</legend>
+				<p class="tinp">
+					精华推荐： <label><input type="radio" name="push" value="1"<#if
+						content.push==1>checked="checked"</#if> >是</label> <label><input
+						type="radio" name="push" value="0"<#if
+						content.push==0>checked="checked"</#if>>否</label>
+				</p>
+				<p class="tinp">
+					是否置顶： <label><input type="radio" name="isTop" value="1"<#if
+						content.isTop==1>checked="checked"</#if>>是</label> <label><input
+						type="radio" name="isTop" value="0"<#if
+						content.isTop==0>checked="checked"</#if>>否</label>
+				</p>
+				<p class="tinp">
+					是否删除： <label><input type="radio" name="isDelete" value="1"<#if
+						content.isDelete==1>checked="checked"</#if> >是</label> <label><input
+						type="radio" name="isDelete" value="0"<#if
+						content.isDelete==0>checked="checked"</#if>>否</label>
+				</p>
+				<p class="tinp">
+					是否评论： <label><input type="radio" name="isComment"
+						value="1"<#if
+						content.isComment==1>checked="checked"</#if>>是</label> <label><input
+						type="radio" name="isComment" value="0"<#if
+						content.isComment==0>checked="checked"</#if>>否</label>
+				</p>
+				<p class="tinp">
+					是否发布： <label><input type="radio" name="status" value="1"<#if
+						content.status==1>checked="checked"</#if>>是</label> <label><input
+						type="radio" name="status" value="0"<#if
+						content.status==0>checked="checked"</#if>>否</label>
+				</p>
+			</fieldset>
+			<textarea id="p_desc">${content.content}</textarea>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+ 	var editor = CKEDITOR.replace("p_desc",{height:760});	
+ 	function tz_editContent() {
+ 		var cid = $("#contentId").val();
+ 		var method = "save";
+ 		if(isNotEmpty(cid)){
+ 			method = "update";
+ 		}
+		var html = editor.getData();
+		var params = $("#editor_warp").serializeArray();
+		params.push({name:"content",value:html});
+		params.push({name:"type",value:"1"});
+		$.tzAjax.request({model:"content",method:method,callback:function(data){
+			if(method=="save")clearEditorBox();
+			loading("操作成功!",4);
+		}},params);
+	};
+	
+	function clearEditorBox(){
+		$(parent.document).find("#editbox").empty().hide();
+	}
+	
+	$(function(){
+		$.tzUpload({
+			url:basePath+"/upload/file",
+			targetId:"uploadBtn",
+			size:"10 MB",
+			data:{"oldName":$("#img").val()},
+			type:"*.jpg;*png",
+			single:true,
+			callback:function(data){
+				var jdata = eval("("+data+")");
+				$("#img").val(jdata.url);
+			}
+		});
+		
+ 		$("select,input").change(function(){
+			tz_editContent();
+		});
+	});
+	
+	function tz_saveContent(){
+		$("#editor_warp").find("input[type='text']").val("");
+		setEditorContent("p_desc","");
+		$("#contentId").val("");
+		$("select,input").off("change");
+	}
+ </script>
+</body>
+</html>

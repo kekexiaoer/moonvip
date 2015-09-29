@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<@contentBean id=id/>
+<html>
+<head>
+<title>${content.title}-KeKe</title>
+<meta charset="UTF-8">
+<meta name="keywords" content="${content.keywords}">
+<meta name="description" content="${content.description}">
+<#include "/common/common.html"/>
+<script type="text/javascript" src="${basePath}/js/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="${basePath}/js/tz_admin.js"></script>
+<script type="text/javascript" src="${basePath}/js/upload/tz_upload.js"></script>
+<style type="text/css" id="cssRule">
+.wz-nav .tinp {
+	padding-top: 5px;
+}
+.wz-nav .tinp .inp {
+	width: 100%;
+	height: 35px;
+	border-radius: 4px;
+	padding-left: 9px;
+}
+.wz-nav fieldset {
+	border: 1px solid #e5e5e5;
+	padding: 40px;
+}
+
+.upbtns{padding:3px 10px;background:#111;color:#fff;}
+#musicbox .inp{width:147px;}
+</style>
+</head>
+<body data-opid="${id}" data-typeid="${content.channelId}">
+	<div style="clear: both;background: #fff;margin: 0 auto;">
+		<div id="editbox"></div>
+		<div class="wz-nav pt30">
+			<form id="editor_warp">
+				<fieldset>
+					<a href="javascript:void(0);" onclick="tz_saveContent()" class="addbtn">添加内容</a>&nbsp;&nbsp;&nbsp;&nbsp;
+					<a href="javascript:void(0);" onclick="tz_editContent()" class="editbtn">编辑内容</a>&nbsp;&nbsp;&nbsp;&nbsp;
+					<a href="javascript:void(0);" onclick="clearEditorBox()" class="editbtn">关闭编辑</a>
+					<input class="inp" type="hidden" name="id" id="contentId" value="${content.id}">
+					<legend>基本信息</legend>
+					<p class="tinp">
+						<select class="inp" name="channelId" style="width:640px;">
+							<@channelList var="ch">
+							<option value="${ch.id}"<#if
+								content.channelId==ch.id>selected="selected"</#if>>${ch.name}</option>
+							</@channelList>
+						</select>
+					</p>
+					<p class="tinp">
+						<input class="inp tmui-tips" type="text" name="title"
+							value="${content.title}" tip="请输入标题">
+					</p>
+					<p class="tinp">
+						<input class="inp tmui-tips" type="text" name="subTitle"
+							value="${content.subTitle}" tip="请输入子标题">
+					</p>
+					<p class="tinp">
+						<input class="inp tmui-tips" type="text" name="tag"
+							value="${content.tag}" tip="请输入标签">
+					</p>
+					<p class="tinp">
+						<input class="inp tmui-tips" type="text"  name="img" id="img"
+							value="${content.img}" tip="请上传封面图片">480 * 240 <span id="uploadBtn"></span>
+					</p>
+					<p class="tinp">
+						<input class="inp tmui-tips" type="text" name="hits"
+							value="${content.hits}" tip="请输入点击数">
+					</p>
+					<p class="tinp">
+						<input class="inp tmui-tips" type="text" name="collections"
+							value="${content.collections}" tip="请输入收藏数">
+					</p>
+					<p class="tinp">
+						<input class="inp tmui-tips" type="text" name="loves"
+							value="${content.loves}" tip="请喜欢数量(热门)">
+					</p>
+					<p class="tinp">
+						<input class="inp tmui-tips" type="text" name="keywords"
+							value="${content.keywords}" tip="请输入SEO关键字">
+					</p>
+					<p class="tinp">
+						<input class="inp tmui-tips" type="text" name="description"
+							value="${content.description}" tip="请输入SEO描述">
+					</p>
+				</fieldset>
+				<#if id??>
+					<fieldset id="music_fieldset">
+						<legend>音乐列表</legend>
+						<span id="uploadBtn2"></span>
+						<input type="file" id="file" name="file" onchange="uploadFile(this)" style="display:none"/> 
+						<ul id="musicbox">
+							<@musicList cid=id>
+								<li class="music_items" id="tz_music_items_${music.id}"  data-url="${music.linksrc}" data-opid="${music.id}">
+									<fieldset>
+										<legend>第一首歌曲</legend>
+										<span><input type="text" class="inp tzui-tips" name='name'  value="${music.name}" title="歌名"></span>
+										<span><input type="text" class="inp tzui-tips" name='author'  value="${music.author}" title="演唱者"></span>
+										<span><input type="text" class="inp tzui-tips" name='atitle'  value="${music.specialName}" title="专辑"></span>
+										<span><input type="text" class="inp tzui-tips" name='timer'  value="${music.timer}" title="时长"></span>
+										<span><img src="${basePath}/${music.img}" data-src="${music.img}"  width="32" class="img" height="24"/></span>
+										<span><a href="javascript:void(0);" onclick="openBrowse(this,0)" class="upbtns">封面</a></span>
+										<span><a href="javascript:void(0);" onclick="openBrowse(this,1)" data-url="${music.linksrc}" class="upbtns">音乐</a></span>
+										<textarea style="width:735px;height:88px;margin-top:6px;padding:5px;" name='cdescription'  class="tzui-tips" tip="描述">${music.description}</textarea>
+										<textarea style="width:735px;height:88px;margin-top:1px;padding:5px;" name='lrc'  class="tzui-tips" tip="歌词">${music.lrc}</textarea>
+										<input type="text" name="sort" value="${music.sort!1}" tip="排序号" class="tzui-tips">
+										<input type="text" name="hits" value="${music.hits!0}" tip="点击数" class="tzui-tips">
+										<label><input type="radio" name="status" value="1" <#if music.status==1>checked="checked"</#if>>是</label>
+										<label><input type="radio" name="status" value="0" <#if music.status==0>checked="checked"</#if>>否</label>
+										<a href="javascript:void(0);" class='edit' data-opid="${music.id}" onclick="tz_edit_music(this)">编辑</a>
+										<a href="javascript:void(0);" data-opid="${music.id}" onclick="tz_delete_music(this)">删除</a>
+									</fieldset>
+								</li>
+							</@musicList>
+						</ul>
+					</fieldset>
+				</#if>
+				<fieldset>
+					<legend>控制状态</legend>
+					<p class="tinp">
+						是否置顶： <label><input type="radio" name="isTop" value="1"<#if
+							content.isTop==1>checked="checked"</#if>>是</label> <label><input
+							type="radio" name="isTop" value="0"<#if
+							content.isTop==0>checked="checked"</#if>>否</label>
+					</p>
+					<p class="tinp">
+						是否删除： <label><input type="radio" name="isDelete" value="1"<#if
+							content.isDelete==1>checked="checked"</#if> >是</label> <label><input
+							type="radio" name="isDelete" value="0"<#if
+							content.isDelete==0>checked="checked"</#if>>否</label>
+					</p>
+					<p class="tinp">
+						是否评论： <label><input type="radio" name="isComment"
+							value="1"<#if
+							content.isComment==1>checked="checked"</#if>>是</label> <label><input
+							type="radio" name="isComment" value="0"<#if
+							content.isComment==0>checked="checked"</#if>>否</label>
+					</p>
+					<p class="tinp">
+						是否发布： <label><input type="radio" name="status" value="1"<#if
+							content.status==1>checked="checked"</#if>>是</label> <label><input
+							type="radio" name="status" value="0"<#if
+							content.status==0>checked="checked"</#if>>否</label>
+					</p>
+				</fieldset>
+				<textarea id="p_desc">${content.content}</textarea>
+			</form>
+		</div>
+	</div>
+<script type="text/javascript">
+ 	var editor = CKEDITOR.replace("p_desc",{height:760});	
+ 	function tz_editContent() {
+ 		var cid = $("#contentId").val();
+ 		var method = "save";
+ 		if(isNotEmpty(cid)){
+ 			method = "update";
+ 		}
+		var html = editor.getData();
+		var params = $("#editor_warp").serializeArray();
+		params.push({name:"content",value:html});
+		params.push({name:"type",value:"2"});
+		$.tzAjax.request({model:"content",method:method,callback:function(data){
+			if(method=="save"){
+				$("#music_fieldset").show();
+				$("#contentId").val(data.id);
+				//clearEditorBox();
+			}
+			loading("操作成功!",4);
+		}},params);
+	};
+	
+	function clearEditorBox(){
+		$(parent.document).find("#editbox").empty().hide();
+	}
+	
+	$(function(){
+	   var cid = $("#contentId").val();
+		$.tzUpload({
+			url:basePath+"/upload/file",
+			targetId:"uploadBtn",
+			size:"10 MB",
+			data:{"selfDir":"music/"+cid},
+			type:"*.jpg;*png",
+			single:true,
+			open:function(){
+				this.addPostParam("oldName",$("#img").val());
+			},
+			callback:function(data){
+				var jdata = eval("("+data+")");
+				$("#img").val(jdata.url);
+			}
+		});
+		
+		$.tzUpload({
+			url:basePath+"/upload/file",
+			targetId:"uploadBtn2",
+			size:"100 MB",
+			data:{"selfDir":"music/"+cid},
+			type:"*.mp3",
+			single:true,
+			callback:function(data){
+				var jdata = eval("("+data+")");
+				var cid = $("#contentId").val();
+				var len = $("#musicbox").find("li").length * 1 + 1;
+				var params = {
+					"name":jdata.name,
+					"sizeString":jdata.sizeString,
+					"timer":jdata.timer,
+					"sort":jdata.sort,
+					"author":jdata.author,
+					"specialName":jdata.title,
+					"linksrc":jdata.url,
+					"contentId":cid,
+					"sort":len
+				};
+				
+				$.tzAjax.request({model:"music",method:"save",limit:false,callback:function(data){
+					$("#musicbox").append("<li class='music_items' id='tz_music_items_"+data.id+"' data-opid='"+data.id+"'  data-url='"+jdata.url+"'>"+
+					"		<fieldset>"+
+					"			<legend>第一首歌曲</legend>"+
+					"			<span><input type='text' class='inp tzui-tips' name='name' value='"+jdata.name+"' title='歌名'></span>"+
+					"			<span><input type='text' class='inp tzui-tips' name='author' value='"+jdata.author+"' title='演唱者'></span>"+
+					"			<span><input type='text' class='inp tzui-tips' name='atitle' value='"+jdata.title+"' title='专辑'></span>"+
+					"			<span><input type='text' class='inp tzui-tips' name='timer' value='"+jdata.timer+"' title='时长'></span>"+
+					"			<span><img src='"+rootPath+"/images/logo.png'  width='32' class='img' height='24'/></span>"+
+					"			<span><a href='javascript:void(0);' onclick='openBrowse(this,0)' class='upbtns'>封面</a></span>"+
+					"			<span><a href='javascript:void(0);' onclick='openBrowse(this,1)' data-url='' class='upbtns'>音乐</a></span>"+
+					"			<textarea style='width:735px;height:88px;margin-top:6px;padding:5px;' name='cdescription' class='tzui-tips' tip='描述'></textarea>"+
+					"			<textarea style='width:735px;height:88px;margin-top:1px;padding:5px;' name='lrc' class='tzui-tips' tip='歌词'></textarea>"+
+					"			<input type='text' name='sort' value='1' tip='排序号' class='tzui-tips'>"+
+					"			<input type='text' name='hits' value='0' tip='点击数' class='tzui-tips'>"+
+					"			<label><input type='radio' name='status' value='1' checked='checked'>是</label>"+
+					"			<label><input type='radio' name='status' value='0'>否</label>"+
+					"			<a href='javascript:void(0);' class='edit' data-opid='"+data.id+"'  data-url='"+jdata.url+"' onclick='tz_edit_music(this)'>编辑</a>"+
+					"			<a href='javascript:void(0);' data-opid='"+data.id+"'  data-url='"+jdata.url+"' onclick='tz_delete_music(this)'>删除</a>"+
+					"		</fieldset>"+
+					"	</li>");
+				}},params);
+			}
+		});
+		
+ 		$("#editor_warp").find("select,input").change(function(){
+			tz_editContent();
+		});
+ 		$("#musicbox").find("select,input").off("change");
+	});
+	
+	function tz_edit_music(obj,isDelete){
+		var opid = $(obj).data("opid");
+		var $op = $("#tz_music_items_"+opid);
+		var cid = $("#contentId").val();
+		var name = $op.find("input[name='name']").val();
+		var title = $op.find("input[name='atitle']").val();
+		var author = $op.find("input[name='author']").val();
+		var timer = $op.find("input[name='timer']").val();
+		var img = $op.find(".img").data("src");
+		var description = $op.find("textarea[name='cdescription']").val();
+		var lrc = $op.find("textarea[name='lrc']").val();
+		var sort = $op.find("input[name='sort']").val();
+		var hits = $op.find("input[name='hits']").val();
+		var status = $op.find("input[name='status']:checked").val();
+		var params = {
+			"id":opid,	
+			"name":name,
+			"timer":timer,
+			"sort":sort,
+			"hits":hits,
+			"author":author,
+			"specialName":title,
+			"contentId":cid,
+			"img":img,
+			"isDelete":isDelete,
+			"status":status,
+			"description":description,
+			"lrc":lrc,
+			"sort":sort
+		};
+		$.tzAjax.request({model:"music",method:"update",callback:function(data){
+			loading("修改成功!!",4);
+		}},params);
+	}
+	
+	function tz_delete_music(obj){
+		var opid = $(obj).data("opid");
+		$("#tz_music_items_"+opid).fadeOut("slow",function(){
+			$(this).remove();
+		});
+		tz_edit_music($(obj).prev(),1);
+	}
+	
+	function tz_saveContent(){
+		$("#editor_warp,#img").find("input[type='text']").val("");
+		setEditorContent("p_desc","");
+		$("#contentId").val("");
+		$("select,input").off("change");
+		$("#musicbox").empty();
+		$("#music_fieldset").hide();
+	}
+ </script>
+ <script type="text/javascript">
+ 	var $fileObj = null;
+ 	var mark = 0;
+	function openBrowse(obj,m){ 
+		$fileObj = $(obj);
+		mark = m;
+		var ie=navigator.appName=="Microsoft Internet Explorer" ? true : false; 
+		if(ie){ 
+			document.getElementById("file").click(); 
+			document.getElementById("filename").value=document.getElementById("file").value;
+		}else{
+			var a=document.createEvent("MouseEvents");//FF的处理 
+			a.initEvent("click", true, true);  
+			document.getElementById("file").dispatchEvent(a); 
+		} 
+	} 
+	
+	
+	// 	Attributes	设置或返回文件或文件夹的属性
+	// 	DateCreated	返回指定文件或文件夹的创建时间
+	// 	DateLastAccessed	返回最近访问文件或文件夹的创建时间
+	// 	DateLastModified	返回最后修改指定文件和文件夹的日期和日期
+	// 	Drive	返回指定文件或文件夹所在的驱动器的驱动器号
+	// 	Name	设置或返回文件或文件夹的名称
+	// 	ParentFolder	返回指定文件或文件夹的父文件夹对象
+	// 	Path	返回指定文件或文件夹或驱动器的路径
+	// 	ShortName	返回短名称
+	// 	ShortPath	返回短路径
+	// 	Size	对于文件,以字节为单位返回指定文件的大小.
+	// 	对于文件夹,以字节为单位返回文件夹中包含的所有子文件夹中的所有文件和子文件夹的大小
+	// 	Type	返回文件或文件夹的信息.
+	function uploadFile() {
+	    var fileObj = document.getElementById("file").files[0]; // js 获取文件对象
+// 	    var type = fileObj.type;
+// 	    if(type!="image/jpeg"){
+// 	    	loading("请选择图片文件!",2);
+// 	    	return;
+// 	    }
+	    var cid = $("#contentId").val();
+	    var $img = $fileObj.parent().prev().find("img");
+	    // FormData 对象
+	    var form = new FormData();
+	    form.append("doc", fileObj);                           // 文件对象
+	    if(mark==0){
+		    form.append("selfDir","music/"+cid);
+		    form.append("oldName", $img.data("src")||"");
+	    }else{
+		    form.append("oldName",$fileObj.data("url")||"");
+	    }
+	    // XMLHttpRequest 对象
+	    var xhr = new XMLHttpRequest();
+	    xhr.open("post", basePath+"/upload/file", true);
+	    xhr.onreadystatechange = function(){
+			if(xhr.readyState==4 && xhr.status==200){//状态4和200代表和服务器端交互成功
+				var data = xhr.responseText.trim();
+				var jdata = eval("("+data+")");
+				if(mark==0){
+					$img.data("src",jdata.url).attr("src",rootPath+"/"+jdata.url+"?d="+new Date().getTime());
+					$fileObj.parents(".music_items").find(".edit").trigger("click");
+				}
+			}
+		};
+	    xhr.upload.addEventListener("progress", progressFunction, false);
+	    xhr.send(form);
+	};
+	
+	
+	 function progressFunction(evt) {
+// 	     var progressBar = document.getElementById("progressBar");
+// 	     var percentageDiv = document.getElementById("percentage");
+// 	     if (evt.lengthComputable) {
+// 	         progressBar.max = evt.total;
+// 	         progressBar.value = evt.loaded;
+// 	         percentageDiv.innerHTML = Math.round(evt.loaded / evt.total * 100) + "%";
+// 	     }
+	 } ; 
+ </script>
+</body>
+</html>

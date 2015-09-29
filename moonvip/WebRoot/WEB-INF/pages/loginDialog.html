@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>KeKe老师个人博客</title>
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    <#include "/common/common.html"/>
+    <style type="text/css" id="cssRule">
+    	body{background:#28384F;}
+    	#particles-js{position: absolute;z-index: -1px;top: 0;left:0px;}
+    	.error_tips{height:65px;background:rgba(57, 75, 110, 0.86);text-align: center;font-size: 12px;line-height: 65px;color:#fff;position:fixed;top: 0px;left: 0px;width: 100%;z-index: 1}
+    	.error_tips .iconfont{color:#fff;padding-right:10px;}
+    	.fmt{margin-top: -1px;}
+    	.c_logo{padding:27px 57px;}
+    </style>
+ </head>
+ <body style="overflow: hidden;" class="changebg">
+	 <div class="login">
+	    <div class="c_logo">
+	        <a href="${basePath}" class="zhuce zc-title center"> <img src="${basePath}/images/logo.png"></a>
+	    </div>
+	    <div class="dengl-cont dl-cont">
+	    	<p class="zhmmk clearfix"><input type="text" id="account" autofocus="autofocus" maxlength="42" placeholder="请输入邮箱"></p>
+	        <p class="zhmmk fmt clearfix"><input type="password" id="password" maxlength="16" placeholder="请输入密码"></p>
+	        <p class="login-xxts"></p>
+	    	<p class="zhmmk clearfix tz_login"><a href="javascript:void(0)" onclick="tzLogin.login(this);" id="loginbtn" class="cbg center btn-login ">登陆</a></p>
+	    </div>
+	</div>
+	<script type="text/javascript">
+		if("${mark}"=="1"){
+	 		top.window.location.href = top.window.location.href;
+	 		//$(parent.document).find(".tzui-dialog").next().remove();
+	 		//$(parent.document).find(".tzui-dialog").remove();
+	 	}
+	 	var tzLogin = (function(){
+	 		 var timer = null;
+	 		 return {
+	 			 init:function(){
+	 				var $this = this;
+	 				$(document).off().keydown(function(e){
+	 					if(e.keyCode==13)$this.login(document.getElementById("loginbtn")); 
+ 					});
+	 				$("#account").keyup(function(){
+	 					var v = $(this).val();
+	 					if(isNotEmpty(v)){
+		 					if(localStorage)localStorage.setItem("reg_account",v);
+	 					}
+	 				});
+	 				if(window.localStorage){
+	 					var ve = localStorage.getItem("reg_account");
+	 					if(ve){
+	 						$("#account").val(ve);
+	 						setTimeout(function(){$("#password").focus();}, 300);
+	 						$this.c_focus();
+	 					}
+	 				};
+	 			 },
+	 			gotoEmail : function(email){
+	 				if(email.indexOf("@163.com")!=-1){
+	 					return "http://email.163.com/";
+	 				}else if(email.indexOf("@sina.com")!=-1){
+	 					return "http://mail.sina.com.cn/";
+	 				}else if(email.indexOf("@qq.com")!=-1){
+	 					return "https://mail.qq.com/cgi-bin/loginpage";
+	 				}else if(email.indexOf("@126.com")!=-1){
+	 					return "http://www.126.com/";
+	 				}else if(email.indexOf("@139.com")!=-1){
+	 					return "http://mail.10086.cn/";
+	 				}else if(email.indexOf("@gmail.com")!=-1){
+	 					return "http://gmail.google.com/";
+	 				}
+	 			},
+	 			 c_focus:function(){
+	 				 var account = $("#account").val();
+	 				 var password = $("#password").val();
+	 				 var username = $("#useranme").val();
+	 				 if(isEmpty(account)){
+	 					$("#account").focus();
+	 					return;
+	 				 }
+	 				 if(isEmpty(password)){
+	 					$("#password").focus();
+	 					return;
+	 				 }
+	 				 if(isEmpty(username)){
+	 					$("#useranme").focus();
+	 					return;
+	 				 }
+	 			 },
+	 			 login:function(obj){
+	 				 var account = $("#account").val();
+	 				 var password = $("#password").val();
+	 				 var $this = this;
+	 				 if(isEmpty(account)){
+	 					$this.error("请输入账号...");
+	 					$("#account").focus();
+	 					return;
+	 				 }
+	 				 
+	 				 if(!$this.email(account)){
+	 					$this.error("邮箱格式有误...");
+	 					$("#account").select();
+	 					return false;
+	 				 }
+	 				 
+	 				 if(isEmpty(password)){
+	 					$this.error("请输入密码...");
+	 					$("#password").focus();
+	 					return;
+	 				 }
+	 				 
+	 				 var params = "account="+account+"&password="+password;
+	 				 var xhr = null;
+	 				 if(window.ActiveXObject){
+	 					xhr = new ActiveXObject("Microsoft.XMLHTTP");
+	 				 }else{
+	 					 xhr = new XMLHttpRequest();
+	 				 }
+	 				 obj.removeAttribute("onclick");
+	 			     obj.innerHTML ="登陆中...";
+	 				 xhr.open("post",rootPath+"/login/logined",true);
+	 				 xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded;");  
+	 				 xhr.onreadystatechange = function() {
+		 			       if (xhr.status == 200 && xhr.readyState==4) {
+		 			    	   obj.setAttribute("onclick","tzLogin.login(this)");
+		 	 			       obj.innerHTML ="登陆";
+		 			        	var text = xhr.responseText;
+		 			        	if(text=="account_null"){
+		 			        		$this.error("请输入账号...");
+		 			        		 $("#account").focus();
+		 			        	}else if(text=="pwd_null"){
+		 			        		$this.error("请输入密码...");
+		 			        		$("#account").focus();
+		 			        	}else if(text=="active"){
+		 			        		$this.error("您输入的邮箱尚未激活...");
+		 			        		$("#account").select();
+		 			        		$("#password").focus().val("");
+		 			        	}else if(text=="fail"){
+		 			        		$this.error("请正确输入账号和密码...");
+		 			        		$("#account").select();
+		 			        		$("#password").focus().val("");
+		 			        	}else{
+		 			        		var data = text.split("#");
+		 			        		/*$(parent.document).find("#headerbox").html("<div>"+
+			 					    "   		<a href='javascript:void(0)' class='color-login fl'>"+
+			 					    "   			<img src='"+rootPath+"/"+data[1]+"' id='user_headerpic' title='"+data[0]+"' width='24' height='24' class='fl'/>"+
+			 					    "   			<span class='fl tmui-ellipsis w70'>"+data[0]+"</span>"+
+			 					    "   		</a>"+
+			 					    "   		<span class='color-login span fl'>/</span>"+	
+			 					    "   		<a href='"+rootPath+"/loginout' class='color-login reg fl'>退出</a>"+
+			 				       	"	</div>");*/
+			 				       	var mark = $(parent.document).find("#headerbox").data("mark")||30;
+			 				        $(parent.document).find("#headerbox").html('<iframe id="loginframe" src="'+rootPath+'/login/loginSuccess?mark='+mark+'" width="140" height="75"  frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>');
+			 				       	if( parent.document.getElementById("comment_iframebox")){
+			 			        		var cdom = parent.document.getElementById("comment_iframebox").contentWindow;
+				 			        	cdom.document.getElementById("userbox").innerHTML = "<a href='javascript:void(0)'  class='color-huis'>"+
+			 			        		"	<img src='"+rootPath+"/"+data[1]+"' width='56' height='56' title='"+data[0]+"' id='userhead'/>"+
+			 			        		"	<span style='position: relative;top: 24px;left: 5px;'>"+data[0]+" 开始评论</span>"+
+			 			        		"</a>";
+			 			        		cdom.document.getElementById("comment_desc").focus();
+			 				       	}
+		 			        		$(parent.document).find(".tzui-dialog").next().remove().end().addClass(tz_animateOut(7)).fadeOut("slow",function(){
+		 			        			$(this).hide();
+		 			        		});
+		 			        	}
+		 			       }else{
+		 			    	  obj.setAttribute("onclick","tzLogin.login(this)");
+		 	 			      obj.innerHTML ="登陆";
+		 			       }
+	 			     };
+	 				 xhr.send(params);
+	 			 },
+	 			 email:function(msg){
+	 				 return /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i.test(msg);
+	 			 },
+	 			 password:function(pwd){
+	 				 return /^[\dA-Za-z(!@#$%&)]{6,16}$/.test(pwd);
+	 			 },
+	 			 _username:function(uname){
+	 				 return /^[\u4e00-\u9fa5A-Za-z_]{2,10}$/.test(uname);	
+	 			 },
+	 			 error:function(msg){
+	 				 $(".error_tips").show().removeClass("magictime slideLeftRetournOut").addClass("magictime slideLeftRetourn");
+	 				 clearTimeout(timer);
+	 				 timer = setTimeout(function(){
+	 					$(".error_tips").removeClass("magictime slideLeftRetourn").addClass("magictime slideLeftRetournOut").fadeOut("slow");
+	 				 },3000);
+	 				 $("#e_m").html(msg);
+	 			 }
+	 		 };	
+	 	}());
+	 	tzLogin.init();
+	 	if(window.localStorage){
+	 		var lcolor = localStorage.getItem("color");
+			if(lcolor){
+				var color = lcolor.split(",");
+				if(color){
+					$(".changebg").css("background",color[0]);
+					$(".cbg").css("background",color[1]);
+				}
+			}
+		}
+	 	
+	 </script>
+</body>
+</html>

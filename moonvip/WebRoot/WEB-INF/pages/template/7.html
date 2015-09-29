@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<@contentBean id=id/>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>${content.title}-KeKe</title>
+    <meta name="keywords" content="${content.keywords}">
+    <meta name="description" content="${content.description}">
+    <#include "/common/common.html"/>
+    <style type="text/css" id="cssRule">.see_source{text-align: center;padding:15px 0px;}</style>
+ </head>
+ <body data-opid="${id}" data-typeid="${content.channelId}">
+ <#include "/common/header.html"/>
+ <#if content?? && content.type==7 && content.status==1 && content.isDelete==0>
+ <div class="auto" style="width:640px;">
+   <div class="wz-nav">
+        <h1 class="wz-user">${content.title}</h1>
+        <#if content.isCode==1><div class="see_source"><a href="${basePath}/code/${content.id}">查看代码</a></div></#if>
+        <p class="hinfo">
+        	<img src="${basePath}/${content.headerPic}" width="24" height="24" class="imgradius tz_userinfos"/>
+        	<label class="au tmui-ellipsis w70">${content.username}</label>
+        	<span class="mr30">${content.createTime?date}</span>
+        	<span><a href="javascript:void(0);" id="l1_${id}" style="cursor: default;"><i class="iconfont">&#xf0060;</i>&nbsp;阅读数-<label id="tz_hits_${id}">${content.hits!0}</label></a></span>
+        	<a href="javascript:void(0)" onclick="tzhlc(${id},3)" id="l3_${id}" class="fs12 color-huis"><i class="iconfont">&#xf0052;</i>&nbsp;喜欢<span>(<span id="tz_love_${id}">${content.loves!"0"}</span>)</span></a>
+         	<a href="javascript:void(0)" onclick="tzhlc(${id},2)" id="l2_${id}" class="fs12 color-huis tj01"><i class="iconfont">&#xf01aa;</i>&nbsp;推荐(<span id="tz_coll_${id}">${content.collections!"0"}</span>)</a>
+            <a href="#comments" class="fs12 color-huis" id="pinglun"><i class="iconfont">&#xf0142;</i>&nbsp;评论<span>(<span id="tz_comm_${id}">${content.comments}</span>)</span></a>
+       		<#if (session_user_key?? && session_user_key.role==1) || content.userId == session_user_key_id> &nbsp;&nbsp;<a href="javascript:void(0);" onclick="tzContent.edit(this)"><i class="iconfont">&#xf014f;</i></a>&nbsp;&nbsp;</#if>
+       	</p>	
+    </div>
+    <div class="box-img pt30" id="tz-img-box">           
+		 <div class="imgs" style="position: relative;"><img src="${basePath}/${content.img}" id="tz_tupian" width="640" class="tupian"><span class="mtip">${content.channelName}</span></div>
+    </div>
+    <div class="wz-cont pt30" id="targetbox">${content.content}</div>
+    <div class="wz-nav mt20 clearfix">
+    	<h1 class="relation">其他博文</h1>
+    	<ul class="wz-lianjx" style="border-top: 1px dotted #9AA2AD;padding-top: 30px;">
+    	<li class="fl">
+	    	<@contentPNBean mark=">" order="asc" type=7  id=id var="nc">
+	    		<#if nc??>
+	    			上一篇：<a href="${basePath}/${nc.staticLink}" class="title" title="${nc.title}">${nc.title}<span class="underline"></span></a>
+	    		<#else>
+	    			暂无篇幅
+	    		</#if>
+	    	</@contentPNBean>
+    	</li>
+    	<li class="fr">
+	    	<@contentPNBean mark="<" order="desc" type=7  id=id var="pc">
+	    		<#if pc??>
+	    			下一篇：<a href="${basePath}/${pc.staticLink}" class="title" title="${pc.title}">${pc.title}<span class="underline"></span></a>
+	    		<#else>
+	    			暂无篇幅
+	    		</#if>
+	    	</@contentPNBean>
+    	</li>
+    	</ul>
+    </div>
+    <!-- 相关文章 -->
+    <div class="wz-nav mt45 clearfix">
+    	<h1 class="relation">相关专题</h1>
+   		<ul class="wz-lianj">
+   			<@contentList filterId=id channelId=content.channelId type="7" var="cnt" pageSize=5>
+	        	<li>
+	        		<a href="${basePath}/${cnt.staticLink}" title="${cnt.title}"><img src="${basePath}/${cnt.img}" width="115" height="100"><span class="underline"></span></a>
+	            	<p class="title"><a href="${basePath}/page/${cnt.id}" title="${cnt.title}">${cnt.title}<span class="underline"></span></a></p>
+	            </li>
+            </@contentList>
+        </ul>
+    </div>
+    <#if content.isComment==1>
+	    <div class="wz-nav mt45 clearfix">
+	    	<a name="comments"></a>	
+	    	<iframe id="comment_iframebox" src="${basePath}/commentno/template/${id}?params=538" width="100%;" frameborder="0" scrolling="no" height="640"></iframe>
+	    </div>
+    </#if>
+ </div>
+<script type="text/javascript">tzhlc("${id}",1);</script>
+<script type="text/javascript">$(".mtip").css("background",tzUtil.getRandomColor());</script>
+</body>
+</html>
+<#else>
+<style>.noempty{ font-size: 36px;color: #fff;margin: 100px auto;text-align: center;padding: 320px 200px; }</style>
+<h1 class="noempty">非常抱歉，没有找到您想要的....</h1>
+</#if>
+ <#include "/common/footer.html"/>

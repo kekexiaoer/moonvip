@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+ <head>
+    <title>KeKe个人博客-首页</title>
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+   <#include "/common/common.html"/>
+   <script type="text/javascript" src="${basePath}/js/upload.js"></script>
+   <style type="text/css" id="cssRule"></style>
+ </head>
+ <body>
+ <#include "/user/header.html"/>
+ <div class="gr_box">
+  <div class="gr-headbg">
+	  <input type="file" id="file" name="file" onchange="uploadFile(this)" style="display:none"/> 
+ 	  <span class="uimgbox">
+ 		<img src="${basePath}/${session_user_key.headerPic}" data-bsrc="${session_user_key.headerPic}" width="117" height="117" class="gr-user-img">
+ 		<a href="javascript:void(0);" data-name="${session_user_key.headerPic}" onclick="openBrowse(this)" class="edit">&nbsp;&nbsp;<i class="iconfont">&#xf014f;</i></a>
+  	  </span>
+  </div>
+  <div class="gr-plnr bdrddd clearfix"><input type="text" id="sign" class="changebg" maxlength="100" autofocus="autofocus" value="${session_user_key.sign}" placeholder="个性签名" ><a href="javascript:void(0);" class="edit edit1">&nbsp;&nbsp;<i class="iconfont">&#xf014f;</i></a></div>
+  <div class="gr-plkj bdrddd clearfix">
+	<table class="gr-xinx" style="width:100%;">
+	    	<tr>
+	        	<td style="width:150px;">用户名</td>
+	            <td>
+	            	<p class="color-huis"><input type="text" class="input changebg" id="username" maxlength="20" value="${session_user_key.username}" />
+	            	<a href="javascript:void(0);" class="edit2">&nbsp;&nbsp;<i class="iconfont">&#xf014f;</i></a></p>
+	                <p class="color-huis">注册邮箱: <a href="javascript:void(0);" class="a-xhx color-huis">${session_user_key.account}</a></p>
+	                <p>是否工作：
+	                	<label><input type="radio" name="job" <#if session_user_key.job==1>checked="checked"</#if> value="1"/>是</label>
+		            	<label><input type="radio" name="job" <#if session_user_key.job==0>checked="checked"</#if> value="0"/>否</label>
+		            	<a href="javascript:void(0);" class="edit3">&nbsp;&nbsp;<i class="iconfont">&#xf014f;</i></a>
+		           	</p>
+		           	<p><input type="text" class="input changebg" id="company" <#if session_user_key.job==0>disabled="disabled"</#if> value="${session_user_key.company}" /></p>
+	            </td>
+	        </tr>
+	        <tr>
+	        	<td>修改密码</td>
+	            <td>
+	            	<p><input type="password" value="..." onfocus="if(this.value=='...')this.value='';" class="input changebg" id="password" maxLength="16" placeholder="请输入旧密码"></p>
+	            	<p><input type="password" value="..." onfocus="if(this.value=='...')this.value='';" class="input changebg" id="newpassword" maxLength="16" placeholder="请输入新密码" >
+	            	<a href="javascript:void(0);" class="edit4">&nbsp;&nbsp;<i class="iconfont">&#xf014f;</i></a></p>
+	            </td>
+	        </tr>
+	        <tr>
+	        	<td>设置网站整体风格</td>
+	            <td>
+	            	<div class="bgbox">
+		            	<span data-color="#28384F,#282B32" class="items ft m1">默认<a href="javascript:void(0);" class="iconfont">&#xf00b2;</a></span><!-- 1 -->
+		            	<span data-color="#191919,#282B32" class="items m2">黑色</span><!-- 2 -->
+		            	<span data-color="#D9AC73,#BA905B" class="items m3">茶色</span><!-- 3 -->
+		            	<span data-color="#3B1652,#57396B" class="items m5">A77D</span><!-- 4 -->
+		            	<span data-color="#25090E,#49252C" class="items m6">2509</span><!-- 5 -->
+		            	<span data-color="#AA9C97,#D2C2BD" class="items m7">AA9C</span><!-- 6 -->
+		            	<span data-color="#143F46,#1F565F" class="items m8">B2A6</span><!-- 7 -->
+		            	<span data-color="#760E0E,#A12F2F" class="items m9">B2B2</span><!-- 8 -->
+		            	<span data-color="#252A30,#373D44" class="items m10">252A</span><!-- 9 -->
+		            	<span data-color="#70463F,#69352C" class="items m11">C1B5</span><!-- 10 -->
+	            	</div>
+	            </td>
+	        </tr>
+	        <tr>
+	            <td colspan="2">
+	           	 	<div class="fbox">
+		            	<span><img src="http://img3.luoo.net/pics/avatars/u16589_1405050599.jpg_128x128.jpg" width="48" height="48"><a href="javascript:void(0);"><i class="iconfont">&#xf00b3;</i></a></span>
+		            	<span><img src="http://img3.luoo.net/pics/avatars/u16589_1405050599.jpg_128x128.jpg" width="48" height="48"><a href="javascript:void(0);"><i class="iconfont">&#xf00b3;</i></a></span>
+		            	<span><img src="http://img3.luoo.net/pics/avatars/u16589_1405050599.jpg_128x128.jpg" width="48" height="48"><a href="javascript:void(0);"><i class="iconfont">&#xf00b3;</i></a></span>
+		            	<span><img src="http://img3.luoo.net/pics/avatars/u16589_1405050599.jpg_128x128.jpg" width="48" height="48"><a href="javascript:void(0);"><i class="iconfont">&#xf00b3;</i></a></span>
+		            	<span><img src="http://img3.luoo.net/pics/avatars/u16589_1405050599.jpg_128x128.jpg" width="48" height="48"><a href="javascript:void(0);"><i class="iconfont">&#xf00b3;</i></a></span>
+		            	<span><img src="http://img3.luoo.net/pics/avatars/u16589_1405050599.jpg_128x128.jpg" width="48" height="48"><a href="javascript:void(0);"><i class="iconfont">&#xf00b3;</i></a></span>
+		            	<span><img src="http://img3.luoo.net/pics/avatars/u16589_1405050599.jpg_128x128.jpg" width="48" height="48"><a href="javascript:void(0);"><i class="iconfont">&#xf00b3;</i></a></span>
+		            	<span><img src="http://img3.luoo.net/pics/avatars/u16589_1405050599.jpg_128x128.jpg" width="48" height="48"><a href="javascript:void(0);"><i class="iconfont">&#xf00b3;</i></a></span>
+		            	<span><img src="http://img3.luoo.net/pics/avatars/u16589_1405050599.jpg_128x128.jpg" width="48" height="48"><a href="javascript:void(0);"><i class="iconfont">&#xf00b3;</i></a></span>
+		            	<span><img src="http://img3.luoo.net/pics/avatars/u16589_1405050599.jpg_128x128.jpg" width="48" height="48"><a href="javascript:void(0);"><i class="iconfont">&#xf00b3;</i></a></span>
+		            	<span><img src="http://img3.luoo.net/pics/avatars/u16589_1405050599.jpg_128x128.jpg" width="48" height="48"><a href="javascript:void(0);"><i class="iconfont">&#xf00b3;</i></a></span>
+		            	<span><img src="http://img3.luoo.net/pics/avatars/u16589_1405050599.jpg_128x128.jpg" width="48" height="48"><a href="javascript:void(0);"><i class="iconfont">&#xf00b3;</i></a></span>
+		            	<span><img src="http://img3.luoo.net/pics/avatars/u16589_1405050599.jpg_128x128.jpg" width="48" height="48"><a href="javascript:void(0);"><i class="iconfont">&#xf00b3;</i></a></span>
+		            	<span><img src="http://img3.luoo.net/pics/avatars/u16589_1405050599.jpg_128x128.jpg" width="48" height="48"><a href="javascript:void(0);"><i class="iconfont">&#xf00b3;</i></a></span>
+		            	<span><img src="http://img3.luoo.net/pics/avatars/u16589_1405050599.jpg_128x128.jpg" width="48" height="48"><a href="javascript:void(0);"><i class="iconfont">&#xf00b3;</i></a></span>
+		            	<span><img src="http://img3.luoo.net/pics/avatars/u16589_1405050599.jpg_128x128.jpg" width="48" height="48"><a href="javascript:void(0);"><i class="iconfont">&#xf00b3;</i></a></span>
+		            	<span><img src="http://img3.luoo.net/pics/avatars/u16589_1405050599.jpg_128x128.jpg" width="48" height="48"><a href="javascript:void(0);"><i class="iconfont">&#xf00b3;</i></a></span>
+		            	<span><img src="http://img3.luoo.net/pics/avatars/u16589_1405050599.jpg_128x128.jpg" width="48" height="48"><a href="javascript:void(0);"><i class="iconfont">&#xf00b3;</i></a></span>
+		            	<span><img src="http://img3.luoo.net/pics/avatars/u16589_1405050599.jpg_128x128.jpg" width="48" height="48"><a href="javascript:void(0);"><i class="iconfont">&#xf00b3;</i></a></span>
+		            	<span><img src="http://img3.luoo.net/pics/avatars/u16589_1405050599.jpg_128x128.jpg" width="48" height="48"><a href="javascript:void(0);"><i class="iconfont">&#xf00b3;</i></a></span>
+		            	<span><img src="http://img3.luoo.net/pics/avatars/u16589_1405050599.jpg_128x128.jpg" width="48" height="48"><a href="javascript:void(0);"><i class="iconfont">&#xf00b3;</i></a></span>
+		            	
+	            	</div>
+	            </td>
+	        </tr>
+	    </table>
+	</div>
+</div>
+ <#include "/common/footer.html"/>
+ <script type="text/javascript">
+ $(function(){
+	 if(window.localStorage){
+		 var color = localStorage.getItem("color");
+		 $(".bgbox").find(".iconfont").remove();
+		 $(".bgbox").find("span[data-color='"+color+"']").append("<a href='javascript:void(0);' class='bg-items iconfont'>&#xf00b2;</a>"); 
+	 }
+	 
+	 $(".bgbox").find(".items").click(function(){
+		$(".bgbox").find(".iconfont").remove();
+		$(this).append("<a href='javascript:void(0);' class='iconfont'>&#xf00b2;</a>"); 
+		var color = $(this).data("color");
+		if(window.localStorage){
+			localStorage.setItem("color",color);
+		}
+	 });
+	 
+	 
+ 	 /*修改签名*/
+	 $(".edit1").click(function(){
+		var sign = $("#sign").val();
+		if(isEmpty(sign)){
+			$("#sign").focus();
+			return;
+		}
+		editUser({"sign":sign});
+	});	
+	/*修改昵称*/
+	$(".edit2").click(function(){
+		var username = $("#username").val();
+		if(isEmpty(username)){
+			$("#username").focus();
+			return;
+		}
+		if(username.length >20){
+			loading("昵称不能超过20位...",3);
+			return;
+		}
+		editUser({"username":username});
+	});	
+	
+	$("input[type='radio'][name='job']").click(function(){
+		$("#company").attr("disabled",($(this).val()==1?false:true));
+	});
+	
+	/*修改职业*/
+	$(".edit3").click(function(){
+		var company = $("#company").val();
+		var job = $("input[type='radio'][name='job']:checked").val();
+		if(isEmpty(job)){
+			loading("请选择是否在工作项...",3);
+			return;
+		}
+		if(job==1){
+			if(isEmpty(company)){
+				$("#company").focus();
+				return;
+			}
+		}
+		editUser({"company":company,"job":job});
+	});
+	
+	$(".edit4").click(function(){
+		var password = $("#password").val();
+		var newPwd = $("#newpassword").val();
+		if(isEmpty(password)){
+			loading("请输入原始密码",3);
+			$("#password").focus();
+			return;
+		}
+		
+		if(isEmpty(newPwd)){
+			loading("请输入新密码",3);
+			$("#newpassword").focus();
+			return;
+		}
+		if(password.length <4 ){
+			$("#password").focus();
+			loading("原始密码的长度不够[6-16]位!!!",3);
+			return;
+		}
+		
+		if( newPwd.length<4 ){
+			$("#newpassword").focus();
+			loading("新密码的长度不够[6-16]位!!!",3);
+			return;
+		}
+		
+		loading("请稍后，密码验证中...");
+		$.tzAjax.request({url:rootPath+"/user/validate",limit:false,callback:function(data){
+			if(data=="fail"){
+				$("#password").select();
+				loading("输入的原始密码有误...",4);
+			}else{
+				$.tzAjax.request({url:rootPath+"/user/updatepwd",limit:false,callback:function(data){
+					loading("修改密码成功",4);
+				}},{"password":newPwd});
+			}
+		}},{"password":password});
+	});
+	
+	//编辑通用方法
+	function editUser(params){
+		$.tzAjax.request({url:rootPath+"/user/edit",callback:function(data){
+			if(data=="success"){
+				loading("修改成功...",4);
+			}
+		}},params);
+	}
+ });			
+</script>
+ </body>
+</html>

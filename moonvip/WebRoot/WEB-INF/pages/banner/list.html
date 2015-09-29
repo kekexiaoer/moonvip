@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>KeKe博客编辑-Banner</title>
+    <meta charset="UTF-8">
+    <#include "/common/common.html"/>
+     <style id="cssRule">
+		.editbanner{width:960px;height:460px;border:1px solid #ccc;margin:0 auto;}
+		.editbanner .c_left{width:119px;background:#e5e5e5;height:460px;float:left;border-right:1px solid #ccc;overflow-x:hidden;overflow-y:auto;}
+		.editbanner .c_left li{padding:10px;border-bottom:1px solid #999}
+		.editbanner .c_left li.selected{background:#f9f9f9}
+		.editbanner .c_left li:hover{background:#f9f9f9}
+		.editbanner .c_center{width:600px;background:#fff;height:460px;float:left;position: relative;}
+		.editbanner .c_center .ed{padding:15px;}
+		.editbanner .c_center p{margin-top:3px;} 
+		.editbanner .c_center .inp{width:240px;height:22px;text-indent:0.5em;font-size:12px;}
+		.editbanner .c_right{width:239px;background:#e5e5e5;float:left;height:460px;border-left:1px solid #ccc;overflow-x:hidden;overflow-y:auto;}
+		.editbanner .c_right li{border-bottom:1px solid #999}
+		.editbanner .c_right li.selected{background:#f9f9f9}
+		.editbanner .c_right  li:hover{background:#f9f9f9}
+		.editbanner .c_right  a{text-overflow:ellipsis; overflow:hidden; white-space:nowrap; width:200px; display:inline-block;padding-left:6px;font-size:12px;}
+		.editbanner .c_center .upbtns{position: absolute;top:0px;left:0px;}
+	  </style>
+ </head>
+ <body>
+ 	<div class="editbanner">
+ 		<input type="file" id="file" name="file" onchange="uploadFile(this)" style="display:none"/> 
+		<div class="c_left">
+			<ul id="bannerbox">
+				<#list banners as banner>
+					<li>
+						<a href="javascript:void(0);" onclick="editBanner(this)"  data-bimg="${banner.img}" data-opid="${banner.id}"><img src="${basePath}/${banner.img}" id="tmimg_${banner.id}" width="80" height="40"></a>
+						&nbsp;&nbsp;<a href="javascript:void(0);" onclick="delBanner(this)" data-opid="${banner.id}" style="color:#111">x</a>
+					</li>
+				</#list>
+			</ul>
+		</div>
+		<div class="c_center">
+			<input type="hidden" id="bannerId" />
+			<a href="javascript:void(0);" onclick="openBrowse(this)" class="upbtns"><i class="iconfont">&#xf0175;</i></a>
+			<div><img src="${basePath}/${(content.img)!}" data-bsrc="${(content.img)!}" data-cid="${(content.id)!}" data-ctype="${(content.type)!}" id="img" width="600px" height="240"/></div>
+			<div class="ed" style="padding:10px;">
+				<p>标题：<input type="text" id="title" class="inp" value="${(content.title)!}"/>&nbsp;&nbsp;地址：<input type="text" id="url" class="inp" value="${(content.staticLink)!}"/></p>
+				<p>排序：<input type="text" class="inp" id="sort" value="1"/>&nbsp;&nbsp;标签：<input type="text" id="tag" class="inp"/></p>
+				<p>描述：<input type="text" id="description" style="width:532px;" class="inp"/></p>
+				<p>类型：
+					<label><input type="radio" name="type" value="1" checked="checked"/>首页</label>
+					<label><input type="radio" name="type" value="0" />其他</label>&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发布：
+					<label><input type="radio" name="status" value="1" checked="checked"/>是</label>&nbsp;&nbsp;
+					<label><input type="radio" name="status" value="0" />否</label>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;打开方式：
+					<label><input type="radio" name="open" value="_blank" checked="checked" />blank</label>&nbsp;&nbsp;
+					<label><input type="radio" name="open" value="_self" />self</label>
+				</p>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript">
+		function tsaveEdit(obj){
+			var title = $("#title").val();
+			var type = $("input[type='radio'][name='type']:checked").val();
+			var tag = $("#tag").val();
+			var desc = $("#description").val();
+			var url = $("#url").val();
+			var open = $("input[type='radio'][name='open']:checked").val();
+			var status = $("input[type='radio'][name='status']:checked").val();
+			var img = $("#img").data("bsrc");
+			var sort = $("#sort").val();
+			var contentId = $("#img").data("cid");
+			var ctype = $("#img").data("ctype");
+			var opid = $("#bannerId").val();
+			var params = {
+				title:title,
+				type:type,
+				tag:tag,
+				description:desc,
+				url:url,
+				open:open,
+				status:status,
+				img:img,
+				sort:sort,
+				contentId:contentId,
+				ctype:ctype
+			};
+			
+			var method = "save";
+			if(isNotEmpty(opid)){
+				method = "update";
+				params["id"] = opid;
+			}
+			loading("执行中...",4);
+			$.tzAjax.request({url:basePath+"/banner/"+method,callback:function(data){
+				loading("操作成功...",4);
+				//if(contentId)tz_staticHtml(contentId);//静态化一次
+				if(isNotEmpty(opid)){
+					$("#tmimg_"+opid).attr("src",rootPath+"/"+img+"?d="+new Date().getTime());
+				}else{
+					$(parent.document).find(".tzdialog_cancel").trigger("click");
+					//$("#bannerId").val(data.id);
+					//$("#bannerbox").prepend("<li ><a href='javascript:void(0);' onclick='editBanner(this)'  data-bimg='"+img+"' data-opid='"+data.id+"'><img src='"+rootPath+"/"+img+"' width='80' height='40'></a></li>");
+				}
+			}},params);
+		};
+		
+		function editBanner(obj){
+			var opid = $(obj).data("opid");
+			$.tzAjax.request({url:basePath+"/banner/get/"+opid,callback:function(data){
+				$("#bannerId").val(opid);
+				$("#title").val(data.title);
+				$("input[type='radio'][name='type'][value='"+data.type+"']").prop("checked",true);
+				$("#tag").val(data.tag);
+				$("#description").val(data.description);
+				$("#url").val(data.url);
+				$("input[type='radio'][name='open'][value='"+data.open+"']").prop("checked",true);
+				$("input[type='radio'][name='status'][value='"+data.status+"']").prop("checked",true);
+				$("#img").data("bsrc",data.img).attr("src",rootPath+"/"+data.img);
+				$("#sort").val(data.sort);
+				$("#img").data("cid",data.contentId);
+				$("#img").data("ctype",data.ctype);
+			}},{id:opid});
+		}
+		
+		
+		function delBanner(obj){
+			var opid = $(obj).data("opid");
+			var params = {id:opid,status:0};
+			$.tzAjax.request({url:basePath+"/banner/update",callback:function(data){
+				loading("操作成功...",4);
+				$(obj).parent().fadeOut("slow",function(){$(this).remove();});
+			}},params);
+		}
+		
+		function contentEdit(obj){
+			var ctype = $(obj).data("ctype");
+			var opid = $(obj).data("opid");
+			var img = $(obj).data("img");
+			var title = $(obj).attr("title");
+			var tag = $(obj).attr("tag");
+			$("#bannerId").val("");
+			$("#title").val(title);
+			$("#img").data({cid:opid,ctype:ctype});
+			$("#img").attr("src",rootPath+"/"+img);
+			$("#tag").val(tag);
+			$("#url").val(rootPath+"/"+getType(ctype)+"/"+opid);
+		}
+		
+		function getType(ctype){
+			var result = "";
+			if(ctype==1)result = "content";
+			if(ctype==2)result = "music";
+			return result;
+		}
+		
+		
+			
+	</script>
+	
+	<script type="text/javascript">
+ 	var $fileObj = null;
+	function openBrowse(obj){ 
+		$fileObj = $(obj);
+		var ie=navigator.appName=="Microsoft Internet Explorer" ? true : false; 
+		if(ie){ 
+			document.getElementById("file").click(); 
+			document.getElementById("filename").value=document.getElementById("file").value;
+		}else{
+			var a=document.createEvent("MouseEvents");//FF的处理 
+			a.initEvent("click", true, true);  
+			document.getElementById("file").dispatchEvent(a); 
+		} 
+	} 
+	
+	
+	// 	Attributes	设置或返回文件或文件夹的属性
+	// 	DateCreated	返回指定文件或文件夹的创建时间
+	// 	DateLastAccessed	返回最近访问文件或文件夹的创建时间
+	// 	DateLastModified	返回最后修改指定文件和文件夹的日期和日期
+	// 	Drive	返回指定文件或文件夹所在的驱动器的驱动器号
+	// 	Name	设置或返回文件或文件夹的名称
+	// 	ParentFolder	返回指定文件或文件夹的父文件夹对象
+	// 	Path	返回指定文件或文件夹或驱动器的路径
+	// 	ShortName	返回短名称
+	// 	ShortPath	返回短路径
+	// 	Size	对于文件,以字节为单位返回指定文件的大小.
+	// 	对于文件夹,以字节为单位返回文件夹中包含的所有子文件夹中的所有文件和子文件夹的大小
+	// 	Type	返回文件或文件夹的信息.
+	function uploadFile() {
+	    var fileObj = document.getElementById("file").files[0]; // js 获取文件对象
+	    var $img = $fileObj.next().find("img");
+	    // FormData 对象
+	    var form = new FormData();
+    	form.append("doc", fileObj);                           // 文件对象
+	    form.append("dir","banner");
+	    form.append("oldName", $img.data("bsrc")||"");
+	    // XMLHttpRequest 对象
+	    var xhr = new XMLHttpRequest();
+	    xhr.open("post", basePath+"/upload/file", true);
+	    xhr.onreadystatechange = function(){
+			if(xhr.readyState==4 && xhr.status==200){//状态4和200代表和服务器端交互成功
+				var data = xhr.responseText.trim();
+				var jdata = eval("("+data+")");
+				$img.data("bsrc",jdata.url).attr("src",rootPath+"/"+jdata.url+"?d="+new Date().getTime());
+				$("#tmimg_"+$("#bannerId").val()).attr("src",rootPath+"/"+jdata.url+"?d="+new Date().getTime());
+				;
+			}
+		};
+	    xhr.upload.addEventListener("progress", progressFunction, false);
+	    xhr.send(form);
+	};
+	
+	 function progressFunction(evt) {
+// 	     var progressBar = document.getElementById("progressBar");
+// 	     var percentageDiv = document.getElementById("percentage");
+// 	     if (evt.lengthComputable) {
+// 	         progressBar.max = evt.total;
+// 	         progressBar.value = evt.loaded;
+// 	         percentageDiv.innerHTML = Math.round(evt.loaded / evt.total * 100) + "%";
+// 	     }
+	 } ; 
+ </script>
+</body>
+</html>

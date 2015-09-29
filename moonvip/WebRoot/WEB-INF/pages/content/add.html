@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>添加内容-KeKe</title>
+<meta charset="UTF-8">
+<#include "/common/common.html"/>
+<script type="text/javascript" src="${basePath}/js/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="${basePath}/js/tz_admin.js"></script>
+<script type="text/javascript" src="${basePath}/js/upload/tz_upload.js"></script>
+<style id="cssRule">
+	.main .box_imptips{padding:0px 0 38px 0px}
+	#nav li:first-child{margin:0}
+</style>
+<body  style="background: url(${basePath}/images/course_bg.jpg) #f2f2f2 repeat-x;">
+ <#include "/user/header.html"/>
+	<form id="editor_warp">
+	<div class="main mb50">
+		<div class="box_imptips">
+			<ul id="nav">
+				<li><a href="${basePath}">首页</a></li>
+				<li><a href="${basePath}/admin/list">内容管理</a></li>
+				<li><a href="${basePath}/admin/channellist">栏目管理</a></li>
+				<li><a href="${basePath}/admin/userlist">用户管理</a></li>
+				<li style="background:green"><a href="javascript:void(0);" onclick="tz_staticindex()">静态化首页</a></li>
+			</ul>			
+		</div>
+		<div class="box_header">
+			<div class="img fl">
+				<div id="imgbox">请上传封面图片</div>
+				<span id="uploadBtn"></span>480 * 240 
+			</div>
+			<div class="info fl ">
+				<ul>
+					<li>
+						<p class="tinp">
+							<select class="inp selc" name="channelId" id="channelIdsec">
+								<@channelList var="ch">
+									<#if ch.id!=1>
+										<option data-type="${ch.sort}" value="${ch.id}">${ch.name}</option>
+									</#if>
+								</@channelList>
+							</select>
+						</p>
+					</li>
+					<li class="mt15"><input class="inp tmui-tips" id="title" type="text" name="title" placeholder="请输入标题"/></li>
+					<li class="mt15"><input class="inp tmui-tips" type="text" name="subTitle"  placeholder="请输入子标题"/></li>
+					<li class="mt15"><input class="inp tmui-tips" type="text" name="tag"  placeholder="请输入标签"/></li>
+				</ul>
+			</div>
+		</div>
+		
+		<h3 class="mt25">其他设置</h3>
+		<div class="box_header box_header_other mb50">
+			<div class="oinfo fl">
+				<#if session_user_key?? && session_user_key.role==1> 
+					<p class="tinp">
+						精华推荐： 
+						<label><input type="radio" name="push" value="1" checked="checked" >是</label> 
+						<label><input type="radio" name="push" value="0">否</label>
+					</p>
+					<p class="tinp">
+						是否置顶： 
+						<label><input type="radio" name="isTop" value="1" checked="checked">是</label> 
+						<label><input type="radio" name="isTop" value="0">否</label>
+					</p>
+				</#if>
+				<p class="tinp">
+					是否删除： 
+					<label><input type="radio" name="isDelete" value="1" >是</label> 
+					<label><input type="radio" name="isDelete" value="0"checked="checked">否</label>
+				</p>
+				<p class="tinp">
+					是否评论： 
+					<label><input type="radio" name="isComment" value="1" checked="checked">是</label> 
+					<label><input type="radio" name="isComment" value="0">否</label>
+				</p>
+				<p class="tinp none">
+					是否发布： 
+					<label><input type="radio" name="status" value="1">是</label> 
+					<label><input type="radio" name="status" value="0" checked="checked">否</label>
+				</p>
+			</div>
+			<div class="info fl">
+				<ul>
+					<li><input class="inp tmui-tips" type="text" name="hits" value="0" placeholder="请输入点击数"></li>
+					<li class="mt15">
+						<input class="inp tmui-tips" style="width: 217px;" type="text" name="collections"value="0" placeholder="请输入收藏数">
+						<input class="inp tmui-tips" style="width: 217px;" type="text" name="loves" value="0" placeholder="请输入喜欢数量(热门)">
+					</li>
+					<li class="mt15"><input class="inp tmui-tips" type="text" name="keywords"  placeholder="请输入SEO关键字"></li>
+					<li class="mt15"><input class="inp tmui-tips" type="text" name="description"  placeholder="请输入SEO描述"></li>
+				</ul>
+			</div>
+		</div>
+		
+		<h3 class="mt25">编辑内容</h3>
+		<div class="box_header_other">
+			<textarea id="p_desc"></textarea>
+		</div>
+	</div>
+	<div id="button_offset" class="box_nextn none">
+	     <div class="clear_float" id="ToolBar">
+	         <a href="javascript:void(0);" class="rbtn" onclick="window.location.href='${basePath}/admin/list'">返回内容页</a>
+	         <a href="javascript:void(0);" class="gbtn" onclick="tz_saveContent()" id="cc-save-waitback">保  存</a>
+	     </div>
+	 </div>
+	</form>
+	<script type="text/javascript" src="${basePath}/js/tm/tz_add.js"></script>
+</body>
+</html>

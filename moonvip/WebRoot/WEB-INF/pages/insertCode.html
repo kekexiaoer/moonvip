@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>insertCode.html</title>
+	
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    <#include "/common/common.html"/>
+	<script src="${basePath}/sg/tz_highLighter.js" type="text/javascript"></script>
+	<style type="text/css" id="cssRule">
+		#code{width:960px;height:420px;overflow: auto;resize:none;}
+	</style>
+  </head>
+  
+  <body>
+    <textarea id="code"></textarea>
+    <script type="text/javascript"> 
+   		function tz_click(callback){
+   			var code = $("#code").val();
+			var  highLightCode = tzHighLighter.code("html", "rDark", code); 
+			callback(highLightCode);
+   		}
+</script> 
+  </body>
+</html>

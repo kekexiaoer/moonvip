@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tz.dao.category.IMusicCategoryDao" >
+
+	<select id="findCategories" parameterType="TmParams" resultType="MusicCategory">
+		SELECT 
+		id,
+		name,
+		create_time,
+		is_delete,
+		sort
+		FROM keke_music_category
+		<trim prefix="WHERE" prefixOverrides="AND | OR">  
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isDelete)">
+				AND is_delete = ${isDelete}
+			</if>
+		</trim>
+		<choose>
+			<when test="@com.tz.util.TmStringUtils@isNotEmpty(orderSql)">
+	               ORDER BY ${orderSql}
+			</when>
+		</choose>
+		LIMIT ${pageNo},${pageSize}
+	</select>
+	
+	
+</mapper>

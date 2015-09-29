@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>Document</title>
+  <link rel="stylesheet" href="codemirror.css">
+  <link rel="stylesheet" href="ambiance.css">
+  <script src="codemirror.js"></script>
+  <script src="javascript.js"></script>
+  <script src="css.js"></script>
+  <script src="xml.js"></script>
+  <script src="htmlmixed.js"></script>
+  <style id="cssRule">
+	*{margin:0;padding:0;}
+	html,body{min-height:100%;font-size:14px;font-family:"微软雅黑"}
+	#container{position:fixed;top:0px;left:0px;width:100%;height:100%;}
+	.breadcrumb{overflow:hidden;border-bottom:2px solid #56BC8A;counter-reset:flag;position:relative;}
+	.breadcrumb a{text-decoration:none;outline:none;display:block;font-size:12px;line-height:36px;color:#fff;padding:0 10px 0 60px;background:#36465D;position:relative;background:linear-gradient(#36465D,#212B38);float:left;}
+	.breadcrumb a:after{content:"";width:36px;height:36px;position:absolute;top:0;right:-18px;z-index:1;background:#36465D;background:linear-gradient(135deg,#36465D,#212B38);box-shadow:2px -2px 0 2px rgba(0,0,0,0.4),3px -3px 0 2px rgba(255,255,255,0.1);border-radius:0 5px 0 50px;transform:scale(0.7) rotate(45deg)}
+	.breadcrumb a:before{content:counter(flag);counter-increment:flag;border-radius:100%;width:20px;height:20px;line-height:20px;margin:8px 0;position:absolute;top:0;left:30px;background:#444;background:linear-gradient(#444,#222);font-weight:bold;text-align:center;}
+	.breadcrumb a.active,.breadcrumb a:hover{background:#333;background:linear-gradient(#333,#000);}
+	.breadcrumb a.active:after,.breadcrumb a:hover:after{background:#333;background:linear-gradient(135deg,#333,#000);}
+	.c_right{width:36%;height:100%;background:#36465D;float:left}
+	.c_left{width:64%;height:100%;background:#56BC8A;float:right;text-align:center;position:relative;}
+
+	#preview {
+	  width: 100%;
+	  height: 100%;
+	  position: absolute;
+	  top: 0;
+	  left: 0;
+	  border-radius: 0 5px 5px 0;
+	}
+  </style>
+ </head>
+ <body oncontextmenu="return false;">
+  <div id="container">
+	<div class="c_left">	
+		<iframe id="preview" name="preview" frameborder="0" oncontextmenu="return false;"></iframe>
+	</div>
+	<section class="c_right">
+		<div class="breadcrumb flat">
+			<a href="javascript:void(0);" id="htmlclick" class="active">HTML代码</a>
+			<a href="javascript:void(0);" id="cssclick">CSS代码</a>
+			<a href="javascript:void(0);" id="jsclick">JS代码</a>
+		</div>
+		<div>
+			<div id="htmlbox">
+<textarea id="htmleditor">
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>RunJS</title>
+	</head>
+	<body>
+		<h1>潭州学院KeKe老师</h1>
+	</body>
+</html>
+</textarea>
+			</div>
+			<!--cssbox-->
+			<div id="cssbox">
+				<textarea id="csseditor" style="height:400px;">
+@charset "UTF-8";
+* {word-wrap: break-word;}
+html {-webkit-text-size-adjust: none; }
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td,span{padding:0;margin:0;}
+body{font:normal 14px/20px "Microsoft Yahei","Hiragino Sans GB","Hiragino Sans GB W3","冬青黑体简体中文 w3","宋体";-webkit-font-smoothing:antialiased}
+fieldset,img,html,body,iframe{border:0;}
+table{border-collapse:collapse;border-spacing:0;}
+ol,ul{list-style:none;}
+address,caption,cite,code,dfn,em,strong,th,var{font-weight:normal;font-style:normal;}
+caption,th{text-align:left;}
+em,i,small,caption,th{font-weight:normal;font-style:normal;font-size:100%;}
+h1,h2,h3,h4,h5,h6,em,strong,b{font-weight:bold;font-size:100%;}
+q:before,q:after{content:'';}
+.clearfix{*zoom:1;}
+.clearfix:after{content:"."; display:block;clear:both;visibility:hidden;line-height:0;height:0;}
+html,body{width:100%;height:100%;}
+a {color: #333;text-decoration: none;}
+a img {border: none;}
+a,button{ outline:none; border:0;}
+input,select{border:1px solid #ccc;}
+button::-moz-focus-inner{border:0;padding:0;margin:0;}
+textarea,input,button,select{outline:0;font-size:inherit;line-height:inherit;color:inherit;font-family:inherit;}
+textarea{overflow:auto;resize:none;}
+.hide,.none{display: none}
+.hidden{visibility: hidden;}
+.show,.block{display: block;}
+img,object,embed,video{max-width:100%}
+img{ vertical-align:middle}
+input:disabled,select:disabled,textarea:disabled{background:#ccc;}
+.fl{float: left;}
+.fr{float: right;}		
+				</textarea>
+			</div>
+			<!--jsbox-->
+			<div id="jsbox">
+				<textarea id="jseditor">
+<script type="text/javascript">
+		window.onload = function(){
+			//js代码写在这里..
+		};
+</script>
+</textarea>
+			</div>
+		</div>
+	</section>
+  </div>
+  <script type="text/javascript" src="jquery-1.11.2.min.js"></script>
+  <script type="text/javascript">
+		var htmlCodeMirror,cssCodeMirror,myCodeMirror = null;
+		window.onload = function(){
+			jsCodeMirror = CodeMirror.fromTextArea(document.getElementById("jseditor"),{
+				modes: "javascript",
+				tabSize:2,/*按下tab键盘的空格数*/
+				indentWithTabs: true,
+				smartIndent: true,
+				lineNumbers: true,/*是否显示行号*/
+				matchBrackets : false,
+				theme:"ambiance",/*设置皮肤*/
+				firstLineNumber:1,/*行号从什么位置开始*/
+				autofocus: true,/*自动获取焦点*/
+				showCursorWhenSelecting:true,//是否会全选的时候绘制光标
+				readOnly:false/*是否禁止输入*/
+			});
+			cssCodeMirror = CodeMirror.fromTextArea(document.getElementById("csseditor"),{mode: "css",lineNumbers:true,theme:"ambiance"/*设置皮肤*/});
+			htmlCodeMirror = CodeMirror.fromTextArea(document.getElementById("htmleditor"),{mode: "htmlmixed",lineNumbers:true,theme:"ambiance"/*设置皮肤*/});
+			var wh = this.innerHeight-36;
+			$(".CodeMirror,.CodeMirror-gutters").height(wh);
+			this.addEventListener("resize",function(){
+				var wh = this.innerHeight-36;
+				$(".CodeMirror,.CodeMirror-gutters").height(wh);
+			});
+
+			//绑定事件 change改变的时候 
+			htmlCodeMirror.on("change",function(){
+				setEditor();
+			});
+			cssCodeMirror.on("change",function(){
+				setEditor();
+			});
+			
+			jsCodeMirror.on("change",function(){
+				setEditor();
+			});
+		};
+
+		function setEditor(){
+			var previewDom = window.frames['preview'];
+			previewDom.document.open();
+			previewDom.document.write(htmlCodeMirror.getValue());
+			previewDom.document.write("<style id="cssRule">"+cssCodeMirror.getValue()+"</style>");
+			previewDom.document.write(jsCodeMirror.getValue());
+			previewDom.document.close();
+		};
+	
+
+		function tzclickme(id,callback){
+			document.getElementById(id+"click").addEventListener("click",callback,false);
+		};
+
+		function siblings(dom){
+			var parents = dom.parentElement;
+			var childs = parents.children;
+			var adoms = Array.prototype.slice.call(childs);
+			var arr = [];
+			adoms.forEach(function(edom){
+				if(dom !== edom){
+					arr.push(edom);
+				}
+			});
+			return arr;
+		};
+
+		tzclickme("html",function(){
+			this.className = "active";
+			siblings(this).forEach(function(dom){
+				dom.className = "";
+			});
+			var hdom = document.getElementById("htmlbox");
+			$(hdom).stop(true,true).slideDown("slow").siblings().slideUp("slow");
+		});
+
+		tzclickme("css",function(){
+			this.className = "active";
+			siblings(this).forEach(function(dom){
+				dom.className = "";
+			});
+			var hdom = document.getElementById("cssbox");
+			$(hdom).stop(true,true).slideDown("slow").siblings().slideUp("slow");
+		});
+
+		tzclickme("js",function(){
+			this.className = "active";
+			siblings(this).forEach(function(dom){
+				dom.className = "";
+			});
+			var hdom = document.getElementById("jsbox");
+			$(hdom).stop(true,true).slideDown("slow").siblings().slideUp("slow");
+		});
+  </script>
+ </body>
+</html>

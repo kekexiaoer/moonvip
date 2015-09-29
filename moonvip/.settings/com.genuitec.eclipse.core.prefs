@@ -1,0 +1,3 @@
+eclipse.preferences.version=1
+validator.Checked=WebRoot/WEB-INF/pages/common/header.html,WebRoot/WEB-INF/pages/index.html,WebRoot/js,WebRoot/WEB-INF/pages/content/edit.html,WebRoot/WEB-INF/moonhong-servlet.xml,WebRoot/resources/sg/jquery-1.11.2.min.js,WebRoot/resources/js
+validator.Unchecked=

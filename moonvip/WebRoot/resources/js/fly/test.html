@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Add to cart fly animation effect </title>
+  <style id="cssRule">
+ 
+  </style>
+
+  <script>
+    window.console = window.console || function(t) {};
+    window.open = function(){ console.log('window.open is disabled.'); };
+    window.print = function(){ console.log('window.print is disabled.'); };
+    // Support hover state for mobile.
+    if (false) {
+      window.ontouchstart = function(){};
+    }
+  </script>
+
+</head>
+
+<body>
+  <div class="container">
+  <div class="row">
+    <p class="m-top">code repositoy：<a href="https://github.com/amibug/fly" target="_blank">https://github.com/amibug/fly</a> <span>喜欢就在github上star一个吧</span></p>
+    <section class="m-tip">
+      click at the blank!  click here</br>
+      在空白处点击鼠标实现放入购物车效果
+    </section>
+  </div>
+</div>
+
+<div class="m-sidebar">
+  <div class="cart">
+    <i id="end"></i>
+    <span>购物车</span>
+  </div>
+</div>
+
+  <script src='http://libs.baidu.com/jquery/1.9.1/jquery.min.js'></script>
+  <script src='requestAnimationFrame.js'>
+  </script><script src='jquery.fly.min.js'></script>
+
+  <script>
+
+    $('html,body').on('click', addProduct);
+	function addProduct(event) {
+		var offset = $('#cartbox').offset(), flyer = $('<div>sdfsdfsd</div>');
+		flyer.fly({
+			start: {
+				left: event.pageX,
+				top: event.pageY
+			},
+			end: {
+				left: offset.left,
+				top: offset.top,
+				width: 20,
+				height: 20
+			}
+		});
+	}
+  </script>
+
+</body>
+</html>

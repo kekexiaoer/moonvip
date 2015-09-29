@@ -1,0 +1,328 @@
+<!doctype html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>潭州学院-KeKe个人博客添加页面</title>
+  <#include "/common/common.html"/>
+  <script type="text/javascript" src="${basePath}/js/ckeditor/ckeditor.js"></script>
+  <script type="text/javascript" src="${basePath}/js/tz_admin.js"></script>
+  <script type="text/javascript" src="${basePath}/js/upload/tz_upload.js"></script>
+  <script type="text/javascript" src="${basePath}/js/show_upload.js"></script>
+  <style id="cssRule">
+	.showbox{width:100%;height:100%;position:fixed;top:0px;left:0px;background:#28384F}
+	.showbox .c_left .btns{display:none;}
+	.showbox .c_left:hover .btns{display:inline-block;}
+	.showbox .c_left{width:70%;height:100%;position:absolute;top:0;left:0;z-index:2;}
+	.showbox .c_left .close_btn{width:36px;height:36px;position:absolute;top:3%;right:2%;background:url(${basePath}/images/video_info_close_btn.png) no-repeat center;z-index:2;transition:all 0.6s ease;}
+	.showbox .c_left .close_btn:hover{background:#738298 url(video_info_close_btn.png) no-repeat center;transform:rotate(360deg);transition:all 0.6s ease;}
+	.showbox .c_left .prev,.showbox .c_left .next{background:#738298;width:36px;height:36px;position:absolute;top:50%;margin-top:-23px;z-index:2;}
+	.showbox .c_left .prev{left:2%;background:url(${basePath}/images/video_info_btn1.png) no-repeat center;transition:all 0.6s ease;}
+	.showbox .c_left .next{right:2%;background:url(${basePath}/images/video_info_btn2.png) no-repeat center;transition:all 0.6s ease;}
+	.showbox .c_left .prev:hover{background:#738298 url(${basePath}/images/video_info_btn1.png) no-repeat center;transform:rotate(360deg);transition:all 0.6s ease;}
+	.showbox .c_left .next:hover{background:#738298 url(${basePath}/images/video_info_btn2.png) no-repeat center;transform:rotate(360deg);transition:all 0.6s ease;}
+	.showbox .c_left .cntbox{padding:2% 10%;color:#9AA2AD;width:96%;}
+	.showbox .c_right{width:26%;height:100%;background:#fff;position:absolute;top:0;right:0;padding:0 2%;color:#3f3f3f;}
+	.showbox .c_right .img{max-width:99%;height:140px;}
+	.showbox .c_right h2{font-size:18px;line-height:60px;border-bottom:1px solid #D9D9D9;padding-top:20px;margin-bottom:58px}
+	.showbox .c_right .fun{padding:10px;background:#28384F;position:relative;top:20px;color:#e5e5e5}
+	.showbox .c_right .fun .its{width: 100%;float:left;font-size: 12px}
+	@media screen and (max-width:768px){
+	.showbox .c_left{width:100%}
+	.showbox .c_right{display:none}
+	}
+	.content{overflow:hidden;}
+	.content .inptt2{color:#fff;line-height:22px;min-height:22px;overflow:hidden;padding:4px;width:100%;outline:medium none;float:left;background:#28384F;border:2px dotted #738298;}
+	.content .img{border:2px dotted #738298;margin-bottom:10px;position: relative;}
+	.content .other{margin-top:5px;float:left;width: 100%;position:relative;}
+	.content .upbtns{position: absolute;right:1px;top:1px;background:#28384F;padding:0 12px;font-size:12px;}
+	.showbox .s_btns{padding:5px 20px;background:#28384F;}
+	.tz_musicbox{width:30px;position: absolute;right:12px;bottom:0px;z-index:2;}
+	.tz_musicbox .imgitems{width:30px;height:30px;margin-top:8px;position: relative;transition:all 0.3s ease-in-out;border-radius:50%;}
+	.tz_musicbox .imgitems img{width:100%;height:100%;border-radius:50%}
+	.tz_musicbox .imgitems .del{position:absolute;right: 0px;top: -12px; }
+	.tz_musicbox .imgitems .iconfont{font-size: 12px;color:#888;}
+	.tz_musicbox .imgitems:hover{border:2px solid #888;transform:scale(0.8);transition:all 0.3s ease-in-out}
+	#c_imgbox{  background: #28384F;
+  width: 100%;
+  height: 100%;
+  color: #9B9494;
+  text-align: center;
+  line-height: 140px;
+  font-size: 24px;}
+  .sliderbox .cnt{position: absolute;}
+  </style>
+ </head>
+ <body data-opid="${id}">
+   
+ 	<div class="error_tips cbg" style="display: none;"><i class="iconfont">&#xf0104;</i><span id="e_m"></span></div>
+	<div class="showbox changebg">
+		<div class="c_left sliderbox">
+			<div class="video_box" style="width: 70%;">
+<!-- 		  <a class="btns close_btn" href="javascript:;"></a> -->
+<!-- 		  <a class="btns prev" href="javascript:void(0)" onclick="createEditor()"></a> -->
+<!-- 		  <a class="btns next" href="javascript:void(0)" onclick="removeEditor()"></a> -->
+			  <div class="omark">
+				<div class="cbar"></div>
+				<div class="bar"></div>
+			  </div>
+			  <div class="cntbox cnt">
+                  <textarea id="p_desc">${(content.content)!}</textarea>                                                                     
+			  </div>
+			</div>
+		</div>
+		<div class="c_right">
+			<form id="contentForm">
+				<div class="content">
+					<h2><input type="text" class="inptt2 changebg  tmui-tips" id="title" name="title" value="${(content.title)!}" maxlength="60" placeholder="请输入标题" tip="标题" style="height: 36px"></h2>
+					<div class="img">
+						<div id="c_imgbox" class="changebg"><#if content?? && content.img??>
+						<img src="${basePath}/${content.img}"   data-iw="${content.width}" data-ih="${content.height}" data-thumnail="${content.thumnail}"  data-img="${content.img}" id="c_img" height="140" width="100%">
+						<#else>请上传图片...</#if></div>
+						<a href="javascript:void(0)" onclick="openBrowse(this,0)" class="upbtns changebg">上传</a>
+						<input type="file" id="file" name="file" onchange="uploadFile(this)" style="display:none"/>
+					</div>
+					<div class="other">
+						<select id="channelId" name="channelId" class="inptt2 changebg  tmui-tips" tip="选择栏目" style="color: #a9a9a9">
+						  <option value="">--请选择栏目--</option> 	
+						  <@channelList var="ch" filterId="1,3,7">
+								<option data-type="${ch.sort}" <#if content?? && ch.id==content.channelId>selected="selected"</#if> data-opid="${ch.id}" value="${ch.id}">${ch.name}</option>
+						  </@channelList>	
+						</select>
+					</div>
+					<div class="other">
+						<input type="text" class="inptt2 changebg  tmui-tips" name="tag" value="${(content.tag)!}" id="tag" style="width:28%;" placeholder="请输入标签"  maxlength="32" tip="多个标签用逗号隔开" > 
+						<input type="text" class="inptt2 changebg  tmui-tips tm_number" name="hits" id="hits"  style="width:16%;margin-left:10px;" value="${(content.hits)!0}" maxlength="8" tip="点击数" placeholder="点击数" >
+							<input type="text" class="inptt2 changebg  tmui-tips tm_number" name="collections" id="collections" style="width:16%; margin-left:10px;" value="${(content.collections)!0}" maxlength="8" tip="请输入收藏数" placeholder="收藏数" >
+							<input type="text" class="inptt2 changebg  tmui-tips tm_number" name="loves" id="loves" style="width:17%; margin-left:10px;" maxlength="8" value="${(content.loves)!0}" tip="请输入喜欢数量(热门)" placeholder="喜欢数量(热门)" >
+						</div>
+					<div class="other">
+						<input type="text" class="inptt2 changebg  tmui-tips" name="keywords" id="keyword" value="${(content.keywords)!}" tip="SEO关键字" placeholder="SEO关键字" maxlength="60">
+						<a href="javascript:void(0);" style="position: absolute;right:0px;bottom:0px;"onclick="tzContent.keyword('keyword')">解析</a>
+					</div>
+					<div class="other">
+						<textarea class="inptt2 changebg  tmui-tips" style="height:106px;" name="description"  id="description" tip="SEO描述" placeholder="SEO描述" maxlength="160">${(content.description)!}</textarea>
+						<a href="javascript:void(0);" style="position: absolute;right:0px;bottom:0px;"onclick="tzContent.keyword('description')">解析</a>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+				<div class="fun changebg">
+					<div class="its">
+						<p class="tinp fl">
+							精华推荐： 
+							<label><input type="radio" name="push" <#if content?? && content.push==1>checked="checked"</#if> value="1">是</label> 
+							<label><input type="radio" name="push" <#if !content?? || content?? && content.push==0>checked="checked"</#if>  value="0">否</label>
+						</p>
+						<p class="tinp fr">
+							是否置顶： 
+							<label><input type="radio" name="isTop" <#if content?? && content.isTop==1>checked="checked"</#if>  value="1">是</label> 
+							<label><input type="radio" name="isTop" <#if !content?? ||  content?? && content.isTop==0>checked="checked"</#if>  value="0">否</label>
+						</p>
+					</div>
+					<div class="its">
+						<p class="tinp fl">
+							是否删除： 
+							<label><input type="radio" name="isDelete" <#if content?? && content.isDelete==1>checked="checked"</#if>  value="1">是</label> 
+							<label><input type="radio" name="isDelete" <#if !content?? ||  content?? && content.isDelete==0>checked="checked"</#if>  value="0">否</label>
+						</p>
+						<p class="tinp fr">
+							是否发布： 
+							<label><input type="radio" name="status" <#if !content?? || content?? && content.status==1>checked="checked"</#if>  value="1">是</label> 
+							<label><input type="radio" name="status" <#if (content?? && content.status==0)>checked="checked"</#if>  value="0">否</label>
+						</p>
+					</div>
+					<div class="its">
+						<p class="tinp fl">
+							是否评论： 
+							<label><input type="radio" name="isComment" <#if !content?? ||  content?? && content.isComment==1>checked="checked"</#if>  value="1">是</label> 
+							<label><input type="radio" name="isComment" <#if content?? && content.isComment==0>checked="checked"</#if>  value="0">否</label>
+						</p>
+						<p class="tinp fr">
+							是否编码： 
+							<label><input type="radio" name="isCode" <#if content?? && content.isCode==1>checked="checked"</#if>  value="1">是</label> 
+							<label><input type="radio" name="isCode" <#if !content?? ||  content?? && content.isCode==0>checked="checked"</#if>  value="0">否</label>
+						</p>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="clearfix"></div>
+				<div style="margin-top:30px;">
+					<a href="javascript:void(0);" onclick="window.location.href='${basePath}/admin/list'" class="s_btns changebg">返回</a>
+					<a href="javascript:void(0);" class="s_btns changebg" onclick="tzContent.save(this)">保存</a>
+				</div>
+			</form>
+		</div>
+	</div>
+	<script type="text/javascript">
+		tzsliderbar();
+		$(function(){
+			createEditor();
+			if(window.localStorage && isEmpty($("body").data("opid"))){
+				var html = localStorage.getItem("content_data");
+				var title = localStorage.getItem("title_data");
+				var img_cache = localStorage.getItem("img_cache");
+				if(html)setEditorContent("p_desc",html);
+				if(title)$("#title").val(title);
+				if(img_cache)$("#c_imgbox").html(img_cache);
+			}
+
+			try{
+				CKEDITOR.on('instanceReady', function (e) { 
+					if(e.editor.document.$.addEventListener) 
+						e.editor.document.$.addEventListener('keydown',ckeydown,false);
+					else if(e.editor.document.$.attachEvent)
+						e.editor.document.$.attachEvent('onkeyup',function(e){ckeydown(e);});  
+				});
+				function ckeydown(){
+					if(window.localStorage){
+						localStorage.setItem("content_data", editor.getData());
+						localStorage.setItem("title_data", $("#title").val());
+					}
+				}
+			}catch(e){}
+		
+		});
+		
+		var editor = null;
+		function createEditor() {
+			 var clientHeight = getClientHeight();
+			 editor =  CKEDITOR.replace("p_desc",{height:clientHeight-126,width:"82%"});
+			 document.getElementById("p_desc").parentElement.style.width = "96%";
+		}
+
+		/*function removeEditor() {
+			if ( !editor )return;
+			document.getElementById("p_desc").parentElement.innerHTML = html = editor.getData();
+			document.getElementById("p_desc").parentElement.style.width = "auto";
+			
+			editor.destroy();
+			editor = null;
+		};*/
+		
+		var timer = null;
+		var  tzContent = {
+			save:function(){
+				if(this.validator()){
+					var html = editor.getData();
+					var opid = $("body").data("opid");
+					var params = $("#contentForm").serializeArray();
+					params.push({name:"img",value:$("#c_img").data("img")});
+					params.push({name:"width",value:$("#c_img").data("iw")});
+					params.push({name:"height",value:$("#c_img").data("ih")});
+					params.push({name:"thumnail",value:$("#c_img").data("thumnail")});
+					params.push({name:"content",value:html});
+					params.push({name:"type",value:$("#channelId").find("option:selected").data("type")});
+					var method ="save";
+					if(isNotEmpty(opid)){
+						params.push({name:"id",value:opid});
+						method="update";
+					}
+					var isCode = $("input[type='radio'][name='isCode']:checked").val();
+					$.tzAjax.request({model:"content",method:method,callback:function(data){
+						loading("操作成功!",4);
+						tz_staticHtml(data.id);//静态化一次
+						if(window.localStorage){
+							localStorage.removeItem("content_data");
+							localStorage.removeItem("title_data");
+							localStorage.removeItem("img_cache");
+						}
+						if(isCode==1){
+							window.location.href = rootPath+"/code/"+data.id;
+						}else{
+							window.location.href = basePath+"/list";
+						}
+					}},params);
+				}
+			},
+			validator:function(){
+				var title = $("#title").val();
+				var img = $("#c_img").data("img");
+				var channelId = $("#channelId").val();
+				var hits = $("#hits").val();
+				var collections = $("#collections").val();
+				var loves = $("#loves").val();
+				var content = editor.document.getBody().getText();
+				if(isEmpty(title)){
+					this.error("别调皮，标题这么重要的怎么忘记了...");
+					$("#title").focus();
+					return false;
+				}
+				if(isEmpty(img)){
+					this.error("找个精美的图片，点击上传按钮修饰一下吧...");
+					return false;
+				}
+				if(isEmpty(channelId)){
+					this.error("归属地还没选择,让它有个归属吧...");
+					$("#channelId").focus();
+					return false;
+				}
+				
+				if(isEmpty(content)){
+					this.error("严重警告提示,内容没有...");
+					return false;
+				}
+				
+				if(isNotEmpty(hits) && isNaN(hits)){
+					this.error("请输入数字...");
+					 $("#hits").select();
+					return false;
+				}
+				
+				if(isNotEmpty(collections) && isNaN(collections)){
+					this.error("请输入数字...");
+					 $("#collections").select();
+					return false;
+				}
+				
+				if(isNotEmpty(loves) && isNaN(loves)){
+					this.error("请输入数字...");
+					 $("#loves").select();
+					return false;
+				}
+				return true;	
+			},
+			error:function(msg){
+				 $(".error_tips").show().removeClass("magictime slideLeftRetournOut").addClass("magictime slideLeftRetourn");
+				 clearTimeout(timer);
+				 timer = setTimeout(function(){
+					$(".error_tips").removeClass("magictime slideLeftRetourn").addClass("magictime slideLeftRetournOut").fadeOut("slow");
+				 },3000);
+				 $("#e_m").html(msg);
+		 	},
+		 	keyword:function(key){
+		 		var title = $("#title").val();
+		 		var content = editor.document.getBody().getText();
+		 		if(isEmpty(title)){
+					this.error("别调皮，标题这么重要的怎么忘记了...");
+					$("#title").focus();
+					return false;
+				}
+				if(isEmpty(content)){
+					this.error("严重警告提示,内容没有...");
+					return false;
+				}
+				var desc = content;
+				if(key=="keyword")desc = title+content;
+		 		$.tzAjax.request({url:basePath+"/content/"+key,callback:function(data){
+		 			$("#"+key).val(data);
+		 			if(key=="keyword")$("#tag").val(data);
+		 		}},{"message":desc});
+		 	}
+		}; 
+		
+		if(window.localStorage){
+			var lcolor = localStorage.getItem("color");
+			if(lcolor){
+				var color = lcolor.split(",");
+				if(color){
+					$(".changebg").css("background",color[0]);
+					$(".cbg").css("background",color[1]);
+				}
+			}
+		}
+	</script>
+ </body>
+</html>

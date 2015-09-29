@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>评论插件框</title>
+    <meta charset="UTF-8">
+    <#include "/common/common.html"/>
+    <#--<script type="text/javascript" src="${basePath}/js/ckeditor/ckeditor.js"></script>  
+    <script src="${basePath}/js/tz_admin.js" type="text/javascript"></script>-->
+    <style type="text/css" id="cssRule">
+    	.nocomment{  border: 2px dotted #738298; padding: 100px 0px;text-align: center;font-size: 36px;color: #999;}#commentbox{margin-top: 20px;}
+    	.box-pingl .uname{position: relative;top: 24px;left: 5px}
+    </style>
+ </head>
+  <body class="changebg" data-opid="${id}" data-userid="${session_user_key_id}"  oncontextmenu="return false;">
+    <div id="commentwarp_box" class="commentwarp clearfix">        	
+        <div class="box-pingl">
+	        <p id="userbox" class="fs12">
+	        	<#if session_user_key_id??>
+	        		<a href="javascript:void(0)"  class="color-huis">
+	        			<img src="${basePath}/${session_user_key.headerPic}" class="tz_userinfo" title="${session_user_key_username}" id="userhead" width="56" height="56"/>
+	        			<span class="tmui-tips uname" title="${session_user_key_username}">${session_user_key_username} 开始评论</span>
+	        		</a>
+	        	<#else>	
+	        		<a href="javascript:void(0);" onclick="tzComment.toLogin(1)" class="color-huis">登陆</a> / <a href="javascript:void(0);" onclick="tzComment.toLogin(2)"  class="color-huis">注册</a> KeKeBlog<span> 开始评论 </span>
+	        	</#if>
+	        </p>
+	        <p class="mt20">评论(<strong id="tzcomment-counts">0</strong>)&nbsp;<span id="info"></span></p>
+            <textarea id="comment_desc" class="inpt changebg" placeholder="请输入评论内容..." style="width: ${params}px"></textarea><button onclick="tzComment.save(this)" id="savebtn" data-opid="${id}" class="cbg" data-model="content">发&nbsp;布</button>
+        </div>
+        <div class="tz_cssloading" style="display: none;"><img src="${basePath}/sg/images/load.gif" width="120" height="120"></div>
+        <ul id="commentbox"></ul>
+        <p class="more"><a href="javascript:void(0);" id="more_comments" onclick="tzComment.click();">加载(更多<strong class="tmuicomment-counts">0</strong>)</a></p>    
+    </div>
+    <script type="text/javascript">
+    	var tzComment = {
+    		update:function(obj){
+    			var opid = $(obj).data("opid");
+    			var uname = $("#userhead").attr("title");
+     			if(isEmpty(uname)){
+     				parent.$.tzIframe({drag:false,title:"",content:rootPath+"/loginDialog",showButton:false,width:375,height:460});
+     				return;
+     			}
+    			$.tzAjax.request({model:"comment",method:"update",callback:function(data){
+    				parent.loading("该条评论已加入黑名单中...",4);
+    				$(obj).removeAttr("onclick").css("color","red").text("已加黑");
+    			}},{id:opid,status:2});
+    		},
+    		toLogin:function(mark){
+    			if(mark==1){
+    				parent.window.location.href = rootPath+"/login";
+    			}else{
+    				parent.window.location.href = rootPath+"/reg";
+    			}
+    		},
+    		remove:function(obj){
+    			var opid = $(obj).data("opid");
+    			var uname = $("#userhead").attr("title");
+     			if(isEmpty(uname)){
+     				parent.$.tzIframe({drag:false,title:"",content:rootPath+"/loginDialog",showButton:false,width:375,height:460});
+     				return;
+     			}
+    			$.tzAjax.request({model:"comment",method:"update",callback:function(data){
+    				$(obj).parents("li").fadeOut("slow",function(){
+    					$(this).remove();
+    					var count = $("#tzcomment-counts").text()*1||0;
+         				$("#tzcomment-counts,.tmuicomment-counts").text(count-1);
+         				var len = $("#commentbox").find("li").length;
+         				if(len<=10)$(".more").remove();
+         				if(len==0){
+         					$("#commentbox").html("<li class='nocomment'>暂无评论</li>");
+         					$(".more").hide();
+         				}
+        				var iframeDom = parent.document.getElementById("comment_iframebox");
+            			iframeDom.height = ($("#commentwarp_box").height()+100)+"px";
+    				});
+    			}},{id:opid,isDelete:1});
+    		},
+    		
+    		reply:function(obj){
+    			var opid = $(obj).data("opid");
+    			var text = $("#tz_cmt_"+opid).text();
+    			$("#savebtn").data("pid",opid);
+    			$("#info").text("【"+text+"】 回复到:");
+    		},
+     		save : function(obj){
+     			var cid = $(obj).data("opid");
+     			var pid = $("#savebtn").data("pid");
+     			var content = $("#comment_desc").val();
+     			
+     			var uname = $("#userhead").attr("title");
+     			if(isEmpty(uname)){
+     				parent.$.tzIframe({drag:false,title:"",content:rootPath+"/loginDialog",showButton:false,width:375,height:460});
+     				return;
+     			}
+     			
+     			if(isEmpty(content)){
+     				$("#comment_desc").focus();
+     				parent.loading("请输入评论信息!",4);
+     				return ;
+     			}
+     			
+     			if(content.length > 400){
+     				$("#comment_desc").focus();
+     				parent.loading("评论信息不能超过400个字符!",4);
+     				return;
+     			}
+     			
+     			content = this.filterScript(content);
+     			if(isEmpty(content)){
+     				$("#comment_desc").select();
+     				parent.loading("请输入正确的评论!",4);
+     				return;
+     			}
+     			var img = $("#userhead").attr("src");
+     			content = this.filterTag(content);
+     			$(obj).removeAttr("onclick").text("发...");
+     			$.tzAjax.request({model:"comment",method:"save",callback:function(data){
+     				$("#comment_desc").val("");
+     				if(window.localStorage)localStorage.removeItem("comment_data");
+     				$(".nocomment").remove();
+     				$(obj).attr("onclick","tzComment.save(this)").text("发布");
+     				$("#commentbox").prepend(" <li data-opid='"+data.id+"' class='pl-cont c_items clearfix tzui-tips' tip='"+new Date().format("yyyy年MM月dd日 HH:mm:ss")+"'>"+
+     		        "        <div class='fl fs12 comment_items'>"+
+    			    "            <a href='javascript:void(0)' class='mr fl'><img class='tz_userinfo' src='"+img+"' title='"+uname+"'></a>"+
+    			    "            <p class='fl clearfix'><a href='javascript:void(0)' id='tz_cmt_"+data.id+"'  class='user-name tmui-ellipsis w30 mr'>"+uname+"</a></p>"+content+
+    			    "    </div>"+
+    			    "    <p class='fr fs12 huif clearfix'><a href='javascript:void(0)' onclick='tzComment.reply(this)' data-opid='"+data.id+"' class='jiah mr color-blue' style='display:none;'><span>回复</span></a><a href='javascript:void(0)' data-opid='"+data.id+"' onclick='tzComment.remove(this)' class='jiah mr color-blue'><span>删除</span></a></p>"+
+    			    " </li>");
+     				$(".tzui-tips,.tmui-tips").tmTip();
+     				var iframeDom = parent.document.getElementById("comment_iframebox");
+     				iframeDom.height = ($("#commentwarp_box").height()+100)+"px";
+     				var count = $("#tzcomment-counts").text()*1||0;
+     				$("#tzcomment-counts,.tmuicomment-counts").text(count+1);
+     				$("#info").text("");
+     				$("#savebtn").removeData("pid");
+     				//$(".more").show();
+     			}},{contentId:cid,content:content,parentId:pid});
+     		},
+     		list:function(pageNo,pageSize){
+     			var cid = $("body").data("opid");
+     			var uid = $("body").data("userid"); 
+     			var tno = pageNo *pageSize;
+     			$(".tz_cssloading").show();
+     			$.tzAjax.request({url:rootPath+"/commentno/list",callback:function(data){
+     				$(".tz_cssloading").hide();
+     				var cdata = data.split("#"); 
+     				var total = cdata[1];
+    				var jdata = eval("("+cdata[0]+")");
+    				if(total==0){
+    					$("#commentbox").html("<li class='nocomment'>暂无评论</li>");
+    					$(".more").hide();
+    					var iframeDom = parent.document.getElementById("comment_iframebox");
+         				iframeDom.height = ($("#commentwarp_box").height()+100)+"px";
+    					return;
+    				}
+    				if(total<=10)$(".more").remove();
+    				if((tno+1) >=total)$("#more_comments").text("加载完毕").removeAttr("onclick");
+     				if(jdata && jdata.length>0){
+    					$("#tzcomment-counts,.tmuicomment-counts").text(total);
+    	 				var len = jdata.length;
+    	 				var i=0,html = "";
+    	 				for(;i<len;i+=1){
+	    	 				var status = jdata[i].status;
+	    	 				var cdline = "";
+	    	 				var shtml = "<a href='javascript:void(0)'  data-opid='"+jdata[i].id+"' onclick='tzComment.update(this)' class='jiah mr color-blue'><span>加黑</span></a><a href='javascript:void(0)'  onclick='tzComment.reply(this)' data-opid='"+jdata[i].id+"' style='display:none;' class='jiah mr color-blue none'><span>回复</span></a>";
+	    	 				var dhtml = "";
+	    	 				if(status == 2){
+	    	 					cdline = "style='text-decoration:line-through'";
+	    	 					shtml="<a href='javascript:void(0)'  class='jiah mr red'><span>已加黑</span></a>";
+	    	 				}
+	    	 				if(uid == jdata[i].userId){
+	    	 					shtml = "<a href='javascript:void(0)' data-opid='"+jdata[i].id+"'  onclick='tzComment.reply(this)' style='display:none;' class='jiah mr color-blue none'><span>回复</span></a>";	
+	    	 					dhtml = "<a href='javascript:void(0)' data-opid='"+jdata[i].id+"' onclick='tzComment.remove(this)' class='jiah mr color-blue'><span>删除</span></a>";
+	    	 				}
+    	 					html+=" <li  data-opid='"+jdata[i].userId+"'  class='pl-cont c_items clearfix tzui-tips' tip='"+$.tmDate._transferDate(jdata[i].createTime).format("yyyy年MM月dd日 HH:mm:ss")+"'>"+
+    	 		 		        "        <div class='fl fs12 comment_items' "+cdline+">"+
+    	 					    "            <a href='javascript:void(0)'  class='mr fl'><img class='tz_userinfo' src='"+rootPath+"/"+jdata[i].headerPic+"' ></a>"+
+    	 					    "            <p class='fl clearfix'><a href='javascript:void(0)' id='tz_cmt_"+jdata[i].id+"' class='user-name tmui-ellipsis w30 mr'>"+jdata[i].username+"</a></p>："+jdata[i].content+
+    	 					    "    </div>"+
+    	 					    "	<p class='fr fs12 huif clearfix'>"+shtml+dhtml+"</p>"+
+    	 					    " </li>";
+    	 				}
+    	 				$("#commentbox").data({pno:pageNo,psize:pageSize}).append(html);
+    	 				$(".tzui-tips").tmTip();
+     				}else{
+     					$("#more_comments").text("加载完毕").removeAttr("onclick");
+     				}
+     				var iframeDom = parent.document.getElementById("comment_iframebox");
+     				iframeDom.height = ($("#commentwarp_box").height()+100)+"px";
+     			}},{contentId:cid,pageNo:tno,pageSize:pageSize});
+     		},
+     		click:function(){
+     			var pno = $("#commentbox").data("pno")*1;
+     			var psize = $("#commentbox").data("psize")*1;
+     			pno++;
+     			this.list(pno,psize);
+     		},
+     		filterTag: function(str) {
+     	        str = str.replace(/&/ig, "&amp;");
+     	        str = str.replace(/</ig, "&lt;");
+     	        str = str.replace(/>/ig, "&gt;");
+     	        str = str.replace(" ", "&nbsp;");
+     	        return str;
+     	    },
+     	    filterScript: function(str) {
+     	        //return str.replace(/(<script)/ig, "&lt;script").replace(/(<script>)/ig, "&lt;script&gt;").replace(/(<\/script>)/ig, "&lt;/script&gt;");
+     	    	return str.replace(/<script.*?>.*?<\/script>/ig, '');  
+     	    }
+     	};
+    	
+    	
+    	$(function(){
+    		$("#comment_desc").keyup(function(){
+    			if(window.localStorage)localStorage.setItem("comment_data", $(this).val());
+    		});
+    		
+    		if(window.localStorage){
+    			$("#comment_desc").val(localStorage.getItem("comment_data")||"");
+    		}
+    	});
+     	tzComment.list(0,10);
+     	if(window.localStorage){
+     		var lcolor = localStorage.getItem("color");
+    		if(lcolor){
+    			var color = lcolor.split(",");
+    			if(color){
+    				$(".changebg").css("background",color[0]);
+    				$(".cbg").css("background",color[1]);
+    			}
+    		}
+    	}
+    </script>
+  </body>
+</html>

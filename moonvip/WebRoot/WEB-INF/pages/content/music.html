@@ -1,0 +1,140 @@
+<@contentBean id=id/>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>${content.title}--潭州学院KeKe个人博客</title>
+    <meta name="keywords" content="${content.keywords}">
+    <meta name="description" content="${content.description}">
+    <#include "/common/common.html"/>
+	<script type="text/javascript" src="${basePath}/sg/tz_audio.js"></script>
+	<style type="text/css" id="cssRule"></style>
+ </head>
+ <body data-opid="${id}" data-typeid="${content.channelId}" >
+ <#include "/common/header.html"/>
+<#if content?? && content.type==2 && content.status==1 && content.isDelete==0>
+	<div class="box-wai">
+	<div class="box-cont">
+		<h1 class="title"><a href="javascript:void(0)">${content.title} </a> </h1>
+    	<p class="title">
+    		<img src="${basePath}/${content.headerPic}" width="24" height="24" class="imgradius"/> 
+    		<span class="tmui-ellipsis w50 au">${content.username}</span>推荐 &nbsp;&nbsp;</span>
+			<span id="timer">00:00</span> / <span id="stimer">00:00</span>
+			<a href="javascript:void(0);" id="l1_${id}" style="cursor: default;"><i class="iconfont">&#xf00f8;</i>&nbsp;&nbsp;聆听数-<label id="tz_hits_${id}">${content.hits!0}</label></a><span>&nbsp;&nbsp;
+			<#if (session_user_key?? && session_user_key.role==1) || content.userId == session_user_key_id><a href="javascript:void(0);" onclick="tzContent.edit(this)"><i class="iconfont">&#xf014f;</i></a>&nbsp;&nbsp;</#if>
+		</p>
+        <div class="box-img mt20" id="tz-img-box">            
+			 <div class="imgs"><img src="${basePath}/${content.img}" id="tz_tupian" width="640" class="tupian"></div>
+			 <span class="mtip">${content.categoryName}</span>
+        </div>
+        <div class="cnt pt20">
+			<div class="msg clearfix">${content.content}</div>
+	         <div class="cnt">
+	         	<p class="fl">
+	            	<i class="iconfont">&#xf014f;</i>
+	            	<#list content.tag?split(",") as c>
+	            		<a href="javascript:void(0)" class="biaoq01 cbg">${c}</a>
+	            	</#list>           		
+	            </p>
+	            <p class="fr pinglun">
+	            	<a href="javascript:void(0)" class="fs12 color-huis" id="geci" onclick="changeLrc()"><i class="iconfont">&#xf018e;</i>&nbsp;歌词</a>        	
+	                <a href="#comments" class="fs12 color-huis" id="pinglun"><i class="iconfont <#if content.comments gt 0>iconon</#if>">&#xf0142;</i>&nbsp;评论<span>(<span id="tz_comm_${id}">${content.comments}</span>)</span></a>
+	                <a href="javascript:void(0)" onclick="tzhlc(${id},3)" id="l3_${id}" class="fs12 color-huis" id="redu"><i class="iconfont">&#xf0052;</i>&nbsp;喜欢<span>(<span id="tz_love_${id}">${content.loves!"0"}</span>)</span></a>
+	           		<a href="javascript:void(0)" onclick="tzhlc(${id},2)" id="l2_${id}" class="fs12 color-huis tj01"><i class="iconfont">&#xf01aa;</i>&nbsp;推荐(<span id="tz_coll_${id}">${content.collections!"0"}</span>)</a>
+	                <a href="javascript:void(0)" class="fs12 color-huis tj02" title="取消推荐" style="display:none;">已推荐</a>
+	            </p>
+	         </div>   
+   	 </div>
+    <div class="clearfix"></div>
+    
+    <#--<div class="tz_cssloading"><img src="${basePath}/sg/images/load.gif" id="tz_loadimgbox" width="120" height="120"></div>-->
+    <ul id="songlist" class="pt30">
+    <li>
+    	<div id="percentBar">
+			<div id="percent"></div>
+			<div id="barc"></div>
+			<div id="bar"></div>
+		</div>
+	</li>
+    <@musicList cid=id status="1">
+    	<li data-opid="${music.id}" data-url="${musicScoret(music.linksrc)}">
+    		<span><i class="iconfont">&#xf0076;</i>&nbsp;&nbsp;<img class="img" src="${basePath}/${music.img}"></span>
+    		<span class="name">${music.name}</span>
+    		<span class="author">${music.author}</span>
+    		<span class="icon love fr"><a class="icon love  fr" data-opid="${music.id}" onclick="tz_loves(this)"><i class="iconfont">&#xf0145;</i></a></span>
+    		<a class="icon play  fr" data-opid="${music.id}" onclick="tz_play(${music_index},this)"><i class="iconfont">&#xe607;</i></a>
+    		<a class="icon pause  fr none" onclick="tz_pause(this)"><i class="iconfont">&#xe632;</i></a>
+    		<span id="tz_timer_${music_index}" class="timer fr"> 00:00</span>
+    		<span class="timer fr">${music.timer}/</span>
+    		<span id="tz_musiclrc_${music.id}" style="display:none">${music.lrc}</span>
+    	</li>
+    </@musicList>
+    </ul>
+    
+    <!--点击评论，弹出内容-->
+    <div class="clearfix sliderbox gc-box" style="display: none;">
+	    <div class="omark">
+			<div class="cbar"></div>
+			<div class="bar"></div>
+		</div>
+   		 <!-- 歌词存放区域 -->
+    	<div class="box-pingl geci-box cnt">
+    		<ul id="lrcbox"></ul>
+        </div>
+    </div>
+    
+     <div class="wz-nav mt20 clearfix">
+    	<h1 class="relation">其他音乐</h1>
+    	<ul class="wz-lianjx" style="border-top: 1px dotted #9AA2AD;padding-top: 30px;">
+    	<li class="fl">
+	    	<@contentPNBean mark=">" order="asc" type=2  id=id var="nc">
+	    		<#if nc??>
+	    			上一篇：<a href="${basePath}/${nc.staticLink}" class="title" title="${nc.title}">${nc.title}<span class="underline"></span></a>
+	    		<#else>
+	    			暂无篇幅
+	    		</#if>
+	    	</@contentPNBean>
+    	</li>
+    	<li class="fr">
+	    	<@contentPNBean mark="<" order="desc" type=2  id=id var="pc" >
+	    		<#if pc??>
+	    			下一篇：<a href="${basePath}/${pc.staticLink}" class="title" title="${pc.title}">${pc.title}<span class="underline"></span></a>
+	    		<#else>
+	    			暂无篇幅
+	    		</#if>
+	    	</@contentPNBean>
+    	</li>
+    	</ul>
+    </div>
+    <!-- 相关文章 -->
+    <div class="wz-nav mt45 clearfix">
+    	<h1 class="relation">相关主题</h1>
+   		<ul class="wz-lianj">
+   			<@contentList filterId=id categoryId=content.categoryId type="2" var="cnt" pageSize=5>
+	        	<li>
+	        		<a href="${basePath}/${cnt.staticLink}" title="${cnt.title}"><img src="${basePath}/${cnt.img}" width="115" height="100"><span class="underline"></span></a>
+	            	<p class="title"><a href="${basePath}/page/${cnt.id}" title="${cnt.title}">${cnt.title}<span class="underline"></span></a></p>
+	            	<span class="mtip">${content.categoryName}</span>
+	            </li>
+            </@contentList>
+        </ul>
+    </div>
+    
+    <#if content.isComment==1>
+    <div class="clearfix pl-box mt45" >
+    	<a name="comments"></a>
+    	<iframe id="comment_iframebox" src="${basePath}/commentno/template/${id}?params=538" width="100%;" frameborder="0" scrolling="no" height="640"></iframe>
+    </div>
+    </#if>
+    </div>
+    </div>
+<script type="text/javascript" src="${basePath}/js/tm/tz_playmusic.js"></script>
+<script type="text/javascript">tzhlc("${id}",1);</script>
+<script type="text/javascript">$(".mtip").css("background",tzUtil.getRandomColor());</script>
+</body>
+</html>
+<#else>
+<style>.noempty{ font-size: 36px;color: #fff;margin: 100px auto;text-align: center;padding: 320px 200px; }</style>
+<h1 class="noempty">非常抱歉，没有找到您想要的....</h1>
+</#if>
+<#include "/common/footer.html"/>

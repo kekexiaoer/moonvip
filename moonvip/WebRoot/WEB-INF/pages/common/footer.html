@@ -1,0 +1,35 @@
+<div class="wz-nav food changebg">
+  	© KeKeBlog | Powered by KeKeBlog
+</div>
+<div class="material-wrap changebg"></div>
+<div id="userDialogbox" class='userdialog' style="display: none;"></div>
+<div class="back_top cbg"><a href="#top"><i></i></a></div>
+<script type="text/javascript">
+function gotoTop(min_height){
+	$(".back_top").click(
+		function(){$('html,body').animate({scrollTop:0},400);
+	});
+	
+	var min_height = 50;
+	$(window).scroll(function(){
+		var s = $(window).scrollTop();
+		if( s > min_height){
+			$(".back_top").fadeIn(100);
+		}else{
+			$(".back_top").fadeOut(200);
+		};
+	});
+	
+	if(window.localStorage){
+		var lcolor = localStorage.getItem("color");
+		if(lcolor){
+			var color = lcolor.split(",");
+			if(color){
+				$(".changebg").css("background",color[0]);
+				$(".cbg").css("background",color[1]);
+			}
+		}
+	}
+};
+gotoTop();
+</script>

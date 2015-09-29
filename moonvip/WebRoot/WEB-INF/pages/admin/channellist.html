@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>内容管理-KeKe</title>
+<meta charset="UTF-8">
+<#include "/common/common.html"/>
+<script type="text/javascript" src="${basePath}/js/tz_admin.js"></script>
+<script type="text/javascript" src="${basePath}/js/tz_page.js"></script>
+<style type="text/css" id="cssRule">
+	.table th{font-weight:normal;text-transform:uppercase;border-top:0;background:#28384F;color:#fff;}
+	.table th.centeralign,.table td.centeralign{text-align:center;}
+	.table.table-bordered{border-top:0;border-right:0;}
+	.table.table-bordered th{border-color:#444;}
+	.table.table-bordered td:last-child{border-right:1px solid #ddd;}
+	.table .con0{background:#fff;}
+	.table .con1{background:#f7f7f7;}
+	.dataTable{margin-bottom:0;}
+	.dataTable th,.dataTable td{font-size:12px;}
+	.dataTables_wrapper{position:relative;}
+	.dataTable a .iconfont{color:#999}
+	.dataTables_length,.dataTables_info{background:#eee;padding:10px;font-size:11px;border:1px solid #ddd;}
+	.table-bordered th,.table-bordered td{border-left:1px solid #dddddd;}
+	.table th,.table td{padding:8px;line-height:20px;text-align:left;vertical-align:top;border-bottom:1px solid #dddddd;color:#f5f5f5}
+	.dataTable tr:hover{background:#e5e5e5}
+	.dataTables_length{border-bottom:0;}
+	.dataTables_info{border-top:0;}
+	.dataTables_filter{position:absolute;top:12px;right:10px;}
+	.dataTables_filter input{width:150px;margin:0 0 0 10px;}
+	.dataTables_paginate{position:absolute;bottom:10px;right:10px;}
+	.dataTables_paginate .first,.dataTables_paginate .previous,.dataTables_paginate .paginate_active,.dataTables_paginate .paginate_button,.dataTables_paginate .next,.dataTables_paginate .last{border:1px solid #ccc;border-left:0;font-size:11px;background:#eee;cursor:pointer;}
+	.dataTables_paginate span:hover{background-color:#ddd;}
+	.dataTables_paginate .first{border-left:1px solid #ccc;}
+	.dataTables_paginate .paginate_active{background:#fff;}
+	.dataTables_paginate .paginate_button:hover{background:#eee;}
+	.dataTables_paginate .paginate_button_disabled{cursor:default;color:#ccc;background:#eee;}
+	.dataTables_paginate a{color:#666;}
+	.dataTables_paginate a:hover{text-decoration:none;}
+	.dataTables_length select{width:auto !important;margin:0;}
+	.dataTables_scrollHead{background:#333;}
+	.dataTables_scrollHead table{border-bottom:0;}
+	/*一个是向下的*/
+	.sortdesc{border-top:5px solid;width:0px;height:0px;display:inline-block;vertical-align:middle;border-right:5px solid transparent;border-left:5px solid transparent;margin-left:5px;}
+	/*一个是向上的*/
+	.sortasc{border-bottom:5px solid;width:0px;height:0px;display:inline-block;vertical-align:middle;border-right:5px solid transparent;border-left:5px solid transparent;margin-left:5px;}
+	.main .box_imptips{padding:0px 0 38px 0px}
+	#nav li:first-child{margin:0}
+	.dataTables_paginate{position:relative;height:35px;}
+	.tzPage{font-size:12px;margin-top:5px;position:absolute;top:15px;right:0px;}
+	.tzPage a{text-decoration:none;border:solid 1px #ccc;color:#999;}
+	.tzPage a,.tzPage span{display:block;float:left;padding:0em 0.5em;margin-right:5px;margin-bottom:5px;min-width:1em;text-align:center;line-height:22px;height:22px;}
+	.tzPage .current{background:#e5e5e5;color:#999;border:solid 1px #e5e5e5;}
+	.tzPage .current.prev,.tzPage .current.next{color:#999;border:1px solid #e5e5e5;background:#fff;}
+	.tm_psize_go{margin-right:4px;float:left;height:24px;line-height:33px;position:relative;border:1px solid #e5e5e5;color:#999}
+	#tm_pagego{height:22px;width:30px;float:left;text-align:center;border:1px solid #e5e5e5;line-height:22px;color:#999}
+	.inpbox{border:1px solid #28384F;}
+	.inpbox .inp{width:240px;border:0px;float:left;}
+	.inpbox .s_btn{background:#28384F;display:inline-block;height:32px;float:left;width:60px;text-align:center;line-height:34px;color:#fff}
+	.inpbox .s_btn:hover{background:#38384A;}
+</style>
+<body  class="changebg">
+ <#include "/user/header.html"/>
+	<div class="main mb50 changebg" style="width: 98%">
+		<div class="box_imptips">
+			<ul id="nav">
+				<li><a href="${basePath}" class="cbg">首页</a></li>
+				<li><a href="${basePath}/admin/list" class="cbg">内容管理</a></li>
+				<li><a href="javascript:void(0);" class="cbg">栏目管理</a></li>
+				<li><a href="${basePath}/admin/userlist" class="cbg">用户管理</a></li>
+				<li><a href="javascript:void(0);" onclick="tzBanner.edit(0);" class="cbg">Banner管理</a></li>
+				<li><a href="javascript:void(0);" onclick="tz_staticindex()" class="cbg">静态化首页</a></li>
+				<li><a href="${basePath}/admin/content/add" class="cbg">添加内容</a></li>
+			</ul>
+			<div class="fr inpbox">
+				<input type="text" class="inp" style="width:240px;" id="keyword"  placeholder="请输入关键字..."/><a href="javascript:void(0);" onclick="tzchannel.search(this)" class="s_btn cbg">搜索</a>
+			</div>			
+		</div>
+		<div class="box_headers">
+			<table id="dyntable" class="table dataTable" style="width:100%" data-itemcount="${totalCount}">
+				<thead id="theader">
+					<tr>
+						<th class="head0 cbg" ><input type="checkbox" class="checkall"></th>
+						<th class="head0 cbg">名称</th>
+						<th class="head0 cbg">类型</th>
+						<th class="head1 cbg">排序</th>
+						<th class="head0 cbg">创建时间</th>
+						<th class="head1 cbg">发布状态</th>
+						<th class="head1 cbg">删除状态</th>
+						<th class="head0 cbg">操作</th>
+				</thead>
+				<tbody id="tbody">
+					<#list channels as channel>
+						<tr class="gradeX odd" id="tz_items_${channel.id}">
+						  <td class="aligncenter"><span class="center">
+							<input type="checkbox"></span></td>
+							<td class="tmui_key"><a href="javascript:void(0);" class="link">${channel.name}</a></td>
+							<td>${channel.model}</td>
+							<td>${channel.sort}</td>
+							<td class="center">${channel.createTime?datetime}</td>
+							<td class="center status">
+								<#if channel.status==0><a href="javascript:void(0)" onclick="tzchannel.status(this,'status',1)" data-opid="${channel.id}" class="red">未发布</a></#if>
+								<#if channel.status==1><a href="javascript:void(0)" onclick="tzchannel.status(this,'status',0)" data-opid="${channel.id}" class="green">发布</a></#if>
+							</td>
+							<td class="center isDelete">
+								<#if channel.isDelete==1><a href="javascript:void(0)" onclick="tzchannel.status(this,'isDelete',0)" data-opid="${channel.id}" class="red">已删除</a></#if>
+								<#if channel.isDelete==0><a href="javascript:void(0)" onclick="tzchannel.status(this,'isDelete',1)" data-opid="${channel.id}" class="green">未删除</a></#if>
+							</td>
+							<td class="center ">
+								<a href="javascript:void(0);" class="tmui-tips" tip="编辑"><i class="iconfont">&#xf014f;</i></a>&nbsp;&nbsp;
+							</td>
+						</tr>
+					</#list>
+					</tbody>
+				</table>
+		</div>
+		<div class="dataTables_paginate"></div>
+	</div>
+	<script type="text/javascript">
+		$(function(){
+			//javascript java 什么拥有存储多个数据能力
+			//第一步：获取表格对象
+			var $table = $(".dataTable");
+			//获取表头的th对象
+			var $header = $table.find("thead th").slice(1);
+			//加上表头排序标识	
+			$header.append("<span></span>");
+			//给表头绑定事件
+			$header.on("click",function(){
+				var $span = $(this).find("span");
+				$span.addClass("sortdesc");
+				//获取点击列的索引
+				var index = $(this).index();
+				//获取当前点击列的值--rows是一个数组
+				var rows = 	$table.find("tbody tr").get();
+				//数组排序的标识
+				var sortDirection = 1;
+				//判断我们当前点击th是否有一个排序样式
+				if($(this).hasClass("sort-asc")){
+					sortDirection=-1;
+				};
+	
+				rows.sort(function(a,b){
+					//$(a)转换jquery对象
+					var keya = $(a).find("td").eq(index).text();
+					var keyb = $(b).find("td").eq(index).text();
+					if(keya > keyb)return sortDirection;
+					if(keya < keyb)return -sortDirection;
+					return 0;
+				});
+	
+				//切换图标
+				$header.removeClass("sort-asc sort-desc");
+				$(this).addClass(sortDirection==1?"sort-asc":"sort-desc");
+				$span.removeClass("sortasc sortdesc");
+				$span.addClass(sortDirection==1?"sortasc":"sortdesc");
+				//把重新排序的值重新放入表格的tbody中
+				$.each(rows,function(index,row){
+					$table.find("tbody").append(row);
+				});
+			});
+			
+			tzchannel.initData(0,10,function(itemCount){
+				tzchannel.initPage(itemCount);
+			});
+			
+			$(document).keydown(function(e){
+				if(e.keyCode==13){
+					tz_search();
+				}
+			});
+		});
+		
+		var tzchannel = {
+			initPage: function(itemCount){
+				var thisDom = this;
+				$(".dataTables_paginate").tzPage(itemCount, {
+					num_edge_entries : 1, //边缘页数
+					num_display_entries :4, //主体页数
+					num_edge_entries:4,
+					current_page:0,
+					items_per_page : 10, //每页显示X项
+					prev_text : "前一页",
+					next_text : "后一页",
+					callback : function(pageNo,psize){
+						thisDom.initData(pageNo,psize);
+					}
+				});
+			},
+			search : function(){
+				var thisDom = this;
+				thisDom.initData(0,10,function(itemCount){
+					thisDom.initPage(itemCount);
+				});
+			},
+			initData:function(pageNo,psize,callback){
+				var thisDom = this;
+				var key = $("#keyword").val();
+				var cid = $("#channelId").val();
+				loading("数据加载中...");
+				$.tzAjax.request({
+					url:basePath+"/channel/listTemplate",
+					callback:function(data){
+						loading("数据加载成功...",3);
+						var html = $(data).find("#tbody").html();
+						if(isNotEmpty(html)){
+							$("#tbody").html(html);
+							thisDom.keyHighlighter(key);
+							if(callback){
+								var itemCount =$(data).find("#dyntable").data("itemcount");
+								callback(itemCount);
+							}
+						}else{
+							$(".dataTables_paginate").empty();
+							$("#tbody").html("<tr><td colspan='11' style='font-size:24px;text-align:center;padding:60px'>暂无数据</td></tr>");
+						}
+					}
+				},{"pageNo":pageNo*psize,"pageSize":psize,"keyword":key,"channelId":cid});
+			},
+			keyHighlighter:function(keyword){
+				if(isEmpty(keyword))return;
+				$("#tbody").find(".tmui_key").each(function(){
+					$(this).html($(this).text().replace(keyword,"<label style='color:red'>"+keyword+"</label>"));
+				});
+			},
+			del:function(obj){
+				var opid = $(obj).data("opid");
+				$.tzConfirm({content:"您确定删除吗",callback:function(ok){
+					if(ok){
+						$.tzAjax.request({url:basePath+"/channel/updateInfo",callback:function(data){
+							$("#tz_items_"+opid).find(".isDelete").html("<a href='#' data-opid='"+opid+"' class='red'>已删除</a>");
+							$(obj).remove();
+						}},{isDelete:1,id:opid});
+					}
+				}});
+			},
+			status:function(obj,mark,value){
+				var opid = $(obj).data("opid");
+				var params = {id:opid};
+				params[mark]=value;
+				loading("执行中...");
+				$.tzAjax.request({url:basePath+"/channel/updateInfo",callback:function(data){
+					loading("执行成功...",3);
+ 					if(mark=="status" && value==1)$("#tz_items_"+opid).find(".status").html("<a  href='javascript:void(0)' onclick=tzchannel.status(this,'status',0) data-opid='"+opid+"' class='green'>发布</a>");
+ 					if(mark=="status" && value==0)$("#tz_items_"+opid).find(".status").html("<a  href='javascript:void(0)' onclick=tzchannel.status(this,'status',1) data-opid='"+opid+"' class='red'>未发布</a>");
+ 					if(mark=="isDelete" && value==1)$("#tz_items_"+opid).find(".isDelete").html("<a  href='javascript:void(0)' onclick=tzchannel.status(this,'isDelete',0) data-opid='"+opid+"' class='red'>已删除</a>");
+ 					if(mark=="isDelete" && value==0)$("#tz_items_"+opid).find(".isDelete").html("<a  href='javascript:void(0)' onclick=tzchannel.status(this,'isDelete',1) data-opid='"+opid+"' class='green'>未删除</a>");
+				}},params);
+			}
+		};
+		
+  </script>
+  <#include "/common/footer.html"/>
+</body>
+</html>

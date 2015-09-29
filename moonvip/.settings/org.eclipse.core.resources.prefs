@@ -1,0 +1,14 @@
+eclipse.preferences.version=1
+encoding//WebRoot/WEB-INF/pages=UTF-8
+encoding//WebRoot/WEB-INF/pages/common/footer.html=UTF-8
+encoding//WebRoot/WEB-INF/pages/common/header.html=UTF-8
+encoding//WebRoot/WEB-INF/pages/content/music.html=UTF-8
+encoding//WebRoot/WEB-INF/pages/user/header.html=UTF-8
+encoding//WebRoot/resources/css/main.css=UTF-8
+encoding//WebRoot/resources/js/tz_admin.js=UTF-8
+encoding//WebRoot/resources/sg/tz_audio.js=UTF-8
+encoding//config/log4j.properties=UTF-8
+encoding//src/com/moon/model/AtiveSer.java=UTF-8
+encoding//src/com/tz/core/tag/ITmContextProvider.java=UTF-8
+encoding/<project>=UTF-8
+encoding/WebRoot=UTF-8

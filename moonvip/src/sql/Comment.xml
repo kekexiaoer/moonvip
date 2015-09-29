@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tz.dao.comment.ICommentDao" >
+
+	<insert id="saveComment" useGeneratedKeys="true" keyProperty="id" flushCache="true" >
+	  INSERT INTO keke_comment(content,user_id,ip,is_delete,status,content_id,is_top,parent_id)VALUES(#{content},#{userId},#{ip},#{isDelete},#{status},#{contentId},#{isTop},#{parentId})
+	</insert>
+
+	<select id="findComments" parameterType="TmParams" resultType="Map">
+		SELECT 
+			c.id as id,
+			c.content as content,
+			c.create_time as createTime,
+			c.user_id as userId,
+			c.ip as ip,
+			c.content_id as contentId,
+			c.is_top as isTop,
+			c.status,
+			u.username as username,
+			u.header_pic as headerPic,
+			u.male as male
+		FROM keke_comment c LEFT JOIN keke_user u ON u.id = c.user_id
+		<trim prefix="WHERE" prefixOverrides="AND | OR">  
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isDelete)">
+				AND c.is_delete = ${isDelete}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(status)">
+				AND c.status >= ${status}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(contentId)">
+				AND c.content_id = ${contentId}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(userId)">
+				AND c.user_id = ${userId}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(parentId)">
+				AND c.parent_id = ${parentId}
+			</if>
+		</trim>
+		<choose>
+			<!--  MyBatis排序时使用order by 动态参数时需要注意，用$而不是# -->
+			<when test="@com.tz.util.TmStringUtils@isNotEmpty(orderSql)">
+                ORDER BY ${orderSql}
+			</when>
+		</choose>
+		LIMIT ${pageNo},${pageSize}
+	</select>
+	
+	<select id="countComments" parameterType="TmParams" resultType="int">
+		SELECT count(1) FROM keke_comment c LEFT JOIN keke_user u ON u.id = c.user_id
+		<trim prefix="WHERE" prefixOverrides="AND | OR">  
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isDelete)">
+				AND c.is_delete = ${isDelete}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(status)">
+				AND c.status >= ${status}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(contentId)">
+				AND c.content_id = ${contentId}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(userId)">
+				AND c.user_id = ${userId}
+			</if>
+		</trim>
+	</select>
+	
+	<update id="updateComment" parameterType="Comment">
+			UPDATE keke_comment 
+			<trim prefix="SET" suffixOverrides=",">
+				<if test="@com.tz.util.TmStringUtils@isNotEmpty(isDelete)">is_delete=#{isDelete},</if>
+				<if test="@com.tz.util.TmStringUtils@isNotEmpty(isTop)">is_top=#{isTop},</if>  
+				<if test="@com.tz.util.TmStringUtils@isNotEmpty(status)">status=#{status},</if>
+				<if test="updateTime!=null">update_time=#{updateTime}</if>
+			</trim>
+			WHERE id = #{id}
+	</update>
+</mapper>

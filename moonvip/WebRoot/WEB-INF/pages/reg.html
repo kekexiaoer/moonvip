@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>KeKe老师个人博客</title>
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    <script src="${basePath}/js/canvas/application.js"></script>
+    <script src="${basePath}/js/canvas/canvas.js"></script>
+    <#include "/common/common.html"/>
+    <style type="text/css" id="cssRule">#particles-js{position: absolute;z-index: -1px;top: 0;left:0px;}
+    	.error_tips{height:65px;background:rgba(57, 75, 110, 0.86);text-align: center;font-size: 12px;line-height: 65px;color:#fff;position:fixed;top: 0px;left: 0px;width: 100%;z-index:1 }
+    	.error_tips .iconfont{color:#fff;padding-right:10px;}
+    	.fmt{margin-top: -1px;}
+    	.send{position:absolute;top:10px;right:10px;}
+    	.send:hover .iconfont{color:#28384F}
+    </style>
+ </head>
+<body class="changebg" style="background:#28384F;overflow: hidden;">
+ 	 <div class="error_tips cbg" style="display: none;"><i class="iconfont">&#xf0104;</i><span id="e_m"></span></div>
+	 <div id="particles-js" style="position: fixed;z-index: 0"><canvas width="1920" height="935" style="width: 100%; height: 100%;"></canvas></div>	 
+	 <div class="login animated bounceInDown">
+	    <div class="animated fadeInDownBig" style="padding:27px 57px;">
+	        <a href="${basePath}" class="zhuce zc-title center"> <img src="${basePath}/images/logo.png"></a>
+	    </div>
+	    <div class="dengl-cont dl-cont">
+	        <p class="zhmmk  clearfix tz_reg animated bounceInLeft"><input type="text" maxlength="10" autofocus="autofocus" id="username" placeholder="请输入昵称"></p>
+	    	<p class="zhmmk fmt clearfix animated bounceInLeft" style="position: relative;">
+	    		<input type="text" id="account"  maxlength="42" placeholder="请输入邮箱">
+	    		<a href="javascript:void(0);" title="获取邮箱注册码" onclick="tzLogin.send(this)" class="send fr"><i class="iconfont">&#xf0159;</i></a>
+	    	</p>
+	        <p class="zhmmk fmt clearfix animated bounceInRight"><input type="password" id="password" maxlength="16" placeholder="请输入密码"></p>
+	        <p class="zhmmk fmt clearfix animated bounceInRight"><input type="text" id="code" maxlength="6" placeholder="请输入邮箱确认码"></p>
+	        <p class="login-xxts"></p>
+	    	<p class="zhmmk clearfix animated bounceInDown tz_reg"><a href="javascript:void(0)" id="backBtn" data-mark="0" onclick="tzLogin.reg(this);"  class="cbg center btn-login animated rollIn">注册</a></p>
+	        <p class="clearfix animated bounceInDown" style="padding: 7px;">
+        	<a href="${basePath}/login" class="fl fs12 tz_login_btn">登陆</a>
+            <a href="${basePath}/forget" class="fr fs12">忘记密码</a>
+	        </p>
+	    </div>
+	</div>
+	<script type="text/javascript">
+	 	var tzLogin = (function(){
+	 		 var timer = null,sendTimer = null,regTimer = null,sendFlag = true;
+	 		 return {
+	 			 
+	 			 init:function(){
+	 				var $this = this;
+	 				$(document).off().keydown(function(e){
+	 					if(e.keyCode==13)$this.login(document.getElementById("backBtn")); 
+ 					});
+	 				if(window.localStorage){
+	 					var ve = localStorage.getItem("reg_account");
+	 					if(ve)return;$("#account").val(ve);
+	 					var vn = localStorage.getItem("reg_username");
+	 					if(vn)$("#username").val(vn);
+	 					setTimeout(function(){$this.c_focus();}, 300);
+	 				}
+	 				
+	 				$("#username").blur(function(){
+	 					var v = $(this).val();
+	 					if(isNotEmpty(v)){
+	 						if(localStorage)localStorage.setItem("reg_username",v);
+	 						setTimeout(function(){$this.c_focus();}, 300);
+	 					}
+	 				});
+	 				
+	 				$("#account").blur(function(){
+	 					var v = $(this).val();
+	 					if(isNotEmpty(v)){
+	 						if(localStorage)localStorage.setItem("reg_account",v);
+	 						setTimeout(function(){$this.c_focus();}, 300);
+	 					}
+	 				});
+	 			 },
+	 			 c_focus:function(){
+	 				 var account = $("#account").val();
+	 				 var password = $("#password").val();
+	 				 var username = $("#username").val();
+	 				 var code = $("#code").val();
+	 				 if(isEmpty(username)){
+	 					$("#username").focus();
+	 					return;
+	 				 }
+	 				 if(isEmpty(account)){
+	 					$("#account").focus();
+	 					return;
+	 				 }
+	 				 if(isEmpty(password)){
+	 					$("#password").focus();
+	 					return;
+	 				 }
+	 				 if(isEmpty(code)){
+		 				$("#code").focus();
+		 				return;
+		 			}
+	 			 },
+	 			 send:function(obj){
+	 				 if(!sendFlag)return;
+	 				 clearTimeout(sendTimer);
+	 				 var $this = this;
+	 				 sendTimer = setTimeout(function(){
+		 				 var account = $("#account").val();
+		 				 $("#backBtn").data("mark",1);
+		 				 if(isEmpty(account)){
+		 					$this.error("请输入邮箱...");
+		 					$("#account").focus();
+		 					return false;
+		 				 }
+		 				 
+		 				 if(!$this.email(account)){
+		 					$this.error("邮箱格式有误...");
+		 					$("#account").select();
+		 					return false;
+		 				 }
+		 				 $("#code").val("");
+		 				 var params = "account="+account;
+		 				 var xhr = null;
+		 				 if(window.ActiveXObject){
+		 					xhr = new ActiveXObject("Microsoft.XMLHTTP");
+		 				 }else{
+		 					xhr = new XMLHttpRequest();
+		 				 }
+		 				 xhr.open("post",rootPath+"/login/code",true);
+		 				 xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded;");  
+		 				 xhr.onreadystatechange = function() {
+			 			       if (xhr.status == 200 && xhr.readyState==4) {
+			 			    	  	obj.setAttribute("onclick","tzLogin.send(this)");
+			 			        	var text = xhr.responseText;
+			 			        	if(text=="exist"){
+			 			        		$this.error("小子你的邮箱已经注册过了...");
+			 			        		$("#backBtn").data("mark",0);
+			 			        		$("#account").focus();
+			 			        		setTimeout(function(){window.location.href = rootPath+"/login";},2000);
+			 			        		sendFlag = true;
+			 			        	}else if(text=="account_null"){
+			 			        		$this.error("请输入邮箱...");
+			 			        		$("#account").focus();
+			 			        		sendFlag = true;
+			 			        	}else if(text=="success"){
+			 			        		$this.error("邮件发送成功，<a style='color:#BBD2B7;text-decoration:underline;' target='_blank' href='"+$this.gotoEmail(account)+"'>点击前往</a>",100000);
+			 			        		setTimeout(function(){$this.c_focus();}, 300);
+			 			        		sendFlag = false;
+			 			        	}
+			 			       }else{
+			 			    	  obj.setAttribute("onclick","tzLogin.send(this)");
+			 			       }
+		 			     };
+		 			     $this.error("请稍后，邮件发送中...");
+		 			     obj.removeAttribute("onclick");
+		 				 xhr.send(params);
+	 				 },200);
+	 			 },
+	 			 gotoEmail : function(email){
+	 				if(email.indexOf("@163.com")!=-1){
+	 					return "http://email.163.com/";
+	 				}else if(email.indexOf("@sina.com")!=-1){
+	 					return "http://mail.sina.com.cn/";
+	 				}else if(email.indexOf("@qq.com")!=-1){
+	 					return "https://mail.qq.com/cgi-bin/loginpage";
+	 				}else if(email.indexOf("@126.com")!=-1){
+	 					return "http://www.126.com/";
+	 				}else if(email.indexOf("@139.com")!=-1){
+	 					return "http://mail.10086.cn/";
+	 				}else if(email.indexOf("@gmail.com")!=-1){
+	 					return "http://gmail.google.com/";
+	 				}
+	 			},
+	 			 reg:function(obj){
+	 				 var $this = this;
+	 				 if($this.validator()){
+	 					clearTimeout(regTimer);
+	 					regTimer = setTimeout(function(){
+		 					 var account = $("#account").val();
+			 				 var password = $("#password").val();
+			 				 var username = $("#username").val();
+			 				 var code = $("#code").val();
+			 				 var mark = $(obj).data("mark");
+			 				 if(mark=="0"){
+			 					 $this.error("请点击邮箱发送方格,获取注册码...");
+			 					 $("#code").focus().val("");
+			 					 return false;
+			 				 }
+			 				 var params = "account="+account+"&password="+password+"&username="+username+"&code="+code;
+			 				 var xhr = null;
+			 				 if(window.ActiveXObject){
+			 					xhr = new ActiveXObject("Microsoft.XMLHTTP");
+			 				 }else{
+			 					xhr = new XMLHttpRequest();
+			 				 }
+			 				 xhr.open("post",rootPath+"/login/reg",true);
+			 				 xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded;");  
+			 				 xhr.onreadystatechange = function() {
+				 			       if (xhr.status == 200 && xhr.readyState==4) {
+				 			    	   obj.setAttribute("onclick","tzLogin.reg(this)");
+					 	 			   obj.innerHTML ="注册";
+				 			        	var text = xhr.responseText;
+				 			        	if(text=="account_null"){
+				 			        		$this.error("请输入邮箱...");
+				 			        		$("#account").focus();
+				 			        	}else if(text=="pwd_null"){
+				 			        		$this.error("请输入密码...");
+				 			        		$("#account").focus();
+				 			        	}else if(text=="username_null"){
+				 			        		$this.error("请输入昵称...");
+				 			        		$("#username").focus();
+				 			        	}else if(text=="code_null"){
+				 			        		$this.error("请输入注册码...");
+				 			        		$("#code").focus();
+				 			        	}else if(text=="success"){
+				 			        		window.location.href = rootPath;
+				 			        	}else if(text=="exist"){
+				 			        		$this.error("您输入的邮箱已被注册过了...");
+				 			        		setTimeout(function(){window.location.href = rootPath+"/login";},2000);
+				 			        	}else if(text=="error_code"){
+				 			        		$this.error("注册码输入有误...");
+				 			        		$("#code").select();
+				 			        	}
+				 			       }else{
+				 			    	  obj.setAttribute("onclick","tzLogin.reg(this)");
+					 	 			  obj.innerHTML ="注册";
+				 			       }
+			 			     };
+			 			     obj.removeAttribute("onclick");
+		 	 			     obj.innerHTML ="注册中...";
+			 				 xhr.send(params);
+		 				 },200); 
+	 				 }
+	 			 },
+	 			 validator:function(){
+	 				 var account = $("#account").val();
+	 				 var password = $("#password").val();
+	 				 var username = $("#username").val();
+	 				 var code = $("#code").val();
+	 				 var $this = this;
+	 				 if(isEmpty(username)){
+	 					$this.error("请输入昵称...");
+	 					$("#username").focus();
+	 					return false;
+	 				 }
+	 				 
+	 				 if(!$this._username(username)){
+	 					$this.error("昵称有误，中文和字母组成[2-10位]...");
+	 					$("#username").select();
+	 					return false;
+	 				 }
+	 				 if(isEmpty(account)){
+	 					$this.error("请输入邮箱...");
+	 					$("#account").focus();
+	 					return false;
+	 				 }
+	 				 
+	 				 if(!$this.email(account)){
+	 					$this.error("邮箱格式有误...");
+	 					$("#account").select();
+	 					return false;
+	 				 }
+	 				 
+	 				 if(isEmpty(password)){
+	 					$this.error("请输入密码...");
+	 					$("#password").focus();
+	 					return false;
+	 				 }
+	 				 
+	 				 if(!$this.password(password)){
+	 					$this.error("输入的密码格式有误，(数字,字母,下划线)[6-16位]...");
+	 					$("#password").select();
+	 					return false;
+	 				 }
+	 				 
+	 				if(isEmpty(code)){
+	 					$this.error("请输入邮箱确认码...");
+	 					$("#code").focus();
+	 					return false;
+	 				 }
+	 				 return true;
+	 			 },
+	 			 email:function(msg){
+	 				 return /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i.test(msg);
+	 			 },
+	 			 password:function(pwd){
+	 				 return /^[\dA-Za-z(!@#$%&)]{6,16}$/.test(pwd);
+	 			 },
+	 			 _username:function(uname){
+	 				 return /^[\u4e00-\u9fa5A-Za-z_]{2,10}$/.test(uname);	
+	 			 },
+	 			 error:function(msg,timer){
+	 				 $(".error_tips").show().removeClass("magictime slideLeftRetournOut").addClass("magictime slideLeftRetourn");
+	 				 clearTimeout(timer);
+	 				 timer = setTimeout(function(){
+	 					$(".error_tips").removeClass("magictime slideLeftRetourn").addClass("magictime slideLeftRetournOut").fadeOut("slow");
+	 				 },timer||3000);
+	 				 $("#e_m").html(msg);
+	 			 }
+	 		 };	
+	 	}());
+	 	tzLogin.init();
+	 	if(window.localStorage){
+	 		var lcolor = localStorage.getItem("color");
+	 		if(lcolor){
+				var color =lcolor.split(",");
+				if(color){
+					$(".changebg").css("background",color[0]);
+					$(".cbg").css("background",color[1]);
+				}
+	 		}
+		}
+	 </script>
+</body>
+</html>

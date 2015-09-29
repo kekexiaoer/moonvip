@@ -1,0 +1,256 @@
+<!doctype html>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>潭州学院-keke个人博客-音乐版块</title>
+  <#include "/common/common.html"/>
+  <style>
+	#container{width:1000px;margin:102px auto;position:relative;-webkit-transform-style:preserve-3d;}
+	#container h1.t{text-align:center;padding:220px 0px;font-size:36px;color:#fff}
+	#container .stage{position:absolute;-webkit-perspective:1000;}
+	#container .stage .box{-webkit-transform-style:preserve-3d;transition:0.5s;position:relative;width:240px;background:linear-gradient(#111,#fff);border-radius:4px;box-shadow:1px 0px 3px #f4f4f4;text-align:left;float:left}
+	#container .front{z-index:2;}
+	#container .back{transform:rotateY(180deg);color:#fff;}
+	#container .back h1{font-size:16px;}
+	#container .stage:hover .box{transform:rotateY(180deg);-webkit-animation:wave paused;}
+	#container .stage .itemsbox{position:absolute;-webkit-perspective:700;background:linear-gradient(#111,#fff);border-radius:4px;box-shadow:1px 0px 3px #f4f4f4;backface-visibility:hidden;}
+	#container .stage .itemsbox img{max-width:100%;transition:all 0.3s ease-in-out;display:block;border-top-left-radius:4px;border-top-right-radius:4px;}
+	#container .stage  .info{padding:10px;font-size:12px;color:#666;}
+	#container .stage  .info a{color:#666}
+	#container .stage  .info a i.iconfont{color:#666}
+	#container .stage  .info p{margin-top:10px;}
+	#container .stage .itemsbox img:hover{transform:rotateY(360deg);transition:all 0.3s ease-in-out;}
+	#loader{width:100%;height:60px;z-index:5;background:url("${basePath}/images/load.gif") no-repeat center #fff;position:fixed;bottom:0;left:0}
+	.food{position:fixed;bottom:0px;width:100%;}
+	
+	@keyframes wave{
+		0%{transform:rotateY(6deg)}
+		50%{transform:rotateY(0deg)}
+		100%{transform:rotateY(-6deg)}
+	}
+	
+	@-webkit-keyframes wave{
+		0%{transform:rotateY(6deg)}
+		50%{transform:rotateY(0deg)}
+		100%{transform:rotateY(-6deg)}
+	}
+	.wave{-webkit-animation:wave 3s infinite  ease-in-out alternate both;animation:wave 3s infinite  ease-in-out alternate;}
+
+  </style>
+ </head>
+ <body>
+    <#include "/common/header.html"/>
+	<div id="container"><h1 class="t">数据正在来的路上.....</h1></div>
+	<div id="loader"></div>
+	<#include "/common/footer.html"/>
+	
+	<script type="text/javascript">
+
+		function hoverImg(){
+			var $container = $("#container");
+			$container.find(".stage").mousemove(function(e){
+				var width = $(this).width()/2;
+				var x =e.clientX - $(this).offset().left;
+				if(x <=150){
+					$(this).find(".box").get(0).style.transform = "rotateY(-180deg)";
+				}else{
+					$(this).find(".box").get(0).style.transform = "rotateY(180deg)";
+				}
+			}).mouseleave(function(){
+				$(this).find(".box").get(0).style.transform = "rotateY(0deg)";
+			});
+		};
+		
+		$(function(){
+			//定义列的宽度
+			var width = 240;
+			//间距
+			var space = 20;
+			//列实际宽度
+			var owdith = width + space;
+			//获取容器对象
+			//js写法var containerDom = document.getElementById("container");
+			var $container = $("#container");
+			//loader对象
+			//js写法var loaderDom = document.getElementById("loader");
+			var $load = $("#loader");
+			//总列数
+			var cells = 0;
+			//分页
+			var pageNo = 0;
+			//防止重复提交
+			var mark = true;
+
+			function getCells(){
+				cells = Math.floor($(window).innerWidth() / owdith);
+				if(cells < 3){
+					cells = 3;
+				}else if(cells >5){
+					cells = 5;
+				}
+				$container.width(cells * owdith - space);
+			};
+			
+			//初始化列数
+			getCells();
+			//记录坐标位置
+			var arrLeft = [];
+			var arrTop = [];
+			for(var i=0;i<cells;i++){
+				arrTop.push(0);
+				arrLeft.push(i * owdith);
+			};
+			
+			function loadData(){
+				if(mark){
+					mark = false;
+					$load.show();
+					$.getJSON("http://www.wookmark.com/api/json/popular?callback=?",
+					{"page":pageNo},function(data){
+						//循环数据
+						data.forEach(function(json,index){ 
+							var $div =$("<div></div>");
+							var minIndex = getMin();
+							var bitheight = (width / json.width) * json.height;
+							$div.addClass("stage animated rollIn").stop(true,true).animate({
+								width:width,
+								height:bitheight,
+								left:arrLeft[minIndex],
+								top:arrTop[minIndex]
+							},1000).html("<div class='box wave'>"+
+									"<div class='itemsbox front'>"+
+									"<a href='javascript:void(0);' title='#'>"+
+									"	<img src='"+json.preview+"' width='"+width+"' style='transform: rotateY(0deg);'>"+
+									"</a>"+
+									"<span class='mtip'>Java</span>"+
+									"<div class='info'>"+
+									"	<h1><a href='javascript:void(0);' title='#'>来扒一扒神秘的“微软改名部”来扒一扒神秘的</a></h1>"+
+									"	<p>"+
+									"		<a href='javascript:void(0);'><i class='iconfont'>&#xf0052;</i>&nbsp;1000</a>"+
+									"		<a href='javascript:void(0);'><i class='iconfont'>&#xf01aa;</i>&nbsp;1000</a>"+
+									"		<a href='javascript:void(0);'><i class='iconfont'>&#xf0142;</i>&nbsp;1000</a>"+
+									"		<a href='javascript:void(0);'><i class='iconfont'>&#xe607;</i></a>"+
+									"		<a href='javascript:void(0);' class='none'><i class='iconfont'>&#xe632;</i></a>"+
+									"		<a href='javascript:void(0);'><span>05:14</span></a>"+
+									"	</p>"+
+									"</div>"+
+								"</div>"+
+								"<div class='back' style='height:"+(bitheight+100)+"px'><div class='info'>"+
+								"	<h1><a href='javascript:void(0);' title='#'>来扒一扒神秘的“微软改名部”来扒一扒神秘的</a></h1>"+
+								"	<p>"+
+								"		<a href='javascript:void(0);'><i class='iconfont'>&#xf0052;</i>&nbsp;1000</a>"+
+								"		<a href='javascript:void(0);'><i class='iconfont'>&#xf01aa;</i>&nbsp;1000</a>"+
+								"		<a href='javascript:void(0);'><i class='iconfont'>&#xf0142;</i>&nbsp;1000</a>"+
+								"		<a href='javascript:void(0);'><i class='iconfont'>&#xe607;</i></a>"+
+								"		<a href='javascript:void(0);' class='none'><i class='iconfont'>&#xe632;</i></a>"+
+								"		<a href='javascript:void(0);'><span>05:14</span></a>"+
+								"	</p>"+
+								"</div></div>"+
+							"</div>");
+							$container.find("h1.t").remove();
+							//.html("<img src='"+json.preview+"'>");
+							$container.append($div);
+							//确定下一次元素的top位置，然后在这里面找一个最短位置
+							arrTop[minIndex] +=(bitheight+space+100);
+							$(".mtip").each(function(){
+								$(this).css("background",tzUtil.getRandomColor());
+							});
+							mark = true;
+							$load.hide();
+						});
+						hoverImg();
+					});
+				}
+			};
+
+			loadData();//调用
+			//绑定窗口的滚动事件
+			$(window).on("scroll",function(){
+				var ih = $(window).scrollTop() + $(window).innerHeight();
+				var minIndex = getMin();
+				var top = arrTop[minIndex] + 50;
+				if(ih > top){
+					pageNo++;
+					loadData();
+				}
+			});
+			
+			//窗口改变事件
+			$(window).on("resize",function(){
+				var len = cells;//改变之前的列6
+				getCells();
+				if(len == cells){
+					return;	
+				}
+				arrLeft = [];
+				arrTop = [];
+				for(var i=0;i<cells;i++){
+					arrTop.push(0);
+					arrLeft.push(i * owdith);
+				};
+
+				$container.find(".stage").each(function(){
+					var min = getMin();
+					$(this).stop(true,true).animate({
+						left:arrLeft[min],
+						top:arrTop[min]
+					});
+					arrTop[min] +=$(this).height() + space +100 ; 
+				});
+			});
+
+			
+			/*找到当前这个元素最短的那个top元素的坐标*/
+			function getMin(){
+				var val = arrTop[0];
+				var index = 0;
+				for(var i=1;i<arrTop.length;i++){
+					if(arrTop[i] < val){
+						val = arrTop[i];
+						index = i;
+					}
+				}
+				return index;
+			};
+		});
+
+
+		function jsonToString(obj) {
+			var THIS = this;
+			switch (typeof (obj)) {
+			case 'string':
+				return '"' + obj.replace(/(["\\])/g, '\\$1') + '"';
+			case 'array':
+				return '[' + obj.map(THIS.jsonToString).join(',') + ']';
+			case 'object':
+				if (obj instanceof Array) {
+					var strArr = [];
+					var len = obj.length;
+					for (var i = 0; i < len; i++) {
+						strArr.push(THIS.jsonToString(obj[i]));
+					}
+					return '[' + strArr.join(',') + ']';
+				} else if (obj == null) {
+					return 'null';
+
+				} else {
+					var string = [];
+					for ( var property in obj)
+						string.push(THIS.jsonToString(property) + ':'
+								+ THIS.jsonToString(obj[property]));
+					return '{' + string.join(',') + '}';
+				}
+			case 'number':
+				return obj;
+			case false:
+				return obj;
+			}
+		}
+	</script>
+	<script type="text/javascript">$(".mtip").css("background",tzUtil.getRandomColor());</script>
+	
+ </body>
+</html>

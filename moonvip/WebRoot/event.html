@@ -1,0 +1,85 @@
+
+(function (window) {
+    if (!window.jasen) {
+        window.jasen = {};
+    }
+
+    if (!window.jasen.core) {
+        window.jasen.core = {};
+    }
+
+    if (!window.jasen.core.Binder) {
+        window.jasen.core.Binder = {};
+    }
+
+    if (typeof jasen.core.Binder != "object") {
+        throw new Error("Invalid entity jasen.core.Binder!");
+    }
+
+    function bind(element, eventType, handler, capture) {
+        if (typeof element == "string") {
+            element = document.getElementById(element);
+        }
+
+        if (typeof capture != "Boolean") {
+            capture = false;
+        }
+
+        if (element.addEventListener) {
+            element.addEventListener(eventType, handler, capture); // Allow to register the same event handler only one. 
+        }
+        else if (element.attachEvent) {
+            if (capture) {
+                element.setCapture();
+            }
+
+            element.attachEvent("on" + eventType, handler); // Allow to register the same event handler more times. 
+        }
+        else {
+            element["on" + eventType] = handler; // Non support Capture.
+        }
+    }
+
+    function unbind(element, eventType, handler, releaseCapture) {
+        if (typeof element == "string") {
+            element = document.getElementById(element);
+        }
+
+        if (typeof releaseCapture != "Boolean") {
+            releaseCapture = false;
+        }
+
+        if (element.removeEventListener) {
+            element.removeEventListener(eventType, handler, releaseCapture);
+        }
+        else if (element.detachEvent) {
+            if (releaseCapture) {
+                element.releaseCapture();
+            }
+
+            element.detachEvent("on" + eventType, handler);
+        }
+        else {
+            element["on" + eventType] = null;
+        }
+    }
+
+    function cancelBubble(e) {
+        e = e || window.event;
+
+        if (e.stopPropagation) {
+            e.stopPropagation();
+        }
+        else {
+            e.cancelBubble = true; //IE
+        }
+    }
+
+    var binder = window.jasen.core.Binder;
+    binder.bind = bind;
+    binder.unbind = unbind;
+    binder.cancelBubble = cancelBubble;
+
+    window.Binder = binder;
+
+})(window);

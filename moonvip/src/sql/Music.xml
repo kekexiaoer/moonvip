@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tz.dao.music.IMusicDao" >
+	<!-- 查询所有音乐 --> 
+	<select id="findMusics" parameterType="TmParams" resultType="Music">
+		SELECT 
+			m.id,
+			m.name,
+			m.description,
+			m.lrc,
+			m.linksrc,
+			m.size_string as sizeString,
+			m.img,
+			m.timer,
+			m.author,
+			m.special_name as specialName,
+			m.is_delete as isDelete,
+			m.user_id as userId,
+			m.status,
+			m.hits,
+			m.loves,
+			m.sort,
+			m.content_id as contentId,
+			c.title as cname,
+			c.static_link as link,
+			u.header_pic as uimg,
+			u.username as uname
+		FROM keke_music m
+		LEFT JOIN keke_content c on c.id = m.content_id 
+		LEFT JOIN keke_user u ON u.id = m.user_id
+		<trim prefix="WHERE" prefixOverrides="AND | OR">  
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isDelete)">
+				AND m.is_delete = ${isDelete}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(contentId)">
+				AND m.content_id = ${contentId}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(status)">
+				AND m.status = ${status}
+			</if>
+		</trim>
+		<choose>
+			<!--  MyBatis排序时使用order by 动态参数时需要注意，用$而不是# -->
+			<when test="@com.tz.util.TmStringUtils@isNotEmpty(orderSql)">
+                ORDER BY ${orderSql}
+			</when>
+		</choose>
+	</select>
+	
+	<select id="findMusicsPage" parameterType="TmParams" resultType="Music">
+		SELECT 
+			m.id,
+			m.name,
+			m.img,
+			m.timer,
+			m.author,
+			m.special_name as specialName,
+			m.user_id as userId,
+			m.hits,
+			m.sort,
+			m.loves,
+			m.content_id as contentId,
+			c.title as cname,
+			c.static_link as link,
+			u.header_pic as uimg,
+			u.username as uname
+		FROM keke_music m
+		LEFT JOIN keke_content c on c.id = m.content_id 
+		LEFT JOIN keke_user u ON u.id = m.user_id
+		<trim prefix="WHERE" prefixOverrides="AND | OR">  
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isDelete)">
+				AND m.is_delete = ${isDelete}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(contentId)">
+				AND m.content_id = ${contentId}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(status)">
+				AND m.status = ${status}
+			</if>
+		</trim>
+		<choose>
+			<!--  MyBatis排序时使用order by 动态参数时需要注意，用$而不是# -->
+			<when test="@com.tz.util.TmStringUtils@isNotEmpty(orderSql)">
+                ORDER BY ${orderSql}
+			</when>
+		</choose>
+		LIMIT ${pageNo},${pageSize}
+	</select>
+	
+	<!-- 查询单条音乐 -->
+	<select id="getMusic" parameterType="TmParams" resultType="Music">
+		SELECT 
+			name,
+			description,
+			lrc,
+			linksrc,
+			size_string as sizeString,
+			img,
+			timer,
+			author,
+			special_name as specialName,
+			is_delete as isDelete,
+			user_id as userId,
+			status,
+			hits,
+			loves,
+			sort,
+			content_id as contentId
+		FROM keke_music  where id = ${id} 
+	</select>
+	
+	<select id="loadMusics" parameterType="TmParams" resultType="Music">
+		SELECT id,name,lrc,linksrc,author,timer FROM  keke_music WHERE content_id = ${contentId} AND is_delete =0 AND `status` = 1 ORDER BY sort asc LIMIT 0,1
+	</select>
+	
+	
+	
+	<!-- 更新音乐 -->
+	<update id="updateMusic" parameterType="Music" flushCache="true">
+		UPDATE  keke_music
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(name)">name =#{name},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(description)">description=#{description},</if>
+ 			<if test="@com.tz.util.TmStringUtils@isNotEmpty(updateTime)">update_time=#{updateTime},</if> 
+ 			<if test="@com.tz.util.TmStringUtils@isNotEmpty(userId)">user_id=#{userId},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isDelete)">is_delete=#{isDelete},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(status)">status=#{status},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(hits)">hits=#{hits},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(loves)">loves=#{loves},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(img)">img=#{img},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(lrc)">lrc=#{lrc},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(linksrc)">linksrc=#{linksrc},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(sizeString)">size_string=#{sizeString},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(timer)">timer=#{timer},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(author)">author=#{author},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(contentId)">content_id=#{contentId},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(sort)">sort=#{sort},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(specialName)">special_name=#{specialName},</if> 
+		</trim>
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateHits" parameterType="Music" flushCache="true">
+		UPDATE  keke_music set hits=hits+1,update_time=#{updateTime} WHERE id = #{id}
+	</update>
+	
+	<update id="updateLoves" parameterType="Music" flushCache="true">
+		UPDATE  keke_music set loves=loves+1,update_time=#{updateTime} WHERE id = #{id}
+	</update>
+	
+	<!-- 保存音乐 -->
+	<insert id="saveMusic" parameterType="Music" useGeneratedKeys="true" keyProperty="id" flushCache="true" >
+	  	INSERT INTO keke_music(name,description,lrc,linksrc,size_string,img,timer,author,special_name,is_delete,user_id,status,hits,content_id,sort,loves) VALUES (#{name},#{description},#{lrc},#{linksrc},#{sizeString},#{img},#{timer},#{author},#{specialName},#{isDelete},#{userId},#{status},#{hits},#{contentId},#{sort},#{loves});
+	</insert>
+</mapper>

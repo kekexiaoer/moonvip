@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tz.dao.channel.IChannelDao" >
+	<select id="findChannels" parameterType="TmParams" resultType="Channel">
+		SELECT 
+			id,
+			name,
+			description,
+			model,
+			url,
+			create_time as createTime,
+			user_id as userId,
+			is_delete as isDelete,
+			status,
+			sort
+		FROM keke_channel 
+		<trim prefix="WHERE" prefixOverrides="AND | OR">  
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isDelete)">
+				AND is_delete = ${isDelete}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(status)">
+				AND status = ${status}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(fids)">
+				AND id not in(${fids}) 
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(keyword)">
+				AND name like '%${keyword}%' 
+			</if>
+		</trim>
+		<choose>
+			<!--  MyBatis排序时使用order by 动态参数时需要注意，用$而不是# -->
+			<when test="@com.tz.util.TmStringUtils@isNotEmpty(orderSql)">
+                ORDER BY ${orderSql}
+			</when>
+		</choose>
+		LIMIT ${pageNo},${pageSize}
+	</select>
+	
+	<select id="countChannels" parameterType="TmParams" resultType="int">
+		SELECT 
+			count(1)			
+		FROM keke_channel 
+		<trim prefix="WHERE" prefixOverrides="AND | OR">  
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isDelete)">
+				AND is_delete = ${isDelete}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(fids)">
+				AND id not in(${fids}) 
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(status)">
+				AND status = ${status}
+			</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(keyword)">
+				AND name like '%${keyword}%' 
+			</if>
+		</trim>
+		<choose>
+			<!--  MyBatis排序时使用order by 动态参数时需要注意，用$而不是# -->
+			<when test="@com.tz.util.TmStringUtils@isNotEmpty(orderSql)">
+                ORDER BY ${orderSql}
+			</when>
+		</choose>
+		LIMIT ${pageNo},${pageSize}
+	</select>
+	
+	
+	
+	<!-- 更新内容 -->
+	<update id="updateChannel" parameterType="Channel" flushCache="true">
+		UPDATE  keke_channel
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(name)">name =#{name},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(description)">description=#{description},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(isDelete)">is_delete=#{isDelete},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(status)">status=#{status},</if>
+ 			<if test="@com.tz.util.TmStringUtils@isNotEmpty(userId)">user_id=#{userId},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(sort)">sort=#{sort},</if>
+ 			<if test="@com.tz.util.TmStringUtils@isNotEmpty(url)">url=#{url},</if> 
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(model)">tag=#{model},</if>
+			<if test="@com.tz.util.TmStringUtils@isNotEmpty(updateTime)">update_time=#{updateTime},</if>
+		</trim>
+			WHERE id = #{id}
+	</update>
+	
+</mapper>

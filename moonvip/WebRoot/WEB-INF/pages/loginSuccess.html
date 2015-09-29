@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>KeKe个人博客-登陆</title>
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+   <#include "/common/common.html"/>
+ </head>
+ <body>
+  <div id="ubox"  class="changebg fr">
+		<div style="position: relative;top:${mark!"30"}px;right:5px;">
+   		<#if session_user_key_id??>
+       		<a href="javascript:void(0);" onclick="top.location.href = '${basePath}/user/${session_user_key_id}';" class="color-login fl">
+       			<img src="${basePath}/${session_user_key.headerPic}" id="user_headerpic" title="${session_user_key_username}" width="24" height="24" class="fl"/>
+       			<span class="fl tmui-ellipsis w50 uname" data-uname="${session_user_key_username}">&nbsp;${session_user_key_username}</span>
+       		</a>
+       		<a href="javascript:void(0);" onclick="tzLogin.logout();" class="color-login pl5 reg fl">退出</a>
+      	<#else>	
+   			<a href="javascript:void(0);" onclick="top.location.href = '${basePath}/login';" class="color-login fl">登陆</a>
+   			<a href="javascript:void(0);" onclick="top.location.href = '${basePath}/reg';" class="color-login pl10 reg fl">注册</a>
+      	</#if>
+   		</div>
+   	</div>
+   	<script type="text/javascript">
+		var refer =document.referrer; 
+		if(isNotEmpty(refer) && refer.indexOf("login")==-1 && refer.indexOf("reg")==-1 && refer.indexOf("forget")==-1){
+			$.tmCookie.setCookie("domainUrl",refer,"h1");
+		}
+   	</script>
+  </body>
+</html>

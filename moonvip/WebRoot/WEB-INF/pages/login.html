@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>KeKe老师个人博客</title>
+    <meta name="keywords" content="keyword1,keyword2,keyword3">
+    <meta name="description" content="this is my page">
+    <meta name="content-type" content="text/html; charset=UTF-8">
+    <#--<script src="${basePath}/js/canvas/application.js"></script>
+    <script src="${basePath}/js/canvas/canvas.js"></script>-->
+    <#include "/common/common.html"/>
+ </head>
+ <body class="changebg" style="background:#28384F;overflow: hidden;">
+ 	  <#if !window>
+ 	 	<div class="error_tips cbg" style="display: none;"><i class="iconfont">&#xf0104;</i><span id="e_m"></span></div>
+	 	<#--<div id="particles-js" style="position: fixed;z-index: 0"><canvas width="1920" height="935"></canvas></div>-->
+	 	<div id="particles-js" style="position: fixed;z-index: 0"><canvas id="magic" ></canvas></div>
+		<script type="text/javascript">
+		      if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+		        window.location = "http://guibento.com/mobile";
+		      }
+		        
+		
+		     window.requestAnimFrame = (function(callback) {
+		        return window.requestAnimationFrame ||
+		                window.webkitRequestAnimationFrame ||
+		                window.mozRequestAnimationFrame ||
+		                window.oRequestAnimationFrame ||
+		                window.msRequestAnimationFrame ||
+		                function(callback) {
+		                    window.setTimeout(callback, 1000 / 30);
+		                };
+		    })();
+		        
+		      var canvas = document.getElementById("magic");
+		      var ctx = canvas.getContext("2d");
+		      var sTop = 0;
+		
+		      var strokeColor = ["#f43616","#f43616","#0dffbf"];
+		      //f43616
+		
+		      window.addEventListener("scroll", function(event) {
+		        sTop = this.scrollY/25;
+		        //console.log(sTop);
+		      }, false);
+		
+		      //Make the canvas occupy the full page
+		      var W = window.innerWidth, H = window.innerHeight;
+		      canvas.width = W;
+		      canvas.height = H;
+		
+		      var particles = [];
+		
+		      //Lets create some particles now
+		      var particle_count = 30;
+		      for(var i = 0; i < particle_count; i++)
+		      {
+		        particles.push(new particle());
+		      }
+		
+		      function particle()
+		      {
+		
+		        //console.log(sTop);
+		        //speed, life, location, life, colors
+		        //speed range = -2.5 to 2.5
+		        this.speed = {x: -25-(sTop/50)+Math.random()*(sTop/100+50), y: -25-(sTop/50)+Math.random()*(sTop/100+50)};
+		        //location = center of the screen
+		        this.location = {x: (W/2 - 200 + sTop/2)+Math.random()*(400 - sTop), y: (H/2 - 200 + sTop/2)+Math.random()*(400 - sTop)};
+		        //radius range = 10-30
+		        this.radius = 1+Math.random()*6;
+		        //life range = 20-30
+		        this.life = Math.random()*100;
+		        this.remaining_life = this.life;
+		        //colors
+		        this.r = Math.round(Math.random()*255);
+		        this.g = Math.round(Math.random()*255);
+		        this.b = Math.round(Math.random()*255);
+		      }
+		
+		      function draw()
+		      {
+		        //Painting the canvas black
+		        //ctx.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+		        //ctx.fillStyle = "black";
+		        //ctx.fillRect(0, 0, W, H);
+		        //ctx.globalCompositeOperation = "destination-in";
+		        
+		        
+				ctx.fillStyle = "rgba(13,4,5,0.05)";	
+		        ctx.fillRect(0,0,canvas.width,canvas.height);
+		        //ctx.globalCompositeOperation = "lighter";
+		
+		        for(var i = 0; i < particles.length; i++)
+		        {
+		
+		          var p = particles[i];
+		          ctx.beginPath();
+		          //changing opacity according to the life.
+		          //opacity goes to 0 at the end of life of a particle
+		          p.opacity = Math.round(p.remaining_life/p.life*100)/100
+		          ctx.fillStyle = "rgba(244, 54, 22, "+p.opacity+")";
+		
+		          //a gradi
+		          ctx.rect(p.location.x, p.location.y, p.radius, p.radius);
+		          ctx.arc(p.location.x, p.location.y, p.radius, Math.PI*2, false);
+		          ctx.fill();
+		
+		          //lets move the particles
+		          p.remaining_life--;
+		          //p.radius--;
+		          p.opacity--;
+		          p.location.x += p.speed.x;
+		          p.location.y += p.speed.y;
+		
+		
+		          for(var n = 0; n < particles.length; n++)
+		          {
+		            var p2 = particles[n];
+		            //calculating distance of particle with all other particles
+		            var yd = p2.location.y - p.location.y;
+		            var xd = p2.location.x - p.location.x;
+		            var distance = Math.sqrt(xd*xd + yd*yd);
+		            //draw a line between both particles if they are in 200px range
+		            if(distance < 100+(sTop/100))
+		            {
+		              ctx.beginPath();
+		              ctx.lineWidth = 1 + Math.random()*3;
+		              ctx.moveTo(p.location.x, p.location.y);
+		              ctx.lineTo(p2.location.x, p2.location.y);
+		              //ctx.arcTo(150,20,150,70,50);
+		              //ctx.bezierCurveTo(p.location.x+p2.location.x/2,p.location.y+p2.location.y/2,p.location.x+p2.location.x/2,p.location.y+p2.location.y/2,p2.location.x,p2.location.y);
+		
+		              ctx.strokeStyle = strokeColor[Math.floor(Math.random()*strokeColor.length)];
+		              ctx.stroke();
+		              //The rib
+		
+		            }
+		          }
+		
+		          //regenerate particles
+		          if(p.remaining_life < 0 || p.radius < 0)
+		          {
+		            //a brand new particle replacing the dead one
+		            particles[i] = new particle();
+		          }
+		        }
+		      }
+		
+		      (function animloop(){
+		          requestAnimFrame(animloop);
+		          draw();
+		        })();
+		
+		
+		      window.onresize = function()
+		      {
+		        W = window.innerWidth;
+		        H = window.innerHeight;
+		        canvas.width = W;
+		        canvas.height = H;
+		      };
+		      
+		      //set up the background
+		      window.onresize();
+		
+		    </script>
+	 	
+	 	
+	 </#if>	 	 
+	 <div class="login animated bounceInDown" style="position: relative;z-index: 2">
+	    <div class="animated fadeInDownBig c_logo">
+	        <a href="${basePath}" class="zhuce zc-title center"> <img src="${basePath}/images/logo.png"></a>
+	    </div>
+	    <div class="dengl-cont dl-cont">
+	    	<p class="zhmmk clearfix animated bounceInLeft"><input type="text" id="account" autofocus="autofocus" maxlength="42" placeholder="请输入邮箱"></p>
+	        <p class="zhmmk fmt clearfix animated bounceInRight"><input type="password" id="password" maxlength="16" placeholder="请输入密码"></p>
+	        <p class="login-xxts"></p>
+	    	<p class="zhmmk clearfix animated bounceInDown tz_login"><a href="javascript:void(0)" onclick="tzLogin.login(this);" id="loginbtn" class="cbg center btn-login animated rollIn">登陆</a></p>
+	        <p class="clearfix animated bounceInDown" style="padding: 7px;">
+            <a href="${basePath}/reg" class="fl fs12 tz_reg_btn">注册</a>
+            <a href="${basePath}/forget" class="fr fs12">忘记密码</a>
+	        </p>
+	    </div>
+	</div>
+	<script type="text/javascript">
+	 	var tzLogin = (function(){
+	 		 var timer = null;
+	 		 return {
+	 			 init:function(){
+	 				var $this = this;
+	 				$(document).off().keydown(function(e){
+	 					if(e.keyCode==13)$this.login(document.getElementById("loginbtn")); 
+ 					});
+	 				$("#account").keyup(function(){
+	 					var v = $(this).val();
+	 					if(isNotEmpty(v)){
+		 					if(localStorage)localStorage.setItem("reg_account",v);
+	 					}
+	 				});
+	 				if(window.localStorage){
+	 					var ve = localStorage.getItem("reg_account");
+	 					if(!ve)return;
+	 					$("#account").val(ve);
+	 					setTimeout(function(){$("#password").focus();}, 300);
+	 					$this.c_focus();
+	 				};
+	 			 },
+	 			gotoEmail : function(email){
+	 				if(email.indexOf("@163.com")!=-1){
+	 					return "http://email.163.com/";
+	 				}else if(email.indexOf("@sina.com")!=-1){
+	 					return "http://mail.sina.com.cn/";
+	 				}else if(email.indexOf("@qq.com")!=-1){
+	 					return "https://mail.qq.com/cgi-bin/loginpage";
+	 				}else if(email.indexOf("@126.com")!=-1){
+	 					return "http://www.126.com/";
+	 				}else if(email.indexOf("@139.com")!=-1){
+	 					return "http://mail.10086.cn/";
+	 				}else if(email.indexOf("@gmail.com")!=-1){
+	 					return "http://gmail.google.com/";
+	 				}
+	 			},
+	 			 c_focus:function(){
+	 				 var account = $("#account").val();
+	 				 var password = $("#password").val();
+	 				 var username = $("#useranme").val();
+	 				 if(isEmpty(account)){
+	 					$("#account").focus();
+	 					return;
+	 				 }
+	 				 if(isEmpty(password)){
+	 					$("#password").focus();
+	 					return;
+	 				 }
+	 				 if(isEmpty(username)){
+	 					$("#useranme").focus();
+	 					return;
+	 				 }
+	 			 },
+	 			 login:function(obj){
+	 				 var account = $("#account").val();
+	 				 var password = $("#password").val();
+	 				 var $this = this;
+	 				 if(isEmpty(account)){
+	 					$this.error("请输入账号...");
+	 					$("#account").focus();
+	 					return;
+	 				 }
+	 				 
+	 				 if(!$this.email(account)){
+	 					$this.error("邮箱格式有误...");
+	 					$("#account").select();
+	 					return false;
+	 				 }
+	 				 
+	 				 if(isEmpty(password)){
+	 					$this.error("请输入密码...");
+	 					$("#password").focus();
+	 					return;
+	 				 }
+	 				 
+	 				 var params = "account="+account+"&password="+password;
+	 				 var xhr = null;
+	 				 if(window.ActiveXObject){
+	 					xhr = new ActiveXObject("Microsoft.XMLHTTP");
+	 				 }else{
+	 					 xhr = new XMLHttpRequest();
+	 				 }
+	 				 obj.removeAttribute("onclick");
+	 			     obj.innerHTML ="登陆中...";
+	 				 xhr.open("post",rootPath+"/login/logined",true);
+	 				 xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded;");  
+	 				 xhr.onreadystatechange = function() {
+		 			       if (xhr.status == 200 && xhr.readyState==4) {
+		 			    	   obj.setAttribute("onclick","tzLogin.login(this)");
+		 	 			       obj.innerHTML ="登陆";
+		 			        	var text = xhr.responseText;
+		 			        	if(text=="account_null"){
+		 			        		$this.error("请输入账号...");
+		 			        		 $("#account").focus();
+		 			        	}else if(text=="pwd_null"){
+		 			        		$this.error("请输入密码...");
+		 			        		$("#account").focus();
+		 			        	}else if(text=="active"){
+		 			        		$this.error("您输入的邮箱尚未激活...");
+		 			        		$("#account").select();
+		 			        		$("#password").focus().val("");
+		 			        	}else if(text=="fail"){
+		 			        		$this.error("请正确输入账号和密码...");
+		 			        		$("#account").select();
+		 			        		$("#password").focus().val("");
+		 			        	}else{
+		 			        		var refer = $.tmCookie.getCookie("domainUrl");
+		 			        		if(isNotEmpty(refer)){
+			 			        		window.location.href = refer;
+		 			        		}else{
+			 			        		window.location.href = rootPath;
+		 			        		}
+		 			        	}
+		 			       }else{
+		 			    	  obj.setAttribute("onclick","tzLogin.login(this)");
+		 	 			      obj.innerHTML ="登陆";
+		 			       }
+	 			     };
+	 				 xhr.send(params);
+	 			 },
+	 			 email:function(msg){
+	 				 return /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i.test(msg);
+	 			 },
+	 			 password:function(pwd){
+	 				 return /^[\dA-Za-z(!@#$%&)]{6,16}$/.test(pwd);
+	 			 },
+	 			 _username:function(uname){
+	 				 return /^[\u4e00-\u9fa5A-Za-z_]{2,10}$/.test(uname);	
+	 			 },
+	 			 error:function(msg){
+	 				 $(".error_tips").show().removeClass("magictime slideLeftRetournOut").addClass("magictime slideLeftRetourn");
+	 				 clearTimeout(timer);
+	 				 timer = setTimeout(function(){
+	 					$(".error_tips").removeClass("magictime slideLeftRetourn").addClass("magictime slideLeftRetournOut").fadeOut("slow");
+	 				 },3000);
+	 				 $("#e_m").html(msg);
+	 			 }
+	 		 };	
+	 	}());
+	 	
+	 	tzLogin.init();
+	 	if(window.localStorage){
+	 		var lcolor = localStorage.getItem("color");
+	 		if(lcolor){
+				var color =lcolor.split(",");
+				if(color){
+					$(".changebg").css("background",color[0]);
+					$(".cbg").css("background",color[1]);
+				}
+	 		}
+		}
+	 </script>
+</body>
+</html>
