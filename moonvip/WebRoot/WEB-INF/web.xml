@@ -70,7 +70,7 @@
         <location>/error.html</location>
     </error-page>
 	<welcome-file-list>
-<!-- 		<welcome-file>/</welcome-file> -->
-		<welcome-file>/index.html</welcome-file>
+ 		<welcome-file>/</welcome-file>
+<!-- 	<welcome-file>/index.html</welcome-file> -->
 	</welcome-file-list>
 </web-app>
