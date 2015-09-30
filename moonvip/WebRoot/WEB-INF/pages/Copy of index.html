@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>KeKe个人博客-首页</title>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="潭州学院 KeKe Java 前端 cavnas 游戏 框架">
+    <meta name="description" content="KeKe老师个人博客">
+    <#include "/common/common.html"/>
+    <style type="text/css" id="cssRule"></style>
+ </head>
+ <body>
+ <#include "/common/header.html"/>
+ <div class="auto" style="background:#fff;">
+  	<div class="g-bdb" id="boxlist">
+    	<div class="banner">        
+        	<ul id="silderbox" class="b-img">
+        		<@bannerList>
+            		<li index="${banner_index}"><a href="${banner.url}" target="${banner.open}" title="${banner.title}"><img src="${banner.img}" width="866" height="380"></a></li>
+            	</@bannerList>
+            </ul>
+            <ul class="b-yd">
+            	<#list 1..banner_size as count>
+            		<li class="<#if count==1>selected</#if>"></li>
+            	</#list>
+            </ul>
+            <a href="javascript:void(0)" class="prev left-tb sxy"><img src="images/left.png" width="50" height="50"></a>
+            <a href="javascript:void(0)" class="next right-tb sxy"><img src="images/right.png" width="50" height="50"></a>
+        </div>
+        <div class="pt30 clearfix">
+            <ul class="m-nav" id="navbox">
+                <li  data-tab="pushbox"><a href="javascript:void(0)" class="nav-bg">精华推荐</a></li>
+                <li  data-tab="hotbox"><a href="javascript:void(0)">热门</a></li>
+                <li  data-tab="musicbox"><a href="javascript:void(0)">本周音乐</a></li>
+                <li  data-tab="weekbox"><a href="javascript:void(0)">本周排行</a></li>
+            </ul>
+        </div>
+        <div class="pt30 itembox clearfix" id="pushbox" >
+            <ul class="m-img">
+            	<!-- 精华帖并且是置顶到首页的 -->
+                <@contentList isTop=1 push=1 filterChannelId="3,7" orderSql="c.update_time desc" pageSize="9">
+	                <li class="<#if content_index%2==0>fl<#else>fr</#if>">
+	                    <a href="${basePath}/${content.staticLink}" title="${content.title}"><img class="img" src="${basePath}/${content.img}" width="416" height="230"></a>
+	                    <p>
+	                    	<img src="${basePath}/${content.headerPic}" width="24" height="24" class="imgradius fl tz_userinfo"/>
+	                    	<a href="${basePath}/${content.staticLink}"  title="${content.title}" class="tmui-ellipsis w360 fl">${content.title}<span class="underline"></span></a>
+	                    </p>
+	                </li>
+				 </@contentList>
+            </ul>
+        </div>
+        
+         <div class="pt30 itembox clearfix" id="hotbox" style="display: none;">
+            <ul class="m-img">
+            	<!-- 热门 -->
+                <@contentList isTop=1  filterChannelId="3,7" orderSql=" c.hits desc" var="rcnt" pageSize="9">
+	                <li class="<#if rcnt_index%2==0>fl<#else>fr</#if>">
+	                    <a href="${basePath}/${rcnt.staticLink}" title="${rcnt.title}"><img class="img" src="${basePath}/${rcnt.img}" width="416" height="230"></a>
+	                    <p><img src="${basePath}/${rcnt.headerPic}" width="24" height="24" class="imgradius fl"/><a href="${basePath}/${rcnt.staticLink}"  title="${rcnt.title}" class="tmui-ellipsis w360">${rcnt.title}<span class="underline"></span></a></p>
+	                </li>
+				 </@contentList>
+            </ul>
+          </div>
+          
+          <div class="pt30 itembox clearfix" id="musicbox" style="display: none;">
+            <ul class="m-img">
+            	<!-- 本周 音乐 -->
+                <@contentList isTop=1 type=2  var="mcnt" channelId=3 pageSize="9">
+	                <li class="<#if mcnt_index%2==0>fl<#else>fr</#if>">
+	                    <a href="${basePath}/${mcnt.staticLink}" title="${mcnt.title}"><img class="img" src="${basePath}/${mcnt.img}" width="416" height="230"></a>
+	                    <p><img src="${basePath}/${mcnt.headerPic}" width="24" height="24" class="imgradius fl"/><a href="${basePath}/${mcnt.staticLink}"  title="${mcnt.title}" class="tmui-ellipsis w360">${mcnt.title}<span class="underline"></span></a></p>
+	                </li>
+				 </@contentList>
+            </ul>
+          </div>
+          
+         <div class="pt30 itembox clearfix" id="weekbox"  style="display: none;">
+            <ul class="m-img">
+            	<!-- 热门 -->
+                <@contentList isTop=1  filterChannelId="3,7" orderSql="c.create_time desc,c.hits desc" week="week" var="wcnt" pageSize="9">
+	                <li class="<#if wcnt_index%2==0>fl<#else>fr</#if>">
+	                    <a href="${basePath}/${wcnt.staticLink}" title="${wcnt.title}"><img class="img" src="${basePath}/${wcnt.img}" width="416" height="230"></a>
+	                    <p><img src="${basePath}/${wcnt.headerPic}" width="24" height="24" class="imgradius fl"/><a href="${basePath}/${wcnt.staticLink}"  title="${wcnt.title}" class="tmui-ellipsis w360">${wcnt.title}<span class="underline"></span></a></p>
+	                </li>
+				 </@contentList>
+            </ul>
+          </div>
+          
+          <script type="text/javascript">
+          		$(function(){
+          			var timer = null;
+          			$("#navbox").find("li").mouseover(function(){
+          				clearTimeout(timer)
+          				var $this = $(this);
+          				timer = setTimeout(function(){
+	          				var id = $this.data("tab");
+	          				$this.find("a").addClass("nav-bg").end().siblings().find("a").removeClass("nav-bg");
+	          				$(".itembox").hide();
+	          				$("#"+id).addClass("magictime swashIn").fadeIn("slow");
+          				},200);
+          			});
+          		});
+          </script>
+        
+        <div class="kh-title">历史随机</div>   
+        <div class="pt30 clearfix">
+            <ul>
+            	 <@contentRandomList pageSize=6>
+	                <li class="kh-li <#if (rcontent_index+1)%3 !=0>mr30</#if>">
+	                    <div class="kh-img">
+	                        <a href="${basePath}/${rcontent.staticLink}" title="${rcontent.title}" class="kh-a01">
+		                        <span class="biank01 biank"></span>
+		                        <img class="img" src="${basePath}/${rcontent.img}" height="262" width="393">
+	                        </a>
+	                    </div>
+	                    <p class="kc-cont">
+	                        <a href="${basePath}/${rcontent.staticLink}" class="fl tmui-ellipsis w260">${rcontent.title}<span class="underline"></span></a>
+	                    </p>
+	                </li>
+                 </@contentRandomList>
+            </ul>
+        </div>
+     </div>
+ </div> 
+ <#include "/common/footer.html"/>
+ <script type="text/javascript" src="${basePath}/js/tz_banner.js"></script>
+ </body>
+</html>

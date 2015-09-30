@@ -111,7 +111,7 @@
 
 				$(".usertip").hover(function(){
 					var top = $(this).offset().top+$(this).outerHeight() + 18;
-					var left = $(this).offset().left-348;
+					var left = $(this).offset().left-358;
 					$("#usertipbox").stop(true,true).addClass("magictime slideRightRetourn").css({left:left,top:top}).show().mouseleave(function(){
 						$(this).removeClass("magictime slideRightRetourn").delay(100).addClass("magictime  slideLeftRetournOut").fadeOut(300,function(){
 							$(this).removeClass("magictime slideRightRetourn slideLeftRetournOut");
