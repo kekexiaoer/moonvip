@@ -30,7 +30,7 @@
 		 jdk1.6 注解
 	 -->
 	<!-- 选演员 -->
- 	<bean id="liudehua" class="com.tz.ioc.LiuDeHua">
+ 	<bean id="liudehua" class="com.tz.ioc.LiuDeHua" scope="">
  		<constructor-arg value="刘德华"></constructor-arg>
  	</bean>
  	
