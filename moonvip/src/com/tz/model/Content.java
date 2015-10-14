@@ -1,67 +1,52 @@
 /**
- * Tm系统平台
- * moonvip
- * com.tz.model
+ * tzdesk系统平台
+ * keke_dialog
+ * com.tz.bean
  * Content.java
  * 创建人:xuchengfei 
- * 时间：2015年6月8日-下午1:13:00 
- * 2015Tm公司-版权所有
+ * 时间：2015年10月4日-下午9:22:57 
+ * 2015潭州教育公司-版权所有
  */
 package com.tz.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.Table;
+
 /**
  * 
- * Content 创建人:xuchengfei 时间：2015年6月8日-下午1:13:00
+ * Content 创建人:xuchengfei 时间：2015年10月4日-下午9:22:57
  * 
  * @version 1.0.0
  * 
  */
+@Entity
+@Table(name = "tz_content")
 public class Content implements java.io.Serializable {
-	private static final long serialVersionUID = 1L;
-	private Integer id;/* 主键 */
+	private Integer id;// 主键
+	private Integer channelId;// 栏目ID
 	private String title;// 标题
-	private String subTitle;// 子标题
+	private String description;// 描述
 	private String content;// 内容
+	private String img;// 图片
+	private String author;// 作者
+	private String keywords;// 关键字
+	private Integer hits;// 点击数
+	private Integer commentHits;// 评论数
+	private Integer loves;
 	private Date createTime;// 创建时间
 	private Date updateTime;// 更新时间
-	private String staticLink;// 静态连接
-	private String tag;// 标签
-	private String img;// 封面图片
-	private Integer userId;// 用户ID
-	private Integer isTop;// 是否置顶1置顶0未置顶
-	private Integer isDelete;// 0删除1未删除
-	private Integer status;// 0未发布1发布
-	private Integer type;// 1文章2音乐3视频4其他
-	private Integer channelId;// 类型1Java，2前端，3音乐 4咖啡 5茶文化 6工具
-	private Integer categoryId;// 音乐类型
-	private Integer push;// 是否精华推荐贴0否1是
-	private Integer isComment;// 是否允许评论1允许0不允许
-	private Integer isSingle;// 是否单曲，针对音乐的0单曲1多曲
-	private String thumnail;// 小图片
-	private Integer width;// 封面图片的宽度
-	private Integer height;// 封面图片的高度
+	private Integer isDelete;// 删除状态0 未删除1删除
+	private Integer status;// 发布状态0未发布1发布
 
-	/* 源代码存储 */
-	private String htmlCode;
-	private String jsCode;
-	private String cssCode;
-	private Integer isCode;// 0不可预览 1可预览
-
-	private Integer hits;// 点击数
-	private Integer loves;// 喜欢数量
-	private Integer collections;// 收藏数量
-	private Integer comments;// 评论数据
-
-	private String keywords;// seo关键字
-	private String description;// seo描述
-	// 临时字段
-	private String headerPic;// 头像
-	private String username;// 作者名称
-	private String channelName;// 栏目名称
-	private String categoryName;// 分类名称
-
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Integer getId() {
 		return id;
 	}
@@ -70,86 +55,7 @@ public class Content implements java.io.Serializable {
 		this.id = id;
 	}
 
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public String getSubTitle() {
-		return subTitle;
-	}
-
-	public void setSubTitle(String subTitle) {
-		this.subTitle = subTitle;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
-	public Date getUpdateTime() {
-		return updateTime;
-	}
-
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
-	}
-
-	public Integer getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Integer userId) {
-		this.userId = userId;
-	}
-
-	public String getTag() {
-		return tag;
-	}
-
-	public void setTag(String tag) {
-		this.tag = tag;
-	}
-
-	public Integer getIsTop() {
-		return isTop;
-	}
-
-	public void setIsTop(Integer isTop) {
-		this.isTop = isTop;
-	}
-
-	public Integer getIsDelete() {
-		return isDelete;
-	}
-
-	public void setIsDelete(Integer isDelete) {
-		this.isDelete = isDelete;
-	}
-
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-
+	@Column(name = "channel_id")
 	public Integer getChannelId() {
 		return channelId;
 	}
@@ -158,70 +64,26 @@ public class Content implements java.io.Serializable {
 		this.channelId = channelId;
 	}
 
-	public String getImg() {
-		return img;
+	@Column(name = "title")
+	public String getTitle() {
+		return title;
 	}
 
-	public void setImg(String img) {
-		this.img = img;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public Integer getPush() {
-		return push;
+	@Column(name = "description")
+	public String getDescription() {
+		return description;
 	}
 
-	public void setPush(Integer push) {
-		this.push = push;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	public Integer getIsComment() {
-		return isComment;
-	}
-
-	public void setIsComment(Integer isComment) {
-		this.isComment = isComment;
-	}
-
-	public Integer getIsSingle() {
-		return isSingle;
-	}
-
-	public void setIsSingle(Integer isSingle) {
-		this.isSingle = isSingle;
-	}
-
-	public Integer getHits() {
-		return hits;
-	}
-
-	public void setHits(Integer hits) {
-		this.hits = hits;
-	}
-
-	public Integer getLoves() {
-		return loves;
-	}
-
-	public void setLoves(Integer loves) {
-		this.loves = loves;
-	}
-
-	public Integer getCollections() {
-		return collections;
-	}
-
-	public void setCollections(Integer collections) {
-		this.collections = collections;
-	}
-
-	public String getStaticLink() {
-		return staticLink;
-	}
-
-	public void setStaticLink(String staticLink) {
-		this.staticLink = staticLink;
-	}
-
+	@Lob
+	@Column(name = "content")
 	public String getContent() {
 		return content;
 	}
@@ -230,6 +92,25 @@ public class Content implements java.io.Serializable {
 		this.content = content;
 	}
 
+	@Column(name = "img")
+	public String getImg() {
+		return img;
+	}
+
+	public void setImg(String img) {
+		this.img = img;
+	}
+
+	@Column(name = "author")
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	@Column(name = "keywords")
 	public String getKeywords() {
 		return keywords;
 	}
@@ -238,115 +119,67 @@ public class Content implements java.io.Serializable {
 		this.keywords = keywords;
 	}
 
-	public Integer getType() {
-		return type;
+	@Column(name = "hits")
+	public Integer getHits() {
+		return hits;
 	}
 
-	public void setType(Integer type) {
-		this.type = type;
+	public void setHits(Integer hits) {
+		this.hits = hits;
 	}
 
-	public String getHeaderPic() {
-		return headerPic;
+	@Column(name = "comment_hits")
+	public Integer getCommentHits() {
+		return commentHits;
 	}
 
-	public void setHeaderPic(String headerPic) {
-		this.headerPic = headerPic;
+	public void setCommentHits(Integer commentHits) {
+		this.commentHits = commentHits;
 	}
 
-	public String getUsername() {
-		return username;
+	@Column(name = "loves")
+	public Integer getLoves() {
+		return loves;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setLoves(Integer loves) {
+		this.loves = loves;
 	}
 
-	public Integer getComments() {
-		return comments;
+	@Column(name = "create_time")
+	public Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setComments(Integer comments) {
-		this.comments = comments;
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
 	}
 
-	public String getChannelName() {
-		return channelName;
+	@Column(name = "update_time")
+	public Date getUpdateTime() {
+		return updateTime;
 	}
 
-	public void setChannelName(String channelName) {
-		this.channelName = channelName;
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
 	}
 
-	public Integer getCategoryId() {
-		return categoryId;
+	@Column(name = "is_delete")
+	public Integer getIsDelete() {
+		return isDelete;
 	}
 
-	public void setCategoryId(Integer categoryId) {
-		this.categoryId = categoryId;
+	public void setIsDelete(Integer isDelete) {
+		this.isDelete = isDelete;
 	}
 
-	public String getCategoryName() {
-		return categoryName;
+	@Column(name = "status")
+	public Integer getStatus() {
+		return status;
 	}
 
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 
-	public String getHtmlCode() {
-		return htmlCode;
-	}
-
-	public void setHtmlCode(String htmlCode) {
-		this.htmlCode = htmlCode;
-	}
-
-	public String getJsCode() {
-		return jsCode;
-	}
-
-	public void setJsCode(String jsCode) {
-		this.jsCode = jsCode;
-	}
-
-	public String getCssCode() {
-		return cssCode;
-	}
-
-	public void setCssCode(String cssCode) {
-		this.cssCode = cssCode;
-	}
-
-	public Integer getIsCode() {
-		return isCode;
-	}
-
-	public void setIsCode(Integer isCode) {
-		this.isCode = isCode;
-	}
-
-	public String getThumnail() {
-		return thumnail;
-	}
-
-	public void setThumnail(String thumnail) {
-		this.thumnail = thumnail;
-	}
-
-	public Integer getWidth() {
-		return width;
-	}
-
-	public void setWidth(Integer width) {
-		this.width = width;
-	}
-
-	public Integer getHeight() {
-		return height;
-	}
-
-	public void setHeight(Integer height) {
-		this.height = height;
-	}
 }
