@@ -32,12 +32,13 @@ public class PermissionInterceptor implements HandlerInterceptor {
 			}
 			return false;//终止后面的拦截器的执行
 		}else{
-			if(moonUser.getRole()!=null && moonUser.getRole()==1){
+			//if(moonUser.getRole()!=null && moonUser.getRole()==1){
+//			if(moonUser.getRole()!=null){
 				return true;//让下一个拦截器去处理
-			}else{
-				response.sendRedirect(request.getContextPath()+"/"+"nopermission");//首页居多
-				return false;
-			}
+//			}ELSE{
+//				RESPONSE.SENDREDIRECT(REQUEST.GETCONTEXTPATH()+"/"+"NOPERMISSION");//首页居多
+//				RETURN FALSE;
+//			}
 		}
 	}
 

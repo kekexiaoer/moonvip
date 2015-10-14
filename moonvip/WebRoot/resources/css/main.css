@@ -137,7 +137,7 @@ to{transform:scale(1,1)}
 .wz-cont{padding:16px 60px;}
 */
 .wz-cont img{max-width:900px;}
-.wz-user{height:50px;color:#E5E5E5;font-size:24px;font-weight:normal;line-height:24px;text-align:center;}
+.wz-user{height:50px;color:#E5E5E5;font-size:24px;font-weight:normal;line-height:50px;text-align:center;}
 .wz-qh{color:#666;font-size:12px;display:inline-block;}
 .wz-img{width:670px;height:503px;border:1px dashed #ddd;}
 .img-btn{padding:5px 10px;border-radius:5px;position:absolute;top:256px;left:330px;display:inline-block;}
