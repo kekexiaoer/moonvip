@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project>
+  <container path="com.genuitec.runtime.library/com.genuitec.generic_6.0">
+    <jar-attrs id="data/libraryset/EE_6//weld-osgi-bundle.jar">
+      <attribute name="javadoc_location" value="http://java.sun.com/javaee/6/docs/api/"/>
+      <attribute name="source-path-root"/>
+      <attribute name="source-path" value="G:\spring-framework-3.2.9.RELEASE-dist\spring-framework-3.2.9.RELEASE\sources\spring-beans-3.2.9.RELEASE-sources.jar"/>
+    </jar-attrs>
+  </container>
+</project>
