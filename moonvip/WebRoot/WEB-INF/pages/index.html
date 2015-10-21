@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>KeKe个人博客-首页</title>
+    <title>Ke-IT技术在线学习图片平台-首页</title>
     <meta charset="UTF-8">
     <meta name="keywords" content="潭州学院 KeKe Java 前端 cavnas 游戏 框架">
     <meta name="description" content="KeKe老师个人博客">
@@ -24,10 +24,12 @@
 		.column-6 .card-cloudcast-title a{font-size:13px;color:#666}
 		.column-6 .small-height{height:358px;}
 		.column-6 .card-stats{margin-top:20px}
+		.column-6 .info{  position: absolute;bottom: 38px;left: 0px;width: 100%;}
 		.welcome-buttons{text-align:center;color:#fff;padding-top:200px;padding-bottom:30px;}
 		.web-tip{padding:30px;}
 		.button .fa{padding-right:10px;}
 		.button.join-via-fb{height:70px;margin:0 20px 0 0;padding:0 50px 0 56px;-webkit-box-shadow:none;box-shadow:none;background-color:#3f5c94;border-bottom:2px solid #334a77;color:#fff;line-height:68px;font-weight:600;font-size:1.5em;text-transform:none;border-radius:3px;}
+		.button.join-via-fb a{color:#f9f9f9}
 		.button.start-listening{height:70px;margin:0;padding:0 48px;background:#612525;-webkit-box-shadow:none;box-shadow:none;border:1px solid #fff;border:1px solid rgba(255,255,255,.3);color:#fff;line-height:68px;font-weight:600;font-size:1.5em;text-transform:none;-webkit-transition:all .3s ease-in-out;-o-transition:all .3s ease-in-out;transition:all .3s ease-in-out;border-radius:3px;background-clip:padding-box;}
 		/*图片转换动画关键帧*/
 		@-webkit-keyframes rotating{from{-webkit-transform:rotate(0deg)}
@@ -43,59 +45,12 @@
 		.rotate{-webkit-animation:rotating 1.2s linear infinite;-moz-animation:rotating 1.2s linear infinite;-o-animation:rotating 1.2s linear infinite;animation:rotating 1.2s linear infinite;}
 		#audio_btn{position:absolute;right:30px;top:80px;z-index:200;width:30px;height:30px;background-repeat:no-repeat;}
 		/*转动的小图片*/
-		.off{background-image:url(http://as.eqxiu.com/view/images/normalmusic.svg);background-size:contain;background-repeat:no-repeat;}
+		.off{background-image:url(images/play.svg);background-size:contain;background-repeat:no-repeat;}
     </style>
  </head>
  <body>
  <body style="background:#f2f2f2">
-	<div class="header">
-		<div class="container">
-			<a class="logo" href="javascript:void(0);"><img src="http://keke.tanzhouedu.com/images/logo2.png"></a>
-			<div id="headerli-box">
-				<ul class="navigation navigation-left fl">
-					<li class="nav-list-item"><a class="nav-link" href="/upload/"><i class="fa fa-home"></i>首页</a><span class="showpan"></span></li>
-					<li class="nav-list-item"><a class="nav-link" href="/upload/"><i class="fa fa-file-text"></i>精品文章</a><span class="showpan"></span></li>
-					<li class="nav-list-item"><a class="nav-link" href="/upload/"><i class="fa fa-book"></i>精品书籍</a><span class="showpan"></span></li>
-					<li class="nav-list-item"><a class="nav-link" href="/upload/"><i class="fa fa-music"></i>音乐图书馆</a><span class="showpan"></span></li>
-					<li class="nav-list-item"><a class="nav-link" href="/discover/"><i class="fa fa-key"></i>Ke工具</a><span class="showpan"></span></li>
-				</ul>
-				<ul class="navigation  navigation-right fr">
-					<li class="nav-list-item">
-						<a id="header-avator" class="user-card-item usertip" href="#" target="_self">
-							<img src="http://img.mukewang.com/user/54584dad0001dd7802200220-40-40.jpg" width="40" height="40">
-						</a>
-						<span class="showpan"></span>
-					</li>
-					<li class="nav-list-item"><a class="nav-link" href="${basePath}/login"><i class="fa fa-location-arrow"></i>登陆</a><span class="showpan"></span></li>
-					<li class="nav-list-item"><a class="nav-link" href="${basePath}/reg"><i class="fa fa-user-plus"></i>注册</a><span class="showpan"></span></li>
-					<li class="nav-list-item"><a class="nav-link" href="/upload/"><i class="fa fa-user-secret"></i>申请作者</a><span class="showpan"></span></li>
-				</ul>
-			</div>
-		</div>
-	</div>
-
-	<script type="text/javascript">
-		$(function(){
-			$("#headerli-box").find("li").hover(function(){
-				$(this).find(".showpan").css("background",randomColor()).animate({bottom:0});
-			},function(){
-				$(this).find(".showpan").css("background",randomColor()).animate({bottom:-56});
-			});
-
-			function randomColor(){
-				var r = Math.floor(Math.random() * 256);
-				var g = Math.floor(Math.random() * 256);
-				var b = Math.floor(Math.random() * 256);
-				return "rgb("+r+","+g+","+b+")";
-			};
-
-		});
-		
-	</script>
-
-
-
-	
+	<#include "/common/header.html"/>
 	<!--banner图集-->
 	<div class="bannerbox">
 		<div id="audio_btn" class="off"></div>
@@ -121,19 +76,9 @@
 			});
 		</script>
 		<!--
-			https://nodejs.org/static/images/nodejs-interactive-portland2015.jpg
-			https://media-mix.netdna-ssl.com/media/images/www/discover/headers/ambient-3.jpg
-			https://media-mix.netdna-ssl.com/media/images/www/static/homepage/homepage-leader-01.jpg
-			https://media-mix.netdna-ssl.com/media/images/www/static/homepage/homepage-leader-02.jpg
-			https://media-mix.netdna-ssl.com/media/images/www/static/homepage/homepage-leader-03.jpg
-			https://media-mix.netdna-ssl.com/media/images/www/static/homepage/homepage-leader-04.jpg
-			https://media-mix.netdna-ssl.com/media/images/www/static/homepage/homepage-leader-05.jpg
-			https://media-mix.netdna-ssl.com/media/images/www/static/homepage/homepage-leader-06.jpg
-			https://media-mix.netdna-ssl.com/media/images/www/static/homepage/homepage-leader-07.jpg
-			https://media-mix.netdna-ssl.com/media/images/www/static/homepage/homepage-leader-08.jpg
-			https://media-mix.netdna-ssl.com/media/images/www/static/homepage/homepage-leader-09.jpg
+			images/bg/homepage-leader-08.jpg
 		-->
-		<div class="bannerimg" style="background-image:url(https://media-mix.netdna-ssl.com/media/images/www/static/homepage/homepage-leader-08.jpg);">
+		<div class="bannerimg" style="background-image:url(https://nodejs.org/static/images/nodejs-interactive-portland2015.jpg);">
 			<div id="box">
 				学习是一个艰苦而又快乐的事情，经常因为一个问题而苦恼很久，Ke音乐图书平台为大家提供实战的技术解决方案。为零基础的学者提供学习解决方案。
 			</div>
@@ -147,166 +92,21 @@
 	<div class="clearfix"></div>
 	<div class="sub-header"><div class="cf"><h2 class="sub-header-title">精品书籍</h2></div></div>
 	<div class="wrap_boxm">
-		<div class="column-6">
-			<div class="card card-cloudcast small-height">
-				<div class="card-chart-position z1"><div class="chart-bg"></div><div class="chart-value char-1">1<sup>st</sup></div></div>
-				<div class="card-cloudcast-image" style="background-color:#050000">
-					<a  href="#" ><img src="https://images-mix.netdna-ssl.com/w/318/h/318/q/90/upload/images/extaudio/80d7a5ba-779e-461e-810f-7aab1b6d3da7.jpg" width="176" height="176" alt="V.8 HBD JEFFY"></a>
-					<span class="c_play"><i class="fa fa-play"></i> </span>
-				</div>
-				<h3 class="card-cloudcast-title"><a href="">DJ Byte - Chile - World Finals 2</a></h3>
-				<div class="card-stats">
-					<a href="#"><span ><i class="fa fa-music"></i>&nbsp;&nbsp;693</span></a>
-					<span class="card-date"><i class="fa fa-fire"></i>&nbsp;&nbsp;<time>20 hours ago</time></span>
-				</div>
-				<div class="card-footer cf">
-					<span class=" icon fl"><i class="fa fa-star-o"></i><label>676</label></span>
-					<span class=" icon fr fb"><i class="fa fa-heartbeat"></i><label>676</label></span>
-				</div>
-			</div>
-		</div>	
-		<div class="column-6">
-			<div class="card card-cloudcast small-height">
-				<div class="card-chart-position z1"><div class="chart-bg"></div><div class="chart-value char-1">1<sup>st</sup></div></div>
-				<div class="card-cloudcast-image" style="background-color:#050000">
-					<a  href="#" ><img src="https://images-mix.netdna-ssl.com/w/318/h/318/q/90/upload/images/extaudio/098b5d71-5ad9-4a48-8d1e-918714f8e7a7.jpg" width="176" height="176" alt="V.8 HBD JEFFY"></a>
-					<span class="c_play"><i class="fa fa-play"></i> </span>
-				</div>
-				<h3 class="card-cloudcast-title"><a href="">DJ Byte - Chile - World Finals 2</a></h3>
-				<div class="card-stats">
-					<a href="#"><span ><i class="fa fa-music"></i>&nbsp;&nbsp;693</span></a>
-					<span class="card-date"><i class="fa fa-fire"></i>&nbsp;&nbsp;<time>20 hours ago</time></span>
-				</div>
-				<div class="card-footer cf">
-					<span class=" icon fl"><i class="fa fa-star-o"></i><label>676</label></span>
-					<span class=" icon fr fb"><i class="fa fa-heartbeat"></i><label>676</label></span>
-				</div>
-			</div>
-		</div>	
 		
-		<div class="column-6">
-			<div class="card card-cloudcast small-height">
-				<div class="card-chart-position z1"><div class="chart-bg"></div><div class="chart-value char-1">1<sup>st</sup></div></div>
-				<div class="card-cloudcast-image" style="background-color:#050000">
-					<a  href="#" ><img src="https://images-mix.netdna-ssl.com/w/318/h/318/q/90/upload/images/extaudio/83b8a549-f297-4cf3-8094-c255f712d1e2.jpg" width="176" height="176" alt="V.8 HBD JEFFY"></a>
-					<span class="c_play"><i class="fa fa-play"></i> </span>
-				</div>
-				<h3 class="card-cloudcast-title"><a href="">DJ Byte - Chile - World Finals 2</a></h3>
-				<div class="card-stats">
-					<a href="#"><span ><i class="fa fa-music"></i>&nbsp;&nbsp;693</span></a>
-					<span class="card-date"><i class="fa fa-fire"></i>&nbsp;&nbsp;<time>20 hours ago</time></span>
-				</div>
-				<div class="card-footer cf">
-					<span class=" icon fl"><i class="fa fa-star-o"></i><label>676</label></span>
-					<span class=" icon fr fb"><i class="fa fa-heartbeat"></i><label>676</label></span>
-				</div>
-			</div>
-		</div>	
-
-		<div class="column-6">
-			<div class="card card-cloudcast small-height">
-				<div class="card-chart-position z1"><div class="chart-bg"></div><div class="chart-value char-1">1<sup>st</sup></div></div>
-				<div class="card-cloudcast-image" style="background-color:#050000">
-					<a  href="#" ><img src="https://images-mix.netdna-ssl.com/w/318/h/318/q/90/upload/images/extaudio/b84b6125-b6ec-479c-a043-67bece21366f.jpg" width="176" height="176" alt="V.8 HBD JEFFY"></a>
-					<span class="c_play"><i class="fa fa-play"></i> </span>
-				</div>
-				<h3 class="card-cloudcast-title"><a href="">DJ Byte - Chile - World Finals 2</a></h3>
-				<div class="card-stats">
-					<a href="#"><span ><i class="fa fa-music"></i>&nbsp;&nbsp;693</span></a>
-					<span class="card-date"><i class="fa fa-fire"></i>&nbsp;&nbsp;<time>20 hours ago</time></span>
-				</div>
-				<div class="card-footer cf">
-					<span class=" icon fl"><i class="fa fa-star-o"></i><label>676</label></span>
-					<span class=" icon fr fb"><i class="fa fa-heartbeat"></i><label>676</label></span>
-				</div>
-				
-			</div>
-		</div>
-		<div class="column-6">
-			<div class="card card-cloudcast small-height">
-				<div class="card-chart-position z1"><div class="chart-bg"></div><div class="chart-value char-1">1<sup>st</sup></div></div>
-				<div class="card-cloudcast-image" style="background-color:#050000">
-					<a  href="#" ><img src="https://images-mix.netdna-ssl.com/w/318/h/318/q/90/upload/images/extaudio/80d7a5ba-779e-461e-810f-7aab1b6d3da7.jpg" width="176" height="176" alt="V.8 HBD JEFFY"></a>
-					<span class="c_play"><i class="fa fa-play"></i> </span>
-				</div>
-				<h3 class="card-cloudcast-title"><a href="">DJ Byte - Chile - World Finals 2</a></h3>
-				<div class="card-stats">
-					<a href="#"><span ><i class="fa fa-music"></i>&nbsp;&nbsp;693</span></a>
-					<span class="card-date"><i class="fa fa-fire"></i>&nbsp;&nbsp;<time>20 hours ago</time></span>
-				</div>
-				<div class="card-footer cf">
-					<span class=" icon fl"><i class="fa fa-star-o"></i><label>676</label></span>
-					<span class=" icon fr fb"><i class="fa fa-heartbeat"></i><label>676</label></span>
-				</div>
-			</div>
-		</div>	
-		<div class="column-6">
-			<div class="card card-cloudcast small-height">
-				<div class="card-chart-position z1"><div class="chart-bg"></div><div class="chart-value char-1">1<sup>st</sup></div></div>
-				<div class="card-cloudcast-image" style="background-color:#050000">
-					<a  href="#" ><img src="https://images-mix.netdna-ssl.com/w/318/h/318/q/90/upload/images/extaudio/098b5d71-5ad9-4a48-8d1e-918714f8e7a7.jpg" width="176" height="176" alt="V.8 HBD JEFFY"></a>
-					<span class="c_play"><i class="fa fa-play"></i> </span>
-				</div>
-				<h3 class="card-cloudcast-title"><a href="">DJ Byte - Chile - World Finals 2</a></h3>
-				<div class="card-stats">
-					<a href="#"><span ><i class="fa fa-music"></i>&nbsp;&nbsp;693</span></a>
-					<span class="card-date"><i class="fa fa-fire"></i>&nbsp;&nbsp;<time>20 hours ago</time></span>
-				</div>
-				<div class="card-footer cf">
-					<span class=" icon fl"><i class="fa fa-star-o"></i><label>676</label></span>
-					<span class=" icon fr fb"><i class="fa fa-heartbeat"></i><label>676</label></span>
-				</div>
-			</div>
-		</div>	
 		
+		<@contentList isTop=1  filterChannelId="3,7" orderSql=" c.hits desc" var="content" pageSize="9">
 		<div class="column-6">
 			<div class="card card-cloudcast small-height">
-				<div class="card-chart-position z1"><div class="chart-bg"></div><div class="chart-value char-1">1<sup>st</sup></div></div>
+				<div class="card-chart-position z1"><div class="chart-bg"></div><div class="chart-value char-1">${content_index+1}<sup>st</sup></div></div>
 				<div class="card-cloudcast-image" style="background-color:#050000">
-					<a  href="#" ><img src="https://images-mix.netdna-ssl.com/w/318/h/318/q/90/upload/images/extaudio/83b8a549-f297-4cf3-8094-c255f712d1e2.jpg" width="176" height="176" alt="V.8 HBD JEFFY"></a>
+					<a href="${basePath}/${content.staticLink}" ><img src="${basePath}/${content.img}" width="176" height="176" alt="${content.title}"></a>
 					<span class="c_play"><i class="fa fa-play"></i> </span>
 				</div>
-				<h3 class="card-cloudcast-title"><a href="">DJ Byte - Chile - World Finals 2</a></h3>
-				<div class="card-stats">
-					<a href="#"><span ><i class="fa fa-music"></i>&nbsp;&nbsp;693</span></a>
-					<span class="card-date"><i class="fa fa-fire"></i>&nbsp;&nbsp;<time>20 hours ago</time></span>
-				</div>
-				<div class="card-footer cf">
-					<span class=" icon fl"><i class="fa fa-star-o"></i><label>676</label></span>
-					<span class=" icon fr fb"><i class="fa fa-heartbeat"></i><label>676</label></span>
-				</div>
-			</div>
-		</div>	
-
-		<div class="column-6">
-			<div class="card card-cloudcast small-height">
-				<div class="card-chart-position z1"><div class="chart-bg"></div><div class="chart-value char-1">1<sup>st</sup></div></div>
-				<div class="card-cloudcast-image" style="background-color:#050000">
-					<a  href="#" ><img src="https://images-mix.netdna-ssl.com/w/318/h/318/q/90/upload/images/extaudio/b84b6125-b6ec-479c-a043-67bece21366f.jpg" width="176" height="176" alt="V.8 HBD JEFFY"></a>
-					<span class="c_play"><i class="fa fa-play"></i> </span>
-				</div>
-				<h3 class="card-cloudcast-title"><a href="">DJ Byte - Chile - World Finals 2</a></h3>
-				<div class="card-stats">
-					<a href="#"><span ><i class="fa fa-music"></i>&nbsp;&nbsp;693</span></a>
-					<span class="card-date"><i class="fa fa-fire"></i>&nbsp;&nbsp;<time>20 hours ago</time></span>
-				</div>
-				<div class="card-footer cf">
-					<span class=" icon fl"><i class="fa fa-star-o"></i><label>676</label></span>
-					<span class=" icon fr fb"><i class="fa fa-heartbeat"></i><label>676</label></span>
-				</div>
+				<h3 class="card-cloudcast-title"><a href="${basePath}/${content.staticLink}" title="${content.title}">${content.title}</a></h3>
 				
-			</div>
-		</div><div class="column-6">
-			<div class="card card-cloudcast small-height">
-				<div class="card-chart-position z1"><div class="chart-bg"></div><div class="chart-value char-1">1<sup>st</sup></div></div>
-				<div class="card-cloudcast-image" style="background-color:#050000">
-					<a  href="#" ><img src="https://images-mix.netdna-ssl.com/w/318/h/318/q/90/upload/images/extaudio/80d7a5ba-779e-461e-810f-7aab1b6d3da7.jpg" width="176" height="176" alt="V.8 HBD JEFFY"></a>
-					<span class="c_play"><i class="fa fa-play"></i> </span>
-				</div>
-				<h3 class="card-cloudcast-title"><a href="">DJ Byte - Chile - World Finals 2</a></h3>
-				<div class="card-stats">
-					<a href="#"><span ><i class="fa fa-music"></i>&nbsp;&nbsp;693</span></a>
-					<span class="card-date"><i class="fa fa-fire"></i>&nbsp;&nbsp;<time>20 hours ago</time></span>
+				<div class="card-stats info">
+					<a href="javascript:void(0);"><span ><i class="fa fa-music"></i>&nbsp;&nbsp;693</span></a>
+					<span class="card-date"><i class="fa fa-fire"></i>&nbsp;&nbsp;<time>${dateFormat(content.createTime?datetime)}</time></span>
 				</div>
 				<div class="card-footer cf">
 					<span class=" icon fl"><i class="fa fa-star-o"></i><label>676</label></span>
@@ -314,24 +114,7 @@
 				</div>
 			</div>
 		</div>	
-		<div class="column-6">
-			<div class="card card-cloudcast small-height">
-				<div class="card-chart-position z1"><div class="chart-bg"></div><div class="chart-value char-1">1<sup>st</sup></div></div>
-				<div class="card-cloudcast-image" style="background-color:#050000">
-					<a  href="#" ><img src="https://images-mix.netdna-ssl.com/w/318/h/318/q/90/upload/images/extaudio/098b5d71-5ad9-4a48-8d1e-918714f8e7a7.jpg" width="176" height="176" alt="V.8 HBD JEFFY"></a>
-					<span class="c_play"><i class="fa fa-play"></i> </span>
-				</div>
-				<h3 class="card-cloudcast-title"><a href="">DJ Byte - Chile - World Finals 2</a></h3>
-				<div class="card-stats">
-					<a href="#"><span ><i class="fa fa-music"></i>&nbsp;&nbsp;693</span></a>
-					<span class="card-date"><i class="fa fa-fire"></i>&nbsp;&nbsp;<time>20 hours ago</time></span>
-				</div>
-				<div class="card-footer cf">
-					<span class=" icon fl"><i class="fa fa-star-o"></i><label>676</label></span>
-					<span class=" icon fr fb"><i class="fa fa-heartbeat"></i><label>676</label></span>
-				</div>
-			</div>
-		</div>	
+		</@contentList>
 	</div>
 	<div class="clearfix"></div>
 	<div class="sub-header"><div class="cf"><h2 class="sub-header-title">精品音乐</h2></div></div>
@@ -606,6 +389,7 @@
 				</div>
 			</div>
 		</div>
+	</div>
 	</div>
 	<div class="clearfix"></div>
 	<div class="sub-header"><div class="cf"><h2 class="sub-header-title">精品文章</h2></div></div>

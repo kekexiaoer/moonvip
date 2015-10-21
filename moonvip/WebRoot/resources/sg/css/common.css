@@ -2,7 +2,7 @@
 * {word-wrap: break-word;}
 html {-webkit-text-size-adjust: none; }
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td,span{padding:0;margin:0;}
-body{font:normal 13px/24px "Microsoft Yahei","冬青黑体简体中文 w3","宋体"; }
+body{font:normal 13px/24px "微软雅黑","冬青黑体简体中文 w3","宋体"; }
 fieldset,img,html,body,iframe{border:0;}
 /** 重置表格元素 **/
 table{border-collapse:collapse;border-spacing:0;}

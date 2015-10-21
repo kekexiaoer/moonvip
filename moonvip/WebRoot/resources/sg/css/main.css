@@ -9,7 +9,7 @@
 .card-cloudcast .c_play{width:72px;height:72px;display:block;-webkit-transform:translate(-50%,-50%);-o-transform:translate(-50%,-50%);transform:translate(-50%,-50%);position:absolute;top:50%;left:50%;background:#111;background:rgba(0,0,0,0.7);border-radius:50%;border:2px solid #fff;box-sizing:border-box;}
 .card-cloudcast .c_play i{font-size:32px;line-height:68px;text-align:center;margin-left:8px;color:#fff}
 .card.fixed-height .card-cloudcast-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:16px 10px 0;font-size:1.125em;}
-.card-cloudcast .card-cloudcast-title a{font-weight:600;color:#333}
+.card-cloudcast .card-cloudcast-title a{font-weight:400;color:#999}
 .card-cloudcast .card-cloudcast-user{margin:5px 0 8px;font-size:0.925em;font-weight:600;color:#555;}
 .card-cloudcast .card-cloudcast-user{margin-bottom:10px;}
 .card-cloudcast .card-cloudcast-user a{margin-left:5px;font-size:12px}
@@ -93,7 +93,7 @@
 .item-tag-cloud{padding-top:8px;padding:10px 0;clear:both;border-top:1px solid #ececec;}
 .cloudcast-description{padding:20px 10px;margin:0;font-weight:400;font-size:.875em;line-height:22px;border-bottom:1px solid #ececec;}
 .cloudcast-footer{margin:0;padding:10px;}
-.card-stats{font-size:.75em;font-weight:600;color:#7e7e7e;}
+.card-stats{font-size:.75em;font-weight:500;color:#7e7e7e;}
 .post-comment{position:relative;padding:10px 20px 20px 100px;margin:10px 0 0;}
 .user-avatar-60{width:60px;height:60px;display:block;float:left;color:transparent;border-radius:30px;background-clip:padding-box;}
 .post-comment-avatar{display:block;border-radius:30px;background:#f2f2f2;position:absolute;top:10px;left:20px;z-index:1;}
@@ -112,7 +112,7 @@ button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appe
 .comment-item{width:100%;min-height:60px;position:relative;padding:10px 10px 10px 100px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}
 .comment-container{padding:0;margin:0;position:relative;border-top:1px solid #ececec;}
 .comment-item .comment-author{font-size:.875em;font-weight:700;float:left;margin:0 15px 0 0;max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-a,.mx-link{color:#f9f9f9;outline:none;text-decoration:none;cursor:pointer;-webkit-transition:all .2s linear;-o-transition:all .2s linear;transition:all .2s linear;}
+.mx-link{color:#666;outline:none;text-decoration:none;cursor:pointer;-webkit-transition:all .2s linear;-o-transition:all .2s linear;transition:all .2s linear;}
 .comment-item .comment-head{margin:0 0 3px;}
 .comment-body{color:#333;font-size:13px;}
 .card-stats span{padding-left:8px;}

@@ -1,6 +1,6 @@
-<div class="header changebg">
+<#--<div class="header changebg">
 	<div class="silderbox">
-		<a href="${basePath}"  class="m-logo" title="KeKe个人博客"><img src="${basePath}/images/logo.png"/></a>
+		<a href="${basePath}"  class="m-logo" title="Ke-IT技术在线学习图片平台"><img src="${basePath}/images/logo.png"/></a>
 		<div class="g-bda fl">
 	        <ul class="f-cb clearfix">
 	           <@channelList>
@@ -15,4 +15,43 @@
 			<iframe id="loginframe" src="${basePath}/login/loginSuccess" width="140" height="75"  frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
 		</div>
 	</div>
+</div>-->
+<div class="header">
+	<div class="container">
+		<a class="logo" href="javascript:void(0);"><img src="http://keke.tanzhouedu.com/images/logo2.png"></a>
+		<div id="headerli-box">
+			<ul class="navigation navigation-left fl">
+				<@channelList>
+					<li class="nav-list-item"><a class="nav-link" id="channel_items_${channel.id}" href="<#if indexOf(currentURL,channel.model) !=-1>javascript:void(0);<#else>${basePath}<#if channel.model!='index'>/${channel.model}</#if></#if>" ><i class="fa fa-${channel.url}"></i>${channel.name}</a><span class="showpan"></span></li>
+				 </@channelList>
+			</ul>
+			<ul class="navigation  navigation-right fr">
+				<li class="nav-list-item">
+					<a id="header-avator" class="user-card-item usertip" href="#" target="_self">
+						<img src="http://img.mukewang.com/user/54584dad0001dd7802200220-40-40.jpg" width="40" height="40">
+					</a>
+					<span class="showpan"></span>
+				</li>
+				<li class="nav-list-item"><a class="nav-link" href="${basePath}/login"><i class="fa fa-location-arrow"></i>登陆</a><span class="showpan"></span></li>
+				<li class="nav-list-item"><a class="nav-link" href="${basePath}/reg"><i class="fa fa-user-plus"></i>注册</a><span class="showpan"></span></li>
+				<li class="nav-list-item"><a class="nav-link" href="/upload/"><i class="fa fa-user-secret"></i>申请作者</a><span class="showpan"></span></li>
+			</ul>
+		</div>
+	</div>
 </div>
+<script type="text/javascript">
+$(function(){
+	$("#headerli-box").find("li").hover(function(){
+		$(this).find(".showpan").css("background",randomColor()).animate({bottom:0});
+	},function(){
+		$(this).find(".showpan").css("background",randomColor()).animate({bottom:-56});
+	});
+
+	function randomColor(){
+		var r = Math.floor(Math.random() * 256);
+		var g = Math.floor(Math.random() * 256);
+		var b = Math.floor(Math.random() * 256);
+		return "rgb("+r+","+g+","+b+")";
+	};
+});
+</script>
