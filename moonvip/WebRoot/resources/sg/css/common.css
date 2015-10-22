@@ -2,7 +2,14 @@
 * {word-wrap: break-word;}
 html {-webkit-text-size-adjust: none; }
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td,span{padding:0;margin:0;}
-body{font:normal 13px/24px "Microsoft Yahei","冬青黑体简体中文 w3","宋体"; }
+body, [placeholder] {
+  font-family: "Hiragino Sans GB","Microsoft YaHei","微软雅黑",tahoma,arial,"宋体";
+  font-smoothing: antialiased;
+  -moz-font-smoothing: antialiased;
+  -ms-font-smoothing: antialiased;
+  -webkit-font-smoothing: antialiased;
+  font-size:14px;
+}
 fieldset,img,html,body,iframe{border:0;}
 /** 重置表格元素 **/
 table{border-collapse:collapse;border-spacing:0;}
@@ -14,7 +21,7 @@ h1,h2,h3,h4,h5,h6,em,strong,b{font-weight:bold;font-size:100%;}
 q:before,q:after{content:'';}
 .clearfix{*zoom:1;}
 .clearfix:after{content:"."; display:block;clear:both;visibility:hidden;line-height:0;height:0;}
-a {color: #E5E5E5;text-decoration: none;}
+a {color:#8a8880;text-decoration: none;}
 a img {border: none;}
 a,button{ outline:none; border:0;}
 input,select{border:1px solid #ccc;}

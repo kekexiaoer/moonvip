@@ -112,7 +112,7 @@ button,html input[type=button],input[type=reset],input[type=submit]{-webkit-appe
 .comment-item{width:100%;min-height:60px;position:relative;padding:10px 10px 10px 100px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;}
 .comment-container{padding:0;margin:0;position:relative;border-top:1px solid #ececec;}
 .comment-item .comment-author{font-size:.875em;font-weight:700;float:left;margin:0 15px 0 0;max-width:250px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-a,.mx-link{color:#f9f9f9;outline:none;text-decoration:none;cursor:pointer;-webkit-transition:all .2s linear;-o-transition:all .2s linear;transition:all .2s linear;}
+.mx-link{color:#8a8880;outline:none;text-decoration:none;cursor:pointer;-webkit-transition:all .2s linear;-o-transition:all .2s linear;transition:all .2s linear;}
 .comment-item .comment-head{margin:0 0 3px;}
 .comment-body{color:#333;font-size:13px;}
 .card-stats span{padding-left:8px;}
@@ -132,7 +132,7 @@ a,.mx-link{color:#f9f9f9;outline:none;text-decoration:none;cursor:pointer;-webki
 }
 
 /*内容*/
-.wz-cont{padding:20px 0;font-size:13px;color:#f9f9f9}
+.wz-cont{padding:20px 0;font-size:13px;color:#8a8880}
 /*个人空间*/
 .leader-avatar-image {
   width: 140px;

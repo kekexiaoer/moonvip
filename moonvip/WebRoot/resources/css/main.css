@@ -112,7 +112,7 @@ to{transform:scale(1,1)}
 .kh-a01:hover img,.kh-a02:hover img,.kh-a03:hover img{transform:scale(0.55,0.58);}
 .kh-a01:hover .biank,.kh-a02:hover .biank,.kh-a03:hover .biank{opacity:1;}
 .hk-ckgd{height:60px;line-height:60px;text-align:center;background:#F6F6F6;}
-.hk-ckgd a{font-size:18px;color:#666;}
+.hk-ckgd a{font-size:18px;color:#8a8880;}
 .hk-ckgd:hover{opacity:0.5;}
 .food{height:36px;line-height:36px;text-align:center;border-top:1px solid #999;border-top:1px solid rgba(255,255,255,.13);font-size:12px;color:#fff;z-index:20;}
 /*login登陆框*/
@@ -138,7 +138,7 @@ to{transform:scale(1,1)}
 */
 .wz-cont img{max-width:900px;}
 .wz-user{height:50px;color:#E5E5E5;font-size:24px;font-weight:normal;line-height:50px;text-align:center;}
-.wz-qh{color:#666;font-size:12px;display:inline-block;}
+.wz-qh{color:#8a8880;font-size:12px;display:inline-block;}
 .wz-img{width:670px;height:503px;border:1px dashed #ddd;}
 .img-btn{padding:5px 10px;border-radius:5px;position:absolute;top:256px;left:330px;display:inline-block;}
 .wz-lianj{border-top:1px dotted #E5E5E5;padding-top:30px;}
