@@ -76,4 +76,4 @@ scrollbarbutton:hover{-moz-appearance:none !important;background-color:rgb(255,0
 .pl20{padding-left:20px;}
  .tmui-ellipsis{display:inline-block;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;}
  /*阴影层*/
-.tzui-loading-overlay,.tmui-overlay{width:100%;height:100%;background-color:#141414;position:fixed;top:0;left:0;z-index:99;filter:alpha(opacity=58);-moz-opacity:0.58;-khtml-opacity:0.58;opacity:0.58;}
+.tzui-loading-overlay,.tmui-overlay,.tmui-box-overlay{width:100%;height:100%;background-color:#141414;position:fixed;top:0;left:0;z-index:99;filter:alpha(opacity=0.4);-moz-opacity:0.4;-khtml-opacity:0.4;opacity:0.4;display:none}

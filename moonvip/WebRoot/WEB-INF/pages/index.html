@@ -6,50 +6,23 @@
     <meta name="keywords" content="潭州学院 KeKe Java 前端 cavnas 游戏 框架">
     <meta name="description" content="KeKe老师个人博客">
     <#include "/common/common.html"/>
-    <style type="text/css" id="cssRule">
-    	.fenxiang_box{ position:absolute; top:160px; left:60px;}
-		.fenxiang_cont{width:382px;padding:20px;background:#14171e;background:rgba(1,1,1,0.88);border-radius:5px;margin-top:-6px;}
-		.fenxiang_img{margin-top:20px;border-top:1px solid #40454d;}
-		.fenxiang_img ul li{float:left;padding:20px 5px;}
-		.sanjiao{position:absolute;top:-26px;right:30px;border-top:10px solid transparent;border-right:10px solid transparent;border-bottom:10px solid #14171E;border-left:10px solid transparent;display:inline-block;}
-		.nav-list-item > a.user-card-item{display:block;height:56px;line-height:56px;width:60px;color:#787d82;text-align:center;-webkit-transition:background-color 0.2s;-moz-transition:background-color 0.2s;transition:background-color 0.2s;}
-		.nav-list-item img{width:36px;height:36px;border-radius:18px;border:2px solid #111;vertical-align:middle;display:inline-block;}
-	
-		.bannerbox{}
-		.bannerbox .bannerimg{width:100%;padding:180px 0 0;position:relative;background-size:cover;background-position:center bottom;}
-		#box{margin:10px auto;text-align:center;font-size:36px;font-weight:700;color:#fff;width:960px;}
-		#box span{display:inline-block;padding:16px 0;}
-		.column-6{width:178px;float:left;margin-right:20px;}
-		.column-6 .card-cloudcast-image{width:176px;margin-bottom:10px;}
-		.column-6 .card-cloudcast-title a{font-size:13px;color:#666}
-		.column-6 .small-height{height:358px;}
-		.column-6 .card-stats{margin-top:20px}
-		.column-6 .info{  position: absolute;bottom: 38px;left: 0px;width: 100%;}
-		.welcome-buttons{text-align:center;color:#fff;padding-top:200px;padding-bottom:30px;}
-		.web-tip{padding:30px;}
-		.button .fa{padding-right:10px;}
-		.button.join-via-fb{height:70px;margin:0 20px 0 0;padding:0 50px 0 56px;-webkit-box-shadow:none;box-shadow:none;background-color:#3f5c94;border-bottom:2px solid #334a77;color:#fff;line-height:68px;font-weight:600;font-size:1.5em;text-transform:none;border-radius:3px;}
-		.button.join-via-fb a{color:#f9f9f9}
-		.button.start-listening{height:70px;margin:0;padding:0 48px;background:#612525;-webkit-box-shadow:none;box-shadow:none;border:1px solid #fff;border:1px solid rgba(255,255,255,.3);color:#fff;line-height:68px;font-weight:600;font-size:1.5em;text-transform:none;-webkit-transition:all .3s ease-in-out;-o-transition:all .3s ease-in-out;transition:all .3s ease-in-out;border-radius:3px;background-clip:padding-box;}
-		/*图片转换动画关键帧*/
-		@-webkit-keyframes rotating{from{-webkit-transform:rotate(0deg)}
-		to{-webkit-transform:rotate(360deg)}
-		}
-		@keyframes rotating{from{transform:rotate(0deg)}
-		to{transform:rotate(360deg)}
-		}
-		@-moz-keyframes rotating{from{-moz-transform:rotate(0deg)}
-		to{-moz-transform:rotate(360deg)}
-		}
-		/*调用关键帧*/
-		.rotate{-webkit-animation:rotating 1.2s linear infinite;-moz-animation:rotating 1.2s linear infinite;-o-animation:rotating 1.2s linear infinite;animation:rotating 1.2s linear infinite;}
-		#audio_btn{position:absolute;right:30px;top:80px;z-index:200;width:30px;height:30px;background-repeat:no-repeat;}
-		/*转动的小图片*/
-		.off{background-image:url(images/play.svg);background-size:contain;background-repeat:no-repeat;}
-    </style>
  </head>
  <body>
- <body style="background:#f2f2f2">
+ <body style="background:#e5e5e5">
+ 	<ul class="push_button">
+		<li class="navi-one"></li>
+		<li class="navi-two"></li>
+		<li class="navi-three"></li>
+	</ul>
+	<div class="tmui-box-overlay"></div>
+	<div class="k_sliderbox">
+		<ul class="navigation navigation-left fl">
+			<@channelList>
+				<li class="nav-list-item"><a class="nav-link" id="channel_items_${channel.id}" href="<#if indexOf(currentURL,channel.model) !=-1>javascript:void(0);<#else>${basePath}<#if channel.model!='index'>/${channel.model}</#if></#if>" ><i class="fa fa-${channel.url}"></i>${channel.name}</a><span class="showpan"></span></li>
+			 </@channelList>
+		</ul>
+	</div>
+	<div class="k_box">
 	<#include "/common/header.html"/>
 	<!--banner图集-->
 	<div class="bannerbox">
@@ -62,7 +35,25 @@
 					var audioDom = document.getElementById("audio");
 					audioDom.paused ? audioDom.play():audioDom.pause();
 				});
-
+				
+				$(".push_button").on("click",function(){
+					if(!$(this).hasClass("active")){
+						$(this).addClass("active").children().addClass("active");
+						$(".k_sliderbox").show().animate({left:0},200).next().animate({marginLeft:240},200);
+						$(".tmui-box-overlay").show();
+						$("html,body").css("overflow","hidden");
+					}else{
+						$(this).removeClass("active").children().removeClass("active");
+						$(".k_sliderbox").show().animate({left:-240},200).next().animate({marginLeft:0},200);
+						$(".tmui-box-overlay").hide();
+						$("html,body").css("overflow","auto");
+					}
+				});
+				
+				$(".tmui-box-overlay").on("click",function(){
+					$(".push_button").trigger("click");
+				});
+				
 
 				$(".usertip").hover(function(){
 					var top = $(this).offset().top+$(this).outerHeight() + 18;
@@ -78,7 +69,7 @@
 		<!--
 			images/bg/homepage-leader-08.jpg
 		-->
-		<div class="bannerimg" style="background-image:url(https://nodejs.org/static/images/nodejs-interactive-portland2015.jpg);">
+		<div class="bannerimg" style="background-image:url(images/bg/homepage-leader-08.jpg);">
 			<div id="box">
 				学习是一个艰苦而又快乐的事情，经常因为一个问题而苦恼很久，Ke音乐图书平台为大家提供实战的技术解决方案。为零基础的学者提供学习解决方案。
 			</div>
@@ -92,9 +83,7 @@
 	<div class="clearfix"></div>
 	<div class="sub-header"><div class="cf"><h2 class="sub-header-title">精品书籍</h2></div></div>
 	<div class="wrap_boxm">
-		
-		
-		<@contentList isTop=1  filterChannelId="3,7" orderSql=" c.hits desc" var="content" pageSize="9">
+		<@contentList isTop=1  filterChannelId="3,7" orderSql=" c.create_time desc" var="content" pageSize="10">
 		<div class="column-6">
 			<div class="card card-cloudcast small-height">
 				<div class="card-chart-position z1"><div class="chart-bg"></div><div class="chart-value char-1">${content_index+1}<sup>st</sup></div></div>
@@ -106,7 +95,7 @@
 				
 				<div class="card-stats info">
 					<a href="javascript:void(0);"><span ><i class="fa fa-music"></i>&nbsp;&nbsp;693</span></a>
-					<span class="card-date"><i class="fa fa-fire"></i>&nbsp;&nbsp;<time>${content.createTime?datetime}</time></span>
+					<span class="card-date"><i class="fa fa-fire"></i>&nbsp;&nbsp;<time>${dateFormat(content.createTime?datetime)}</time></span>
 				</div>
 				<div class="card-footer cf">
 					<span class=" icon fl"><i class="fa fa-star-o"></i><label>676</label></span>
@@ -594,6 +583,7 @@
 			</div>
 			<div class="clearfix"></div>
 		</div>
+	</div>
 	</div>
 </body>
 </html>

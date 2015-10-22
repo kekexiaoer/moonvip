@@ -2,14 +2,7 @@
 	<div class="silderbox">
 		<a href="${basePath}"  class="m-logo" title="Ke-IT技术在线学习图片平台"><img src="${basePath}/images/logo.png"/></a>
 		<div class="g-bda fl">
-	        <ul class="f-cb clearfix">
-	           <@channelList>
-	         	  	<li>
-	         	  		<a id="channel_items_${channel.id}" href="<#if indexOf(currentURL,channel.model) !=-1>javascript:void(0);<#else>${basePath}<#if channel.model!='index'>/${channel.model}</#if></#if>" <#if indexOf(currentURL,channel.model) !=-1>class="cbg"</#if>>${channel.name}<span class="underline"></span></a>
-	         	  	</li>
-	           </@channelList>
-				<li>
-	      	</ul>
+	       
 		</div>
 		<div class="fl" id="headerbox">
 			<iframe id="loginframe" src="${basePath}/login/loginSuccess" width="140" height="75"  frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
@@ -18,14 +11,9 @@
 </div>-->
 <div class="header">
 	<div class="container">
-		<a class="logo" href="javascript:void(0);"><img src="http://keke.tanzhouedu.com/images/logo2.png"></a>
-		<div id="headerli-box">
-			<ul class="navigation navigation-left fl">
-				<@channelList>
-					<li class="nav-list-item"><a class="nav-link" id="channel_items_${channel.id}" href="<#if indexOf(currentURL,channel.model) !=-1>javascript:void(0);<#else>${basePath}<#if channel.model!='index'>/${channel.model}</#if></#if>" ><i class="fa fa-${channel.url}"></i>${channel.name}</a><span class="showpan"></span></li>
-				 </@channelList>
-			</ul>
-			<ul class="navigation  navigation-right fr">
+		<div id="headerli-box" >
+			<a class="logo" href="javascript:void(0);"><img src="http://keke.tanzhouedu.com/images/logo.png"></a>
+			<ul class=" navigation-right fr">
 				<li class="nav-list-item">
 					<a id="header-avator" class="user-card-item usertip" href="#" target="_self">
 						<img src="http://img.mukewang.com/user/54584dad0001dd7802200220-40-40.jpg" width="40" height="40">
@@ -41,10 +29,10 @@
 </div>
 <script type="text/javascript">
 $(function(){
-	$("#headerli-box").find("li").hover(function(){
-		$(this).find(".showpan").css("background",randomColor()).animate({bottom:0});
+	$(".k_sliderbox").find("li").hover(function(){
+		$(this).find(".showpan").css("background",randomColor()).animate({left:0});
 	},function(){
-		$(this).find(".showpan").css("background",randomColor()).animate({bottom:-56});
+		$(this).find(".showpan").css("background",randomColor()).animate({left:240});
 	});
 
 	function randomColor(){
