@@ -1,0 +1,18 @@
+<div class="header changebg">
+	<div class="silderbox">
+		<a href="${basePath}"  class="m-logo" title="Ke-IT技术在线学习图片平台"><img src="${basePath}/images/logo.png"/></a>
+		<div class="g-bda fl">
+	        <ul class="f-cb clearfix">
+	           <@channelList>
+	         	  	<li>
+	         	  		<a id="channel_items_${channel.id}" href="<#if indexOf(currentURL,channel.model) !=-1>javascript:void(0);<#else>${basePath}<#if channel.model!='index'>/${channel.model}</#if></#if>" <#if indexOf(currentURL,channel.model) !=-1>class="cbg"</#if>>${channel.name}<span class="underline"></span></a>
+	         	  	</li>
+	           </@channelList>
+				<li>
+	      	</ul>
+		</div>
+		<div class="fl" id="headerbox">
+			<iframe id="loginframe" src="${basePath}/login/loginSuccess" width="140" height="75"  frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no"></iframe>
+		</div>
+	</div>
+</div>
